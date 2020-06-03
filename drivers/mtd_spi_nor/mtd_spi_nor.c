@@ -420,16 +420,8 @@ static int mtd_spi_nor_read(mtd_dev_t *mtd, void *dest, uint32_t addr, uint32_t 
     if (addr > chipsize) {
         return -EOVERFLOW;
     }
-    if (size > mtd->page_size) {
-        size = mtd->page_size;
-    }
     if ((addr + size) > chipsize) {
         size = chipsize - addr;
-    }
-    uint32_t page_addr_mask = dev->page_addr_mask;
-    if ((addr & page_addr_mask) != ((addr + size - 1) & page_addr_mask)) {
-        /* Reads across page boundaries must be split */
-        size = mtd->page_size - (addr & ~(page_addr_mask));
     }
     if (size == 0) {
         return 0;
@@ -440,7 +432,7 @@ static int mtd_spi_nor_read(mtd_dev_t *mtd, void *dest, uint32_t addr, uint32_t 
     mtd_spi_cmd_addr_read(dev, dev->params->opcode->read, addr_be, dest, size);
     mtd_spi_release(dev);
 
-    return size;
+    return 0;
 }
 
 static int mtd_spi_nor_write(mtd_dev_t *mtd, const void *src, uint32_t addr, uint32_t size)
@@ -478,7 +470,7 @@ static int mtd_spi_nor_write(mtd_dev_t *mtd, const void *src, uint32_t addr, uin
     wait_for_write_complete(dev, 0);
 
     mtd_spi_release(dev);
-    return size;
+    return 0;
 }
 
 static int mtd_spi_nor_erase(mtd_dev_t *mtd, uint32_t addr, uint32_t size)

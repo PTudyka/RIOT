@@ -37,13 +37,14 @@
 #endif /* MODULE_CORE_MSG */
 #include "mutex.h"
 #include "kernel_types.h"
+#include "rmutex.h"
 
 #ifdef MODULE_ZTIMER_XTIMER_COMPAT
 #include "ztimer/xtimer_compat.h"
 #else
 
-#ifndef MODULE_XTIMER_ON_ZTIMER
 #include "board.h"
+#ifndef MODULE_XTIMER_ON_ZTIMER
 #include "periph_conf.h"
 #endif
 
@@ -413,7 +414,19 @@ static inline bool xtimer_less64(xtimer_ticks64_t a, xtimer_ticks64_t b);
  */
 int xtimer_mutex_lock_timeout(mutex_t *mutex, uint64_t us);
 
+/**
+ * @brief lock a rmutex but with timeout
+ *
+ * @param[in]    rmutex  rmutex to lock
+ * @param[in]    us     timeout in microseconds relative
+ *
+ * @return       0, when returned after rmutex was locked
+ * @return       -1, when the timeout occcured
+ */
+int xtimer_rmutex_lock_timeout(rmutex_t *rmutex, uint64_t us);
+
 #if defined(MODULE_CORE_THREAD_FLAGS) || defined(DOXYGEN)
+
 /**
  * @brief    Set timeout thread flag after @p timeout
  *
@@ -633,7 +646,7 @@ static inline int xtimer_msg_receive_timeout64(msg_t *msg, uint64_t timeout);
 }
 #endif
 
-#endif /* MODULE_XTIMER_ON_ZTIMER */
+#endif /* MODULE_ZTIMER_XTIMER_COMPAT */
 
 /** @} */
 #endif /* XTIMER_H */
