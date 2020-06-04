@@ -26,8 +26,13 @@
 #include "kernel_defines.h"
 #include "log.h"
 
+#define ENABLE_DEBUG (1)
+#include "debug.h"
+
 void auto_init(void)
 {
+    DEBUG("auto_init() called\n")
+
     if (IS_USED(MODULE_AUTO_INIT_RANDOM)) {
         LOG_DEBUG("Auto init random.\n");
         extern void auto_init_random(void);

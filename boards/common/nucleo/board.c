@@ -31,10 +31,15 @@
 #include "board.h"
 #include "periph/gpio.h"
 
+#define ENABLE_DEBUG (1)
+#include "debug.h"
+
 void board_init(void)
 {
     /* initialize the CPU */
     cpu_init();
+
+    DEBUG("CPU initialized\n");
 
     /* initialization of on-board LEDs
      * NOTE: LED0 must be explicitly enabled as it is also used for SPI_DEV(0) */
@@ -47,4 +52,6 @@ void board_init(void)
 #ifdef LED2_PIN
     gpio_init(LED2_PIN, GPIO_OUT);
 #endif
+
+    DEBUG("Board LEDs initialized\n")
 }

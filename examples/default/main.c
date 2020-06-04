@@ -34,8 +34,13 @@
 #include "net/gnrc.h"
 #endif
 
+#define ENABLE_DEBUG (1)
+#include "debug.h"
+
 int main(void)
 {
+    DEBUG("Jumped into main function\n");
+
 #ifdef MODULE_NETIF
     gnrc_netreg_entry_t dump = GNRC_NETREG_ENTRY_INIT_PID(GNRC_NETREG_DEMUX_CTX_ALL,
                                                           gnrc_pktdump_pid);

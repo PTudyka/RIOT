@@ -46,6 +46,9 @@
 #endif
 #endif /* MODULE_PERIPH_INIT */
 
+#define ENABLE_DEBUG (1)
+#include "debug.h"
+
 void periph_init(void)
 {
 #ifdef MODULE_PERIPH_INIT
@@ -54,6 +57,7 @@ void periph_init(void)
     for (unsigned i = 0; i < I2C_NUMOF; i++) {
         i2c_init(I2C_DEV(i));
     }
+    DEBUG("I2C initialized\n");
 #endif
 
     /* initialize configured SPI devices */
@@ -61,6 +65,7 @@ void periph_init(void)
     for (unsigned i = 0; i < SPI_NUMOF; i++) {
         spi_init(SPI_DEV(i));
     }
+    DEBUG("SPI initialized\n");
 #endif
 
     /* Initialize RTT before RTC to allow for RTT based RTC implementations */
