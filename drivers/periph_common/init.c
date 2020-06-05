@@ -46,7 +46,7 @@
 #endif
 #endif /* MODULE_PERIPH_INIT */
 
-#define ENABLE_DEBUG (0)
+#define ENABLE_DEBUG (1)
 #include "debug.h"
 
 void periph_init(void)
@@ -71,23 +71,28 @@ void periph_init(void)
     /* Initialize RTT before RTC to allow for RTT based RTC implementations */
 #ifdef MODULE_PERIPH_INIT_RTT
     rtt_init();
+    DEBUG("rtt initialized\n");
 #endif
 
     /* Initialize RTC */
 #ifdef MODULE_PERIPH_INIT_RTC
     rtc_init();
+    DEBUG("rtc initialized\n");
 #endif
 
 #ifdef MODULE_PERIPH_INIT_HWRNG
     hwrng_init();
+    DEBUG("hwrng initialized\n");
 #endif
 
 #ifdef MODULE_PERIPH_INIT_USBDEV
     usbdev_init_lowlevel();
+    DEBUG("usbdev initialized\n");
 #endif
 
 #if defined(MODULE_PERIPH_INIT_WDT) && WDT_HAS_INIT
     wdt_init();
+    DEBUG("wdt initialized\n");
 #endif
 
 #endif /* MODULE_PERIPH_INIT */

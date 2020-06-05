@@ -26,6 +26,9 @@
 #include "shell_commands.h"
 #include "periph/gpio.h"
 
+#include "periph/spi.h"
+#include "periph/i2c.h"
+
 #define ENABLE_DEBUG (1)
 #include "debug.h"
 
@@ -36,7 +39,7 @@
  */
 void post_board_init (void)
 {   
-    // if (BOARD != "nucleo-l073rz")
+    // if (!strcmp(RIOT_BOARD, "nucleo-l073rz"))
     // {
     //     DEBUG("Board is not nucleo-l073rz!\n");
     //     return;
@@ -53,6 +56,8 @@ void post_board_init (void)
     gpio_t PC13 = GPIO_PIN(PORT_C, 13);
     gpio_t PC14 = GPIO_PIN(PORT_C, 14);
     gpio_t PC15 = GPIO_PIN(PORT_C, 15);
+    gpio_t PH0  = GPIO_PIN(PORT_H, 0);
+    gpio_t PH1  = GPIO_PIN(PORT_H, 1);
     gpio_t PC2  = GPIO_PIN(PORT_C, 2);
     gpio_t PC3  = GPIO_PIN(PORT_C, 3);
 
@@ -66,6 +71,8 @@ void post_board_init (void)
     gpio_init(PC13, GPIO_OUT);
     gpio_init(PC14, GPIO_OUT);
     gpio_init(PC15, GPIO_OUT);
+    gpio_init(PH0, GPIO_OUT);
+    gpio_init(PH1, GPIO_OUT);
     gpio_init(PC2, GPIO_OUT);
     gpio_init(PC3, GPIO_OUT);
 
@@ -79,6 +86,8 @@ void post_board_init (void)
     gpio_clear(PC13);
     gpio_clear(PC14);
     gpio_clear(PC15);
+    gpio_clear(PH0);
+    gpio_clear(PH1);
     gpio_clear(PC2);
     gpio_clear(PC3);
 }

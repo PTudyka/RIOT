@@ -21,7 +21,16 @@ DEVELHELP ?= 1
 # Change this to 0 show compiler invocation lines by default:
 QUIET ?= 1
 
+# FEATURES_OPTIONAL += periph_rtc
+
+# Periph modules to include for testing purpose
+FEATURES_OPTIONAL += periph_i2c
+FEATURES_OPTIONAL += periph_spi
 FEATURES_OPTIONAL += periph_rtc
+FEATURES_OPTIONAL += periph_rtt
+FEATURES_OPTIONAL += periph_hwrng
+FEATURES_OPTIONAL += periph_usbdev
+FEATURES_OPTIONAL += periph_wdt
 
 ifneq (,$(filter msba2,$(BOARD)))
   USEMODULE += mci
