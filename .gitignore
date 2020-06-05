@@ -75,3 +75,6 @@ keys/
 
 # clangd language server
 .clangd/
+
+# We don't need inga_tool on this branch
+dist/tools/inga_tool/
