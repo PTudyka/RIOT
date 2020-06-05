@@ -46,7 +46,7 @@
 #endif
 #endif /* MODULE_PERIPH_INIT */
 
-#define ENABLE_DEBUG (1)
+#define ENABLE_DEBUG (0)
 #include "debug.h"
 
 void periph_init(void)

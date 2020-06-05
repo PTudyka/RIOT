@@ -39,7 +39,7 @@
 #include "periph/init.h"
 #include "board.h"
 
-#define ENABLE_DEBUG (1)
+#define ENABLE_DEBUG (0)
 #include "debug.h"
 
 #if defined (CPU_FAM_STM32L4)

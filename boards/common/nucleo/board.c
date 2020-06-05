@@ -31,15 +31,22 @@
 #include "board.h"
 #include "periph/gpio.h"
 
-#define ENABLE_DEBUG (1)
+#define ENABLE_DEBUG (0)
 #include "debug.h"
+
+/**
+ * @brief   Post-init routine for Boards-specific settings
+ */
+__attribute__((weak)) void post_board_init (void)
+{
+}
 
 void board_init(void)
 {
     /* initialize the CPU */
     cpu_init();
 
-    DEBUG("CPU initialized\n");
+    // DEBUG("CPU initialized\n");
 
     /* initialization of on-board LEDs
      * NOTE: LED0 must be explicitly enabled as it is also used for SPI_DEV(0) */
@@ -53,7 +60,9 @@ void board_init(void)
     gpio_init(LED2_PIN, GPIO_OUT);
 #endif
 
-    DEBUG("Board LEDs initialized\n")
+    // DEBUG("Board LEDs initialized\n")
+
+    post_board_init();
 
     /* Init GPIO Pins for Module timing measurement */
     // gpio_init(GPIO_PIN(PORT_C, 10), GPIO_OUT);  // init Pin PC10
