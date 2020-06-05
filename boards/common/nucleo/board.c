@@ -54,4 +54,8 @@ void board_init(void)
 #endif
 
     DEBUG("Board LEDs initialized\n")
+
+    /* Init GPIO Pins for Module timing measurement */
+    // gpio_init(GPIO_PIN(PORT_C, 10), GPIO_OUT);  // init Pin PC10
+    // gpio_write(GPIO_PIN(PORT_C, 10), 0);        // set to LOW before measurement
 }
