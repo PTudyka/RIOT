@@ -34,13 +34,6 @@
 #define ENABLE_DEBUG (0)
 #include "debug.h"
 
-/**
- * @brief   Post-init routine for Boards-specific settings
- */
-__attribute__((weak)) void post_board_init (void)
-{
-}
-
 void board_init(void)
 {
     /* initialize the CPU */
@@ -61,8 +54,6 @@ void board_init(void)
 #endif
 
     // DEBUG("Board LEDs initialized\n")
-
-    post_board_init();
 
     /* Init GPIO Pins for Module timing measurement */
     // gpio_init(GPIO_PIN(PORT_C, 10), GPIO_OUT);  // init Pin PC10

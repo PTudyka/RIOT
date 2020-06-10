@@ -29,8 +29,8 @@ FEATURES_OPTIONAL += periph_spi
 FEATURES_OPTIONAL += periph_rtc
 FEATURES_OPTIONAL += periph_rtt
 FEATURES_OPTIONAL += periph_hwrng
-FEATURES_OPTIONAL += periph_usbdev
-FEATURES_OPTIONAL += periph_wdt
+# FEATURES_OPTIONAL += periph_usbdev
+# FEATURES_OPTIONAL += periph_wdt
 
 ifneq (,$(filter msba2,$(BOARD)))
   USEMODULE += mci
