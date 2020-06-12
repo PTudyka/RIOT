@@ -45,6 +45,8 @@ int _gnrc_netapi_get_set(kernel_pid_t pid, netopt_t opt, uint16_t context,
     cmd.content.ptr = (void *)&o;
     /* trigger the netapi */
     msg_send_receive(&cmd, &ack, pid);
+    DEBUG("ACK type is %d\n", ack.type);
+    DEBUG("Should be: %d\n", GNRC_NETAPI_MSG_TYPE_ACK);
     assert(ack.type == GNRC_NETAPI_MSG_TYPE_ACK);
     /* return the ACK message's value */
     return (int)ack.content.value;
