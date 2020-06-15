@@ -40,28 +40,16 @@ extern "C" {
 #endif
 #ifndef AT86RF215_PARAM_CS
 // #define AT86RF215_PARAM_CS          (GPIO_PIN(1, 28))
-#define AT86RF215_PARAM_CS          (GPIO_PIN(PORT_A, 4))
-// #define AT86RF215_PARAM_CS          (GPIO_PIN(PORT_A, 0))
-// #define AT86RF215_PARAM_CS          (GPIO_PIN(PORT_B, 6))
-// #define AT86RF215_PARAM_CS          (GPIO_PIN(PORT_C, 4))
-// #define AT86RF215_PARAM_CS          (GPIO_PIN(PORT_D, 10))
+#define AT86RF215_PARAM_CS          (GPIO_PIN(PORT_A, 4)) // Stm32f4discovery
+// #define AT86RF215_PARAM_CS          (GPIO_PIN(PORT_B, 6)) // Nucleo-l073rz
 #endif
 #ifndef AT86RF215_PARAM_INT
 // #define AT86RF215_PARAM_INT         (GPIO_PIN(1, 7))
 #define AT86RF215_PARAM_INT         (GPIO_PIN(PORT_A, 8))
-// #define AT86RF215_PARAM_INT         (GPIO_PIN(PORT_D, 6))
-// #define AT86RF215_PARAM_INT         (GPIO_PIN(PORT_D, 3))
-// #define AT86RF215_PARAM_INT         (GPIO_PIN(PORT_E, 0))
-// #define AT86RF215_PARAM_INT         (GPIO_PIN(PORT_A, 8))
-// #define AT86RF215_PARAM_INT         (GPIO_PIN(PORT_C, 5))
 #endif
 #ifndef AT86RF215_PARAM_RESET
 // #define AT86RF215_PARAM_RESET       (GPIO_PIN(1, 8))
 #define AT86RF215_PARAM_RESET       (GPIO_PIN(PORT_B, 5))
-// #define AT86RF215_PARAM_RESET       (GPIO_PIN(PORT_D, 4))
-// #define AT86RF215_PARAM_RESET       (GPIO_PIN(PORT_A, 9))
-// #define AT86RF215_PARAM_RESET       (GPIO_PIN(PORT_D, 7))
-// #define AT86RF215_PARAM_RESET       (GPIO_PIN(PORT_C, 6))
 #endif
 
 #ifndef AT86RF215_PARAMS

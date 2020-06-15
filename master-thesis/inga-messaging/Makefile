@@ -3,31 +3,33 @@ APPLICATION = inga-messaging
 
 # If no BOARD is found in the environment, use this default:
 BOARD ?= stm32f4discovery
+# BOARD ?= nucleo-l073rz
 
 # This has to be the absolute path to the RIOT base directory:
 RIOTBASE ?= $(CURDIR)/../..
 
 # required features
-FEATURES_REQUIRED += periph_spi
+# FEATURES_REQUIRED += periph_spi
+
 USEMODULE += stdio_cdc_acm
+# USEMODULE += usbus_cdc_acm
 
 GNRC_NETIF_NUMOF := 2
 
-# required modules
 USEMODULE += at86rf215
 # USEMODULE += gnrc
 USEMODULE += gnrc_netdev_default
 USEMODULE += gnrc_pktdump
 USEMODULE += gnrc_txtsnd
 USEMODULE += auto_init_gnrc_netif
-# USEMODULE += ps
+USEMODULE += ps
 USEMODULE += shell
 USEMODULE += shell_commands
 
 # allow to use a smaller packet buffer in low-PDU drivers
-# ifdef GNRC_PKTBUF_SIZE
-#   CFLAGS += -DGNRC_PKTBUF_SIZE=$(GNRC_PKTBUF_SIZE)
-# endif
+ifdef GNRC_PKTBUF_SIZE
+  CFLAGS += -DGNRC_PKTBUF_SIZE=$(GNRC_PKTBUF_SIZE)
+endif
 
 # CFLAGS += -DDEBUG_ASSERT_VERBOSE
 
