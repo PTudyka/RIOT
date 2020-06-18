@@ -81,6 +81,7 @@ __attribute__((used,section(".isr_stack"))) uint8_t isr_stack[ISR_STACKSIZE];
  */
 __attribute__((weak)) void pre_startup (void)
 {
+    // gpio_toggle(MODULES_GPIO_PIN);
 }
 
 /**
@@ -88,6 +89,7 @@ __attribute__((weak)) void pre_startup (void)
  */
 __attribute__((weak)) void post_startup (void)
 {
+    // gpio_toggle(MODULES_GPIO_PIN);
 }
 
 void reset_handler_default(void)
@@ -99,9 +101,15 @@ void reset_handler_default(void)
     puf_sram_init((uint8_t *)&_srelocate, SEED_RAM_LEN);
 #endif
 
+    /* Init GPIO Pins for startup measurement */
+    gpio_init(STARTUP_GPIO_PIN, GPIO_OUT);
+    gpio_init(MODULES_GPIO_PIN, GPIO_OUT);
+    gpio_toggle(STARTUP_GPIO_PIN);
+
     pre_startup();
 
 #ifdef DEVELHELP
+    gpio_toggle(MODULES_GPIO_PIN);
     uint32_t *top;
     /* Fill stack space with canary values up until the current stack pointer */
     /* Read current stack pointer from CPU register */
@@ -110,19 +118,25 @@ void reset_handler_default(void)
     while (dst < top) {
         *(dst++) = STACK_CANARY_WORD;
     }
+    gpio_toggle(MODULES_GPIO_PIN);
 #endif
 
+    gpio_toggle(MODULES_GPIO_PIN);
     /* load data section from flash to ram */
     for (dst = &_srelocate; dst < &_erelocate; ) {
         *(dst++) = *(src++);
     }
+    // gpio_toggle(MODULES_GPIO_PIN);
 
+    // gpio_toggle(MODULES_GPIO_PIN);
     /* default bss section to zero */
     for (dst = &_szero; dst < &_ezero; ) {
         *(dst++) = 0;
     }
+    gpio_toggle(MODULES_GPIO_PIN);
 
 #ifdef CPU_HAS_BACKUP_RAM
+    // gpio_toggle(MODULES_GPIO_PIN);
     if (!cpu_woke_from_backup() ||
         CPU_BACKUP_RAM_NOT_RETAINED) {
 
@@ -138,13 +152,17 @@ void reset_handler_default(void)
             *dst = 0;
         }
     }
+    // gpio_toggle(MODULES_GPIO_PIN);
 #endif /* CPU_HAS_BACKUP_RAM */
 
 #if defined(MODULE_MPU_STACK_GUARD) || defined(MODULE_MPU_NOEXEC_RAM)
+    // gpio_toggle(MODULES_GPIO_PIN);
     mpu_enable();
+    // gpio_toggle(MODULES_GPIO_PIN);
 #endif
 
 #ifdef MODULE_MPU_NOEXEC_RAM
+    // gpio_toggle(MODULES_GPIO_PIN);
     /* Mark the RAM non executable. This is a protection mechanism which
      * makes exploitation of buffer overflows significantly harder.
      *
@@ -156,9 +174,11 @@ void reset_handler_default(void)
         (uintptr_t)&_sram,                               /* RAM base address */
         MPU_ATTR(1, AP_RW_RW, 0, 1, 0, 1, MPU_SIZE_512M) /* Allow read/write but no exec */
     );
+    // gpio_toggle(MODULES_GPIO_PIN);
 #endif
 
 #ifdef MODULE_MPU_STACK_GUARD
+    // gpio_toggle(MODULES_GPIO_PIN);
     if (((uintptr_t)&_sstack) != SRAM_BASE) {
         mpu_configure(
             1,                                              /* MPU region 1 */
@@ -167,21 +187,27 @@ void reset_handler_default(void)
         );
 
     }
+    // gpio_toggle(MODULES_GPIO_PIN);
 #endif
 
     post_startup();
 
+    // gpio_toggle(MODULES_GPIO_PIN);
     /* initialize the board (which also initiates CPU initialization) */
     board_init();
+    // gpio_toggle(MODULES_GPIO_PIN);
 
 #if MODULE_NEWLIB
     /* initialize std-c library (this must be done after board_init) */
     extern void __libc_init_array(void);
+    // MODULES_TOGGLE
     __libc_init_array();
+    // MODULES_TOGGLE
 #endif
 
     /* startup the kernel */
     kernel_init();
+    // gpio_toggle(STARTUP_GPIO_PIN);
 }
 
 void nmi_default(void)

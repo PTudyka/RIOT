@@ -26,6 +26,7 @@
 #include "thread.h"
 #include "irq.h"
 #include "log.h"
+#include "board.h"
 
 #include "periph/pm.h"
 
@@ -43,9 +44,13 @@ static void *main_trampoline(void *arg)
     (void)arg;
 
 #ifdef MODULE_AUTO_INIT
+    gpio_toggle(MODULES_GPIO_PIN);
     auto_init();
+    gpio_toggle(MODULES_GPIO_PIN);
 #endif
 
+    // gpio_toggle(MODULES_GPIO_PIN);
+    gpio_toggle(STARTUP_GPIO_PIN);
     LOG_INFO("main(): This is RIOT! (Version: " RIOT_VERSION ")\n");
 
     main();
@@ -69,17 +74,22 @@ static char idle_stack[THREAD_STACKSIZE_IDLE];
 
 void kernel_init(void)
 {
+    // gpio_toggle(MODULES_GPIO_PIN);
     irq_disable();
 
+    gpio_toggle(MODULES_GPIO_PIN);
     thread_create(idle_stack, sizeof(idle_stack),
                   THREAD_PRIORITY_IDLE,
                   THREAD_CREATE_WOUT_YIELD | THREAD_CREATE_STACKTEST,
                   idle_thread, NULL, "idle");
+    gpio_toggle(MODULES_GPIO_PIN);
 
+    gpio_toggle(MODULES_GPIO_PIN);
     thread_create(main_stack, sizeof(main_stack),
                   THREAD_PRIORITY_MAIN,
                   THREAD_CREATE_WOUT_YIELD | THREAD_CREATE_STACKTEST,
                   main_trampoline, NULL, "main");
+    gpio_toggle(MODULES_GPIO_PIN);
 
     cpu_switch_context_exit();
 }

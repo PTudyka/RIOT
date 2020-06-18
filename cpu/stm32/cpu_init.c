@@ -147,8 +147,13 @@ static void _gpio_init_ain(void)
 void cpu_init(void)
 {
     /* initialize the Cortex-M core */
+
+    gpio_toggle(MODULES_GPIO_PIN);
     cortexm_init();
+    // gpio_toggle(MODULES_GPIO_PIN);
     /* enable PWR module */
+
+    // gpio_toggle(MODULES_GPIO_PIN);
 #ifndef CPU_FAM_STM32WB
     periph_clk_en(APB1, BIT_APB_PWREN);
 #endif
@@ -160,12 +165,15 @@ void cpu_init(void)
     defined(CPU_FAM_STM32L1)
     _gpio_init_ain();
 #endif
+    gpio_toggle(MODULES_GPIO_PIN);
 #ifdef MODULE_PERIPH_DMA
     /*  initialize DMA streams */
     dma_init();
 #endif
     /* initialize stdio prior to periph_init() to allow use of DEBUG() there */
+    gpio_toggle(MODULES_GPIO_PIN);
     stdio_init();
+    gpio_toggle(MODULES_GPIO_PIN);
 
 #ifdef STM32F1_DISABLE_JTAG
     RCC->APB2ENR |= RCC_APB2ENR_AFIOEN;
@@ -173,5 +181,7 @@ void cpu_init(void)
 #endif
 
     /* trigger static peripheral initialization */
+    gpio_toggle(MODULES_GPIO_PIN);
     periph_init();
+    gpio_toggle(MODULES_GPIO_PIN);
 }
