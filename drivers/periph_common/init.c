@@ -51,38 +51,52 @@ void periph_init(void)
 #ifdef MODULE_PERIPH_INIT
     /* initialize configured I2C devices */
 #ifdef MODULE_PERIPH_INIT_I2C
+    // gpio_toggle(MODULES_GPIO_PIN);
     for (unsigned i = 0; i < I2C_NUMOF; i++) {
         i2c_init(I2C_DEV(i));
     }
+    // gpio_toggle(MODULES_GPIO_PIN);
 #endif
 
     /* initialize configured SPI devices */
 #ifdef MODULE_PERIPH_INIT_SPI
+    // gpio_toggle(MODULES_GPIO_PIN);
     for (unsigned i = 0; i < SPI_NUMOF; i++) {
         spi_init(SPI_DEV(i));
     }
+    // gpio_toggle(MODULES_GPIO_PIN);
 #endif
 
     /* Initialize RTT before RTC to allow for RTT based RTC implementations */
 #ifdef MODULE_PERIPH_INIT_RTT
+    // gpio_toggle(MODULES_GPIO_PIN);
     rtt_init();
+    // gpio_toggle(MODULES_GPIO_PIN);
 #endif
 
     /* Initialize RTC */
 #ifdef MODULE_PERIPH_INIT_RTC
+    // gpio_toggle(MODULES_GPIO_PIN);
     rtc_init();
+    // gpio_toggle(MODULES_GPIO_PIN);
 #endif
 
 #ifdef MODULE_PERIPH_INIT_HWRNG
+    // gpio_toggle(MODULES_GPIO_PIN);
     hwrng_init();
+    // gpio_toggle(MODULES_GPIO_PIN);
 #endif
 
 #ifdef MODULE_PERIPH_INIT_USBDEV
+    // gpio_toggle(MODULES_GPIO_PIN);
     usbdev_init_lowlevel();
+    // gpio_toggle(MODULES_GPIO_PIN);
 #endif
 
 #if defined(MODULE_PERIPH_INIT_WDT) && WDT_HAS_INIT
+    // gpio_toggle(MODULES_GPIO_PIN);
     wdt_init();
+    // gpio_toggle(MODULES_GPIO_PIN);
 #endif
 
 #endif /* MODULE_PERIPH_INIT */
