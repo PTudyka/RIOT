@@ -92,6 +92,23 @@ static const motor_driver_config_t motor_driver_config[] = {
 #define MOTOR_DRIVER_NUMOF           ARRAY_SIZE(motor_driver_config)
 /** @} */
 
+/**
+ * GPIO Debug Pins for timing measurement (PC10, PC12 on CN7 Header, top left)
+ */
+// #if !defined(ENABLE_STARTUP_TOGGLE) || defined(DOXYGEN)
+// #define ENABLE_STARTUP_TOGGLE (1)
+// #endif
+// #if !defined(ENABLE_MODULES_TOGGLE) || defined(DOXYGEN)
+// #define ENABLE_MODULES_TOGGLE (1)
+// #endif
+
+#define STARTUP_GPIO_PIN    GPIO_PIN(PORT_C, 10)
+#define MODULES_GPIO_PIN    GPIO_PIN(PORT_C, 12)
+// #define STARTUP_TOGGLE if (ENABLE_STARTUP_TOGGLE) { gpio_toggle(STARTUP_GPIO_PIN); }
+// #define MODULES_TOGGLE if (ENABLE_MODULES_TOGGLE) { gpio_toggle(MODULES_GPIO_PIN); }
+// #define STARTUP_TOGGLE gpio_toggle(STARTUP_GPIO_PIN);
+// #define MODULES_TOGGLE gpio_toggle(MODULES_GPIO_PIN);
+
 #ifdef __cplusplus
 }
 #endif
