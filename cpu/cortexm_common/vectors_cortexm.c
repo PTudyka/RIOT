@@ -109,7 +109,7 @@ void reset_handler_default(void)
     pre_startup();
 
 #ifdef DEVELHELP
-    gpio_toggle(MODULES_GPIO_PIN);
+    // gpio_toggle(MODULES_GPIO_PIN);
     uint32_t *top;
     /* Fill stack space with canary values up until the current stack pointer */
     /* Read current stack pointer from CPU register */
@@ -118,10 +118,10 @@ void reset_handler_default(void)
     while (dst < top) {
         *(dst++) = STACK_CANARY_WORD;
     }
-    gpio_toggle(MODULES_GPIO_PIN);
+    // gpio_toggle(MODULES_GPIO_PIN);
 #endif
 
-    gpio_toggle(MODULES_GPIO_PIN);
+    // gpio_toggle(MODULES_GPIO_PIN);
     /* load data section from flash to ram */
     for (dst = &_srelocate; dst < &_erelocate; ) {
         *(dst++) = *(src++);
@@ -133,7 +133,7 @@ void reset_handler_default(void)
     for (dst = &_szero; dst < &_ezero; ) {
         *(dst++) = 0;
     }
-    gpio_toggle(MODULES_GPIO_PIN);
+    // gpio_toggle(MODULES_GPIO_PIN);
 
 #ifdef CPU_HAS_BACKUP_RAM
     // gpio_toggle(MODULES_GPIO_PIN);

@@ -80,6 +80,12 @@ extern "C" {
 #define BTN0_MODE           GPIO_IN
 /** @} */
 
+/**
+ * GPIO Debug Pins for timing measurement (PC10, PC12 on CN7 Header, top left)
+ */
+#include "periph/gpio.h"
+#define STARTUP_GPIO_PIN    GPIO_PIN(PORT_C, 0)
+#define MODULES_GPIO_PIN    GPIO_PIN(PORT_C, 1)
 
 /**
  * @brief Initialize board specific hardware, including clock, LEDs and std-IO

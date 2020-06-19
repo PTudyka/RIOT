@@ -148,7 +148,7 @@ void cpu_init(void)
 {
     /* initialize the Cortex-M core */
 
-    gpio_toggle(MODULES_GPIO_PIN);
+    // gpio_toggle(MODULES_GPIO_PIN);
     cortexm_init();
     // gpio_toggle(MODULES_GPIO_PIN);
     /* enable PWR module */
@@ -165,7 +165,7 @@ void cpu_init(void)
     defined(CPU_FAM_STM32L1)
     _gpio_init_ain();
 #endif
-    gpio_toggle(MODULES_GPIO_PIN);
+    // gpio_toggle(MODULES_GPIO_PIN);
 #ifdef MODULE_PERIPH_DMA
     /*  initialize DMA streams */
     dma_init();

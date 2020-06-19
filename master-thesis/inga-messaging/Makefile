@@ -27,9 +27,9 @@ USEMODULE += shell
 USEMODULE += shell_commands
 
 # allow to use a smaller packet buffer in low-PDU drivers
-ifdef GNRC_PKTBUF_SIZE
-  CFLAGS += -DGNRC_PKTBUF_SIZE=$(GNRC_PKTBUF_SIZE)
-endif
+# ifdef GNRC_PKTBUF_SIZE
+#   CFLAGS += -DGNRC_PKTBUF_SIZE=$(GNRC_PKTBUF_SIZE)
+# endif
 
 # CFLAGS += -DDEBUG_ASSERT_VERBOSE
 
