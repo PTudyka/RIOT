@@ -9,6 +9,7 @@ PSEUDOMODULES += conn_can_isotp_multi
 PSEUDOMODULES += cord_ep_standalone
 PSEUDOMODULES += core_%
 PSEUDOMODULES += cortexm_fpu
+PSEUDOMODULES += cortexm_svc
 PSEUDOMODULES += cpu_check_address
 PSEUDOMODULES += crypto_%	# crypto_aes or crypto_3des
 PSEUDOMODULES += devfs_%
@@ -162,6 +163,10 @@ PSEUDOMODULES += hmc5883l_int
 
 # interrupt variant of the ITG320X driver as pseudo module
 PSEUDOMODULES += itg320x_int
+
+# include variants of MH-Z19 drivers as pseudo modules
+PSEUDOMODULES += mhz19_uart
+PSEUDOMODULES += mhz19_pwm
 
 # include variants of MPU9X50 drivers as pseudo modules
 PSEUDOMODULES += mpu9150

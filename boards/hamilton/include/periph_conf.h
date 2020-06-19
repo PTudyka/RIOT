@@ -88,23 +88,12 @@ extern "C" {
 /** @} */
 
 /**
- * @name    RTC configuration
+ * @name RTT configuration
  * @{
  */
-#define RTC_DEV             RTC->MODE2
-/** @} */
-
-/**
- * @name    RTT configuration
- * @{
- */
-#define RTT_DEV             RTC->MODE0
-#define RTT_IRQ             RTC_IRQn
-#define RTT_IRQ_PRIO        10
-#define RTT_ISR             isr_rtc
-#define RTT_MAX_VALUE       (0xffffffff)
+#ifndef RTT_FREQUENCY
 #define RTT_FREQUENCY       (32768U)    /* in Hz. For changes see `rtt.c` */
-#define RTT_RUNSTDBY        (1)         /* Keep RTT running in sleep states */
+#endif
 /** @} */
 
 /**
@@ -224,6 +213,10 @@ static const spi_conf_t spi_config[] = {
         .miso_pad = SPI_PAD_MISO_0,
         .mosi_pad = SPI_PAD_MOSI_2_SCK_3,
         .gclk_src = SAM0_GCLK_MAIN,
+#ifdef MODULE_PERIPH_DMA
+        .tx_trigger = SERCOM4_DMAC_ID_TX,
+        .rx_trigger = SERCOM4_DMAC_ID_RX,
+#endif
     }
 };
 

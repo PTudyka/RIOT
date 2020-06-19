@@ -162,6 +162,10 @@ static const spi_conf_t spi_config[] = {
         .miso_pad = SPI_PAD_MISO_3,
         .mosi_pad = SPI_PAD_MOSI_0_SCK_1,
         .gclk_src = SAM0_GCLK_48MHZ,
+#ifdef MODULE_PERIPH_DMA
+        .tx_trigger = SERCOM4_DMAC_ID_TX,
+        .rx_trigger = SERCOM4_DMAC_ID_RX,
+#endif
 
     },
     {    /* EXT2, EXT3 */
@@ -175,6 +179,10 @@ static const spi_conf_t spi_config[] = {
         .miso_pad = SPI_PAD_MISO_3,
         .mosi_pad = SPI_PAD_MOSI_0_SCK_1,
         .gclk_src = SAM0_GCLK_48MHZ,
+#ifdef MODULE_PERIPH_DMA
+        .tx_trigger = SERCOM6_DMAC_ID_TX,
+        .rx_trigger = SERCOM6_DMAC_ID_RX,
+#endif
     }
 };
 
@@ -223,8 +231,9 @@ static const i2c_conf_t i2c_config[] = {
  * @name RTT configuration
  * @{
  */
+#ifndef RTT_FREQUENCY
 #define RTT_FREQUENCY       (32768U)
-#define RTT_MAX_VALUE       (0xffffffffU)
+#endif
 /** @} */
 
 /**

@@ -103,6 +103,10 @@ static const spi_conf_t spi_config[] = {
         .miso_pad = SPI_PAD_MISO_0,
         .mosi_pad = SPI_PAD_MOSI_2_SCK_3,
         .gclk_src = SAM0_GCLK_MAIN,
+#ifdef MODULE_PERIPH_DMA
+        .tx_trigger = SERCOM4_DMAC_ID_TX,
+        .rx_trigger = SERCOM4_DMAC_ID_RX,
+#endif
     }
 };
 
@@ -140,8 +144,9 @@ static const i2c_conf_t i2c_config[] = {
  * @name    RTT configuration
  * @{
  */
-#define RTT_FREQUENCY                           (32768U)
-#define RTT_MAX_VALUE                           (0xffffffffU)
+#ifndef RTT_FREQUENCY
+#define RTT_FREQUENCY       (32768U)
+#endif
 /** @} */
 
 /**
@@ -163,6 +168,21 @@ static const adc_conf_chan_t adc_channels[] = {
 
 
 #define ADC_NUMOF                               ARRAY_SIZE(adc_channels)
+/** @} */
+
+/**
+ * @name USB peripheral configuration
+ * @{
+ */
+static const sam0_common_usb_config_t sam_usbdev_config[] = {
+    {
+        .dm       = GPIO_PIN(PA, 24),
+        .dp       = GPIO_PIN(PA, 25),
+        .d_mux    = GPIO_MUX_G,
+        .device   = &USB->DEVICE,
+        .gclk_src = SAM0_GCLK_48MHZ,
+    }
+};
 /** @} */
 
 #ifdef __cplusplus

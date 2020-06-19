@@ -81,6 +81,11 @@ extern "C" {
 #endif
 
 /**
+ * @defgroup net_gnrc_lwmac_conf    GNRC LWMAC compile configurations
+ * @ingroup  net_gnrc_conf
+ * @{
+ */
+/**
  * @brief Time between consecutive wake-ups.
  *
  * This macro governs power consumption, latency and throughput!
@@ -285,17 +290,7 @@ extern "C" {
 #ifndef GNRC_LWMAC_BROADCAST_CSMA_RETRIES
 #define GNRC_LWMAC_BROADCAST_CSMA_RETRIES    (3U)
 #endif
-
-/**
- * @brief Default message queue size to use for the LWMAC thread.
- *
- * The value of this macro should be enough for supporting the manipulation of
- * LWMAC.
- *
- */
-#ifndef GNRC_LWMAC_IPC_MSG_QUEUE_SIZE
-#define GNRC_LWMAC_IPC_MSG_QUEUE_SIZE        (8U)
-#endif
+/** @} */
 
 /**
  * @brief   Creates an IEEE 802.15.4 LWMAC network interface

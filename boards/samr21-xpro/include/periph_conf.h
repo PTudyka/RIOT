@@ -143,12 +143,16 @@ static const uart_conf_t uart_config[] = {
         .rx_pin   = GPIO_PIN(PA,5),
         .tx_pin   = GPIO_PIN(PA,4),
 #ifdef MODULE_PERIPH_UART_HW_FC
-        .rts_pin  = GPIO_UNDEF,
-        .cts_pin  = GPIO_UNDEF,
+        .rts_pin  = GPIO_PIN(PA,6),
+        .cts_pin  = GPIO_PIN(PA,7),
 #endif
         .mux      = GPIO_MUX_D,
         .rx_pad   = UART_PAD_RX_1,
+#ifdef MODULE_PERIPH_UART_HW_FC
+        .tx_pad   = UART_PAD_TX_0_RTS_2_CTS_3,
+#else
         .tx_pad   = UART_PAD_TX_0,
+#endif
         .flags    = UART_FLAG_NONE,
         .gclk_src = SAM0_GCLK_MAIN,
     },
@@ -157,12 +161,16 @@ static const uart_conf_t uart_config[] = {
         .rx_pin   = GPIO_PIN(PA,23),
         .tx_pin   = GPIO_PIN(PA,22),
 #ifdef MODULE_PERIPH_UART_HW_FC
-        .rts_pin  = GPIO_UNDEF,
-        .cts_pin  = GPIO_UNDEF,
+        .rts_pin  = GPIO_PIN(PB,22),
+        .cts_pin  = GPIO_PIN(PB,23),
 #endif
         .mux      = GPIO_MUX_D,
         .rx_pad   = UART_PAD_RX_1,
+#ifdef MODULE_PERIPH_UART_HW_FC
+        .tx_pad   = UART_PAD_TX_0_RTS_2_CTS_3,
+#else
         .tx_pad   = UART_PAD_TX_0,
+#endif
         .flags    = UART_FLAG_NONE,
         .gclk_src = SAM0_GCLK_MAIN,
     }
@@ -230,6 +238,10 @@ static const spi_conf_t spi_config[] = {
         .miso_pad = SPI_PAD_MISO_0,
         .mosi_pad = SPI_PAD_MOSI_2_SCK_3,
         .gclk_src = SAM0_GCLK_MAIN,
+#ifdef MODULE_PERIPH_DMA
+        .tx_trigger = SERCOM4_DMAC_ID_TX,
+        .rx_trigger = SERCOM4_DMAC_ID_RX,
+#endif
     },
     {
         .dev      = &SERCOM5->SPI,
@@ -242,6 +254,10 @@ static const spi_conf_t spi_config[] = {
         .miso_pad = SPI_PAD_MISO_0,
         .mosi_pad = SPI_PAD_MOSI_2_SCK_3,
         .gclk_src = SAM0_GCLK_MAIN,
+#ifdef MODULE_PERIPH_DMA
+        .tx_trigger = SERCOM5_DMAC_ID_TX,
+        .rx_trigger = SERCOM5_DMAC_ID_RX,
+#endif
     }
 };
 
@@ -267,23 +283,13 @@ static const i2c_conf_t i2c_config[] = {
 /** @} */
 
 /**
- * @name    RTC configuration
+ * @name RTT configuration
  * @{
  */
-#define RTC_DEV             RTC->MODE2
-/** @} */
-
-/**
- * @name    RTT configuration
- * @{
- */
-#define RTT_DEV             RTC->MODE0
-#define RTT_IRQ             RTC_IRQn
-#define RTT_IRQ_PRIO        10
-#define RTT_ISR             isr_rtc
-#define RTT_MAX_VALUE       (0xffffffff)
+#ifndef RTT_FREQUENCY
 #define RTT_FREQUENCY       (32768U)    /* in Hz. For changes see `rtt.c` */
-#define RTT_RUNSTDBY        (1)         /* Keep RTT running in sleep states */
+#endif
+#define RTT_MIN_OFFSET      (10U)
 /** @} */
 
 /**
