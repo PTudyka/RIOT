@@ -39,6 +39,9 @@
 #include "periph/init.h"
 #include "board.h"
 
+#define ENABLE_DEBUG (0)
+#include "debug.h"
+
 #if defined (CPU_FAM_STM32L4)
 #define BIT_APB_PWREN       RCC_APB1ENR1_PWREN
 #else
@@ -166,9 +169,22 @@ void cpu_init(void)
     _gpio_init_ain();
 #endif
     // gpio_toggle(MODULES_GPIO_PIN);
+
+    /* Init GPIO Pins for startup measurement */
+    gpio_init(STARTUP_GPIO_PIN, GPIO_OUT);
+    gpio_init(MODULES_GPIO_PIN, GPIO_OUT);
+    gpio_toggle(STARTUP_GPIO_PIN);
+    // gpio_toggle(MODULES_GPIO_PIN);
+    // gpio_init(GPIO_PIN(PORT_D, 6), GPIO_OUT);
+    // gpio_init(GPIO_PIN(PORT_D, 7), GPIO_OUT);
+    // gpio_toggle(GPIO_PIN(PORT_D, 6));
+    // gpio_toggle(GPIO_PIN(PORT_D, 7));
+
 #ifdef MODULE_PERIPH_DMA
     /*  initialize DMA streams */
+    gpio_toggle(MODULES_GPIO_PIN);
     dma_init();
+    gpio_toggle(MODULES_GPIO_PIN);
 #endif
     /* initialize stdio prior to periph_init() to allow use of DEBUG() there */
     gpio_toggle(MODULES_GPIO_PIN);
@@ -184,4 +200,5 @@ void cpu_init(void)
     gpio_toggle(MODULES_GPIO_PIN);
     periph_init();
     gpio_toggle(MODULES_GPIO_PIN);
+    // gpio_toggle(MODULES_GPIO_PIN);
 }

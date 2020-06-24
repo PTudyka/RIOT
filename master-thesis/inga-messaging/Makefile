@@ -25,6 +25,7 @@ USEMODULE += auto_init_gnrc_netif
 USEMODULE += ps
 USEMODULE += shell
 USEMODULE += shell_commands
+USEMODULE += auto_init
 
 # allow to use a smaller packet buffer in low-PDU drivers
 # ifdef GNRC_PKTBUF_SIZE

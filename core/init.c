@@ -43,12 +43,15 @@ static void *main_trampoline(void *arg)
 {
     (void)arg;
 
+    DEBUG("AUTO INIT\n");
+
 #ifdef MODULE_AUTO_INIT
     gpio_toggle(MODULES_GPIO_PIN);
     auto_init();
     gpio_toggle(MODULES_GPIO_PIN);
 #endif
 
+    DEBUG("MAIN FUNCTION CALL\n");
     // gpio_toggle(MODULES_GPIO_PIN);
     gpio_toggle(STARTUP_GPIO_PIN);
     LOG_INFO("main(): This is RIOT! (Version: " RIOT_VERSION ")\n");
@@ -77,6 +80,8 @@ void kernel_init(void)
     // gpio_toggle(MODULES_GPIO_PIN);
     irq_disable();
 
+    DEBUG("IDLE THREAD INIT\n");
+
     gpio_toggle(MODULES_GPIO_PIN);
     thread_create(idle_stack, sizeof(idle_stack),
                   THREAD_PRIORITY_IDLE,
@@ -84,6 +89,7 @@ void kernel_init(void)
                   idle_thread, NULL, "idle");
     gpio_toggle(MODULES_GPIO_PIN);
 
+    DEBUG("MAIN THREAD INIT\n");
     gpio_toggle(MODULES_GPIO_PIN);
     thread_create(main_stack, sizeof(main_stack),
                   THREAD_PRIORITY_MAIN,

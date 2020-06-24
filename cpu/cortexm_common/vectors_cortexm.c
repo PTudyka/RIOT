@@ -101,10 +101,6 @@ void reset_handler_default(void)
     puf_sram_init((uint8_t *)&_srelocate, SEED_RAM_LEN);
 #endif
 
-    /* Init GPIO Pins for startup measurement */
-    gpio_init(STARTUP_GPIO_PIN, GPIO_OUT);
-    gpio_init(MODULES_GPIO_PIN, GPIO_OUT);
-    gpio_toggle(STARTUP_GPIO_PIN);
 
     pre_startup();
 
@@ -206,6 +202,7 @@ void reset_handler_default(void)
 #endif
 
     /* startup the kernel */
+    // gpio_toggle(MODULES_GPIO_PIN);
     kernel_init();
     // gpio_toggle(STARTUP_GPIO_PIN);
 }

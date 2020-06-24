@@ -45,11 +45,16 @@ extern "C" {
 #endif
 #ifndef AT86RF215_PARAM_INT
 // #define AT86RF215_PARAM_INT         (GPIO_PIN(1, 7))
-#define AT86RF215_PARAM_INT         (GPIO_PIN(PORT_A, 8))
+// #define AT86RF215_PARAM_INT         (GPIO_PIN(PORT_A, 8))
+// #define AT86RF215_PARAM_INT         (GPIO_PIN(PORT_E, 2))
+#define AT86RF215_PARAM_INT         (GPIO_PIN(PORT_E, 2))
 #endif
 #ifndef AT86RF215_PARAM_RESET
 // #define AT86RF215_PARAM_RESET       (GPIO_PIN(1, 8))
-#define AT86RF215_PARAM_RESET       (GPIO_PIN(PORT_B, 5))
+// #define AT86RF215_PARAM_RESET       (GPIO_PIN(PORT_B, 5))
+#define AT86RF215_PARAM_RESET       (GPIO_PIN(PORT_E, 3))
+// #define AT86RF215_PARAM_RESET       (GPIO_PIN(PORT_D, 10))
+// #define AT86RF215_PARAM_RESET       (GPIO_PIN(PORT_D, 4))
 #endif
 
 #ifndef AT86RF215_PARAMS
