@@ -41,6 +41,12 @@ extern "C" {
 #define BTN0_MODE           GPIO_IN
 /** @} */
 
+/**
+ * GPIO Debug Pins for timing measurement (PA0, PA1 on JP1 Header)
+ */
+#define STARTUP_GPIO_PIN    GPIO_PIN(PORT_A, 0)
+#define MODULES_GPIO_PIN    GPIO_PIN(PORT_A, 1)
+
 #ifdef __cplusplus
 }
 #endif

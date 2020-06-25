@@ -99,17 +99,27 @@ void _reset_cause(void)
 }
 
 void cpu_init(void)
-{
+{   
+
     _reset_cause();
 
     wdt_reset();   /* should not be nececessary as done in bootloader */
+
     wdt_disable(); /* but when used without bootloader this is needed */
+
+
+    /* Init GPIO Pins for timing measurements */
+    gpio_init(STARTUP_GPIO_PIN, GPIO_OUT);
+    gpio_init(MODULES_GPIO_PIN, GPIO_OUT);
+    // gpio_toggle(STARTUP_GPIO_PIN);
 
     /* Initialize peripherals for which modules are included in the makefile.*/
     /* spi_init */
     /* rtc_init */
     /* hwrng_init */
+    // gpio_toggle(MODULES_GPIO_PIN);
     periph_init();
+    // gpio_toggle(MODULES_GPIO_PIN);
 }
 
 /* This is a vector which is aliased to __vector_default,

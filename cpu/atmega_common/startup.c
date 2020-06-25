@@ -71,6 +71,7 @@ __attribute__((used)) void reset_handler(void)
 #ifdef MODULE_PUF_SRAM
     puf_sram_init((uint8_t *)RAMEND-SEED_RAM_LEN, SEED_RAM_LEN);
 #endif
+
     /* initialize the board and startup the kernel */
     board_init();
     /* startup the kernel */

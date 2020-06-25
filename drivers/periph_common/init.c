@@ -39,37 +39,53 @@
 #include "periph/usbdev.h"
 #endif
 
+#include "board.h"
+
 void periph_init(void)
 {
+    // gpio_toggle(MODULES_GPIO_PIN);
     /* initialize configured I2C devices */
 #ifdef MODULE_PERIPH_I2C
+    // gpio_toggle(MODULES_GPIO_PIN);
     for (unsigned i = 0; i < I2C_NUMOF; i++) {
         i2c_init(I2C_DEV(i));
     }
+    // gpio_toggle(MODULES_GPIO_PIN);
 #endif
 
     /* initialize configured SPI devices */
 #ifdef MODULE_PERIPH_SPI
+    // gpio_toggle(MODULES_GPIO_PIN);
     for (unsigned i = 0; i < SPI_NUMOF; i++) {
         spi_init(SPI_DEV(i));
     }
+    // gpio_toggle(MODULES_GPIO_PIN);
 #endif
 
     /* Initialize RTC */
 #ifdef MODULE_PERIPH_RTC
+    // gpio_toggle(MODULES_GPIO_PIN);
     rtc_init();
+    // gpio_toggle(MODULES_GPIO_PIN);
 #endif
 
     /* Initialize RTT */
 #ifdef MODULE_PERIPH_RTT
+    // gpio_toggle(MODULES_GPIO_PIN);
     rtt_init();
+    // gpio_toggle(MODULES_GPIO_PIN);
 #endif
 
 #ifdef MODULE_PERIPH_HWRNG
+    // gpio_toggle(MODULES_GPIO_PIN);
     hwrng_init();
+    // gpio_toggle(MODULES_GPIO_PIN);
 #endif
 
 #ifdef MODULE_PERIPH_USBDEV
+    // gpio_toggle(MODULES_GPIO_PIN);
     usbdev_init_lowlevel();
+    // gpio_toggle(MODULES_GPIO_PIN);
 #endif
+    // gpio_toggle(MODULES_GPIO_PIN);
 }

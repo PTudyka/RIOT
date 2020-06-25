@@ -18,6 +18,8 @@
 #include <stdint.h>
 #include <stdio.h>
 
+#include "board.h"
+
 #include "auto_init.h"
 
 #ifdef MODULE_MCI
@@ -95,11 +97,16 @@ void auto_init(void)
 {
 #ifdef MODULE_PRNG
     void auto_init_random(void);
+    gpio_toggle(MODULES_GPIO_PIN);
+    DEBUG("Auto init Random module\n");
     auto_init_random();
+    gpio_toggle(MODULES_GPIO_PIN);
 #endif
 #ifdef MODULE_XTIMER
     DEBUG("Auto init xtimer module.\n");
+    gpio_toggle(MODULES_GPIO_PIN);
     xtimer_init();
+    gpio_toggle(MODULES_GPIO_PIN);
 #endif
 #ifdef MODULE_MCI
     DEBUG("Auto init mci module.\n");
@@ -107,15 +114,20 @@ void auto_init(void)
 #endif
 #ifdef MODULE_PROFILING
     extern void profiling_init(void);
+    DEBUG("Auto init Profiling\n");
     profiling_init();
 #endif
 #ifdef MODULE_GNRC_PKTBUF
     DEBUG("Auto init gnrc_pktbuf module\n");
+    gpio_toggle(MODULES_GPIO_PIN);
     gnrc_pktbuf_init();
+    gpio_toggle(MODULES_GPIO_PIN);
 #endif
 #ifdef MODULE_GNRC_PKTDUMP
     DEBUG("Auto init gnrc_pktdump module.\n");
+    gpio_toggle(MODULES_GPIO_PIN);
     gnrc_pktdump_init();
+    gpio_toggle(MODULES_GPIO_PIN);
 #endif
 #ifdef MODULE_GNRC_SIXLOWPAN
     DEBUG("Auto init gnrc_sixlowpan module.\n");
@@ -138,6 +150,7 @@ void auto_init(void)
     lwip_bootstrap();
 #endif
 #ifdef MODULE_OPENTHREAD
+    DEBUG("Auto init Openthread\n");
     extern void openthread_bootstrap(void);
     openthread_bootstrap();
 #endif
@@ -178,130 +191,159 @@ void auto_init(void)
     nimble_riot_init();
 #endif
 #ifdef MODULE_AUTO_INIT_LORAMAC
+    DEBUG("Auto init Loramac\n");
     extern void auto_init_loramac(void);
     auto_init_loramac();
 #endif
 
 /* initialize USB devices */
 #ifdef MODULE_AUTO_INIT_USBUS
+    DEBUG("Auto init USBUS\n");
     extern void auto_init_usb(void);
     auto_init_usb();
 #endif
 
 /* initialize network devices */
 #ifdef MODULE_AUTO_INIT_GNRC_NETIF
+    DEBUG("Auto init AUTO INIT GNRC NETIF\n");
+// #if 0
 
 #ifdef MODULE_STM32_ETH
+    DEBUG("Auto init STM32 Eth\n");
     extern void auto_init_stm32_eth(void);
     auto_init_stm32_eth();
 #endif
 
 #ifdef MODULE_AT86RF2XX
+    DEBUG("Auto init AT86RF2xx\n");
     extern void auto_init_at86rf2xx(void);
+    gpio_toggle(MODULES_GPIO_PIN);
     auto_init_at86rf2xx();
+    gpio_toggle(MODULES_GPIO_PIN);
 #endif
 
 #ifdef MODULE_MRF24J40
+    DEBUG("Auto init MRF24J40\n");
     extern void auto_init_mrf24j40(void);
     auto_init_mrf24j40();
 #endif
 
 #ifdef MODULE_CC2420
+    DEBUG("Auto init CC2420\n");
     extern void auto_init_cc2420(void);
     auto_init_cc2420();
 #endif
 
 #ifdef MODULE_ENCX24J600
+    DEBUG("Auto init ENCX24J600\n");
     extern void auto_init_encx24j600(void);
     auto_init_encx24j600();
 #endif
 
 #ifdef MODULE_ENC28J60
+    DEBUG("Auto init ENC28J60\n");
     extern void auto_init_enc28j60(void);
     auto_init_enc28j60();
 #endif
 
 #ifdef MODULE_ESP_ETH
+    DEBUG("Auto init ESP ETH\n");
     extern void auto_init_esp_eth(void);
     auto_init_esp_eth();
 #endif
 
 #ifdef MODULE_ESP_NOW
+    DEBUG("Auto init ESP NOW\n");
     extern void auto_init_esp_now(void);
     auto_init_esp_now();
 #endif
 
 #ifdef MODULE_ESP_WIFI
+    DEBUG("Auto init ESP WIFI\n");
     extern void auto_init_esp_wifi(void);
     auto_init_esp_wifi();
 #endif
 
 #ifdef MODULE_ETHOS
+    DEBUG("Auto init ETHOS\n");
     extern void auto_init_ethos(void);
     auto_init_ethos();
 #endif
 
 #ifdef MODULE_SLIPDEV
+    DEBUG("Auto init SLIPDEV\n");
     extern void auto_init_slipdev(void);
     auto_init_slipdev();
 #endif
 
 #ifdef MODULE_CC110X
+    DEBUG("Auto init CC110X\n");
     extern void auto_init_cc110x(void);
     auto_init_cc110x();
 #endif
 
 #ifdef MODULE_CC2538_RF
+    DEBUG("Auto init CC2538 RF\n");
     extern void auto_init_cc2538_rf(void);
     auto_init_cc2538_rf();
 #endif
 
 #ifdef MODULE_XBEE
+    DEBUG("Auto init XBEE\n");
     extern void auto_init_xbee(void);
     auto_init_xbee();
 #endif
 
 #ifdef MODULE_KW2XRF
+    DEBUG("Auto init KW2XRF\n");
     extern void auto_init_kw2xrf(void);
     auto_init_kw2xrf();
 #endif
 
 #ifdef MODULE_USBUS_CDC_ECM
+    DEBUG("Auto init USBUS CDC ECM\n");
     extern void auto_init_netdev_cdcecm(void);
     auto_init_netdev_cdcecm();
 #endif
 
 #ifdef MODULE_NETDEV_TAP
+    DEBUG("Auto init NETDEV TAP\n");
     extern void auto_init_netdev_tap(void);
     auto_init_netdev_tap();
 #endif
 
 #ifdef MODULE_SOCKET_ZEP
+    DEBUG("Auto init SOCKET ZEP\n");
     extern void auto_init_socket_zep(void);
     auto_init_socket_zep();
 #endif
 
 #ifdef MODULE_NORDIC_SOFTDEVICE_BLE
+    DEBUG("Auto init NORDIC SOFTDEVICE BLE\n");
     extern void gnrc_nordic_ble_6lowpan_init(void);
     gnrc_nordic_ble_6lowpan_init();
 #endif
 
 #ifdef MODULE_NRFMIN
+    DEBUG("Auto init NRFMIN\n");
     extern void gnrc_nrfmin_init(void);
     gnrc_nrfmin_init();
 #endif
 
 #ifdef MODULE_W5100
+    DEBUG("Auto init W5100\n");
     extern void auto_init_w5100(void);
     auto_init_w5100();
 #endif
 
 #if defined(MODULE_SX127X) && !defined(MODULE_SEMTECH_LORAMAC)
+    DEBUG("Auto init SX127X\n");
     extern void auto_init_sx127x(void);
     auto_init_sx127x();
 #endif
 
 #ifdef MODULE_NRF802154
+    DEBUG("Auto init NRF802154\n");
     extern void auto_init_nrf802154(void);
     auto_init_nrf802154();
 #endif
@@ -309,6 +351,7 @@ void auto_init(void)
 #endif /* MODULE_AUTO_INIT_GNRC_NETIF */
 
 #ifdef MODULE_GNRC_UHCPC
+    DEBUG("Auto init GNRC UHCPC\n");
     extern void auto_init_gnrc_uhcpc(void);
     auto_init_gnrc_uhcpc();
 #endif
@@ -527,6 +570,7 @@ void auto_init(void)
 #ifdef MODULE_AUTO_INIT_GNRC_RPL
 
 #ifdef MODULE_GNRC_RPL
+    DEBUG("Auto init GNRC RPL\n");
     extern void auto_init_gnrc_rpl(void);
     auto_init_gnrc_rpl();
 #endif
@@ -538,6 +582,7 @@ void auto_init(void)
     DEBUG("auto_init STORAGE\n");
 
 #ifdef MODULE_SDCARD_SPI
+    DEBUG("Auto init SDCARD SPI\n");
     extern void auto_init_sdcard_spi(void);
     auto_init_sdcard_spi();
 #endif
