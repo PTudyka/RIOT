@@ -86,16 +86,6 @@ extern "C" {
  */
 #define STARTUP_GPIO_PIN    GPIO_PIN(PORT_D, 6)
 #define MODULES_GPIO_PIN    GPIO_PIN(PORT_D, 7)
-// #define STARTUP_GPIO_PIN    GPIO_PIN(PORT_C, 6)
-// #define MODULES_GPIO_PIN    GPIO_PIN(PORT_C, 7)
-// #define STARTUP_GPIO_PIN    GPIO_PIN(PORT_A, 9)
-// #define MODULES_GPIO_PIN    GPIO_PIN(PORT_A, 8)
-// #define STARTUP_GPIO_PIN    GPIO_PIN(PORT_D, 5)
-// #define MODULES_GPIO_PIN    GPIO_PIN(PORT_D, 6)
-// #define STARTUP_GPIO_PIN    GPIO_PIN(PORT_E, 9)
-// #define MODULES_GPIO_PIN    GPIO_PIN(PORT_E, 11)
-// #define STARTUP_GPIO_PIN    GPIO_PIN(PORT_C, 1)
-// #define MODULES_GPIO_PIN    GPIO_PIN(PORT_C, 2)
 
 /**
  * @brief Initialize board specific hardware, including clock, LEDs and std-IO

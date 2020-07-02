@@ -26,6 +26,8 @@
 #include "kernel_defines.h"
 #include "log.h"
 
+#include "board.h"
+
 void auto_init(void)
 {
     if (IS_USED(MODULE_AUTO_INIT_RANDOM)) {
@@ -35,6 +37,13 @@ void auto_init(void)
         auto_init_random();
         // gpio_toggle(MODULES_GPIO_PIN);
     }
+    // else
+    // {
+    //     /* Still toggle GPIO Pin, to make analysis easier later */
+    //     gpio_toggle(MODULES_GPIO_PIN);
+    //     gpio_toggle(MODULES_GPIO_PIN);
+    // }
+    
     if (IS_USED(MODULE_AUTO_INIT_ZTIMER)) {
         LOG_DEBUG("Auto init ztimer.\n");
         void ztimer_init(void);

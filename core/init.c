@@ -47,7 +47,9 @@ static void *main_trampoline(void *arg)
 
 #ifdef MODULE_AUTO_INIT
     gpio_toggle(MODULES_GPIO_PIN);
+    // gpio_toggle(STARTUP_GPIO_PIN);
     auto_init();
+    // gpio_toggle(STARTUP_GPIO_PIN);
     gpio_toggle(MODULES_GPIO_PIN);
 #endif
 

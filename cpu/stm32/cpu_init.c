@@ -182,9 +182,9 @@ void cpu_init(void)
 
 #ifdef MODULE_PERIPH_DMA
     /*  initialize DMA streams */
-    gpio_toggle(MODULES_GPIO_PIN);
+    // gpio_toggle(MODULES_GPIO_PIN);
     dma_init();
-    gpio_toggle(MODULES_GPIO_PIN);
+    // gpio_toggle(MODULES_GPIO_PIN);
 #endif
     /* initialize stdio prior to periph_init() to allow use of DEBUG() there */
     gpio_toggle(MODULES_GPIO_PIN);
