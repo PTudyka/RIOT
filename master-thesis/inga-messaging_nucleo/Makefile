@@ -2,8 +2,8 @@
 APPLICATION = inga-messaging
 
 # If no BOARD is found in the environment, use this default:
-BOARD ?= stm32f4discovery
-# BOARD ?= nucleo-l073rz
+# BOARD ?= stm32f4discovery
+BOARD ?= nucleo-l073rz
 
 # This has to be the absolute path to the RIOT base directory:
 RIOTBASE ?= $(CURDIR)/../..
@@ -12,16 +12,16 @@ RIOTBASE ?= $(CURDIR)/../..
 # FEATURES_REQUIRED += periph_spi
 
 # USEMODULE += stdio_cdc_acm
-USEMODULE += usbus_cdc_acm
+# USEMODULE += usbus_cdc_acm
 
-GNRC_NETIF_NUMOF := 2
+# GNRC_NETIF_NUMOF := 2
 
-USEMODULE += at86rf215
+# USEMODULE += at86rf215
 # USEMODULE += gnrc
-USEMODULE += gnrc_netdev_default
-USEMODULE += gnrc_pktdump
-USEMODULE += gnrc_txtsnd
-USEMODULE += auto_init_gnrc_netif
+# USEMODULE += gnrc_netdev_default
+# USEMODULE += gnrc_pktdump
+# USEMODULE += gnrc_txtsnd
+# USEMODULE += auto_init_gnrc_netif
 USEMODULE += ps
 USEMODULE += shell
 USEMODULE += shell_commands
