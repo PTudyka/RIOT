@@ -2,7 +2,13 @@
 APPLICATION = hello-world
 
 # If no BOARD is found in the environment, use this default:
-BOARD ?= native
+#BOARD ?= native
+BOARD = inga_red
+
+# USEMODULE += adxl345
+#   USEMODULE += l3g4200d
+#   USEMODULE += mag3110
+# USEMODULE += auto_init
 
 # This has to be the absolute path to the RIOT base directory:
 RIOTBASE ?= $(CURDIR)/../..

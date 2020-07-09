@@ -22,11 +22,11 @@
 
 // #include "periph/gpio.h"
 
-// #include "msg.h"
-// #include "thread.h"
+#include "msg.h"
+#include "thread.h"
 #include "shell.h"
 #include "shell_commands.h"
-// #include "xtimer.h"
+#include "xtimer.h"
 #include "net/gnrc.h"
 #include "net/gnrc/netreg.h"
 #include "net/gnrc/netif/ieee802154.h"
@@ -37,9 +37,9 @@
 #define RCV_QUEUE_SIZE (16)
 
 // char dump_thread_stack[512+256];
-// char send_thread_stack[512+256];
+char send_thread_stack[512+256];
 
-// kernel_pid_t send_thread_pid = 0;
+kernel_pid_t send_thread_pid = 0;
 
 // int SEND_MESG_FLAG = 0;
 // char *CURRENT_MSG = NULL;
@@ -100,58 +100,58 @@
 //     return NULL;
 // }
 
-// void *send_thread(void *arg)
-// {
-//     gnrc_netif_t *ieee802154_netif = arg;
+void *send_thread(void *arg)
+{
+    gnrc_netif_t *ieee802154_netif = arg;
 
-//     /// 0 Adress length means we want to use broadcast
-//     size_t addr_len = 0;
-//     uint8_t addr[GNRC_NETIF_L2ADDR_MAXLEN];
-//     gnrc_pktsnip_t *pkt, *hdr;
-//     gnrc_netif_hdr_t *nethdr;
+    /// 0 Adress length means we want to use broadcast
+    size_t addr_len = 0;
+    uint8_t addr[GNRC_NETIF_L2ADDR_MAXLEN];
+    gnrc_pktsnip_t *pkt, *hdr;
+    gnrc_netif_hdr_t *nethdr;
 
-//     /// Send packet as broadcast
-//     uint8_t flags = 0 | GNRC_NETIF_HDR_FLAGS_BROADCAST;
+    /// Send packet as broadcast
+    uint8_t flags = 0 | GNRC_NETIF_HDR_FLAGS_BROADCAST;
     
-//     /// payload
-//     // char message[] = "RIOT says hello.\0";
+    /// payload
+    char message[] = "RIOT says hello.\0";
     
-//     while(1) {
-//         /// Sleep 1 second
-//         xtimer_sleep(SEND_INTERVAL);
+    while(1) {
+        /// Sleep 1 second
+        xtimer_sleep(SEND_INTERVAL);
 
-//         // Wait for a message to send
-//         // Reset FLAG if a messag should be sent
-//         if (!SEND_MESG_FLAG) { continue; }
-//         else { SEND_MESG_FLAG = 0; }
+        // Wait for a message to send
+        // Reset FLAG if a messag should be sent
+        // if (!SEND_MESG_FLAG) { continue; }
+        // else { SEND_MESG_FLAG = 0; }
 
-//         printf("MSG: %s\n", CURRENT_MSG);
+        // printf("MSG: %s\n", CURRENT_MSG);
 
-//         pkt = gnrc_pktbuf_add(NULL, CURRENT_MSG, CURRENT_MSG_SIZE, GNRC_NETTYPE_UNDEF);
-//         if (pkt == NULL) {
-//             puts("ERROR: packet buffer full");
-//             return NULL;
-//         }
+        pkt = gnrc_pktbuf_add(NULL, message, sizeof(message), GNRC_NETTYPE_UNDEF);
+        if (pkt == NULL) {
+            puts("ERROR: packet buffer full");
+            return NULL;
+        }
 
-//         hdr = gnrc_netif_hdr_build(NULL, 0, addr, addr_len);
-//         if (hdr == NULL) {
-//             puts("ERROR: packet buffer full");
-//             gnrc_pktbuf_release(pkt);
-//             return NULL;
-//         }
-//         LL_PREPEND(pkt, hdr);
-//         nethdr = (gnrc_netif_hdr_t *)hdr->data;
-//         nethdr->flags = flags;
-//         int ret = gnrc_netapi_send(ieee802154_netif->pid, pkt);
-//         if (ret < 1) {
-//             printf("[send_thread] unable to send: %d\n", ret);
-//             gnrc_pktbuf_release(pkt);
-//         } else {
-//             puts("[send_thread] sent message");
-//         }
-//     }
-//     return NULL;
-// }
+        hdr = gnrc_netif_hdr_build(NULL, 0, addr, addr_len);
+        if (hdr == NULL) {
+            puts("ERROR: packet buffer full");
+            gnrc_pktbuf_release(pkt);
+            return NULL;
+        }
+        LL_PREPEND(pkt, hdr);
+        nethdr = (gnrc_netif_hdr_t *)hdr->data;
+        nethdr->flags = flags;
+        int ret = gnrc_netapi_send(ieee802154_netif->pid, pkt);
+        if (ret < 1) {
+            printf("[send_thread] unable to send: %d\n", ret);
+            gnrc_pktbuf_release(pkt);
+        } else {
+            puts("[send_thread] sent message");
+        }
+    }
+    return NULL;
+}
 
 // int send_command(int argc, char **argv)
 // {
@@ -207,12 +207,13 @@ int main(void)
     // }
     
 
-    // if((netif = gnrc_netif_iter(netif))) {
-    //     gnrc_netif_t *ieee802154_netif = netif;
-    //     send_thread_pid = thread_create(send_thread_stack, sizeof(send_thread_stack), THREAD_PRIORITY_MAIN + 2, THREAD_CREATE_STACKTEST, send_thread, ieee802154_netif, "send_thread");
-    // } else {
-    //     puts("Unable to find netif");
-    // }
+    gnrc_netif_t *netif = NULL;
+    if((netif = gnrc_netif_iter(netif))) {
+        gnrc_netif_t *ieee802154_netif = netif;
+        send_thread_pid = thread_create(send_thread_stack, sizeof(send_thread_stack), THREAD_PRIORITY_MAIN + 2, THREAD_CREATE_STACKTEST, send_thread, ieee802154_netif, "send_thread");
+    } else {
+        puts("Unable to find netif");
+    }
 
     (void) puts("Welcome to RIOT!");
 

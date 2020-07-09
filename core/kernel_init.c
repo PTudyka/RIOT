@@ -48,11 +48,11 @@ static void *main_trampoline(void *arg)
     (void) arg;
 
 #ifdef MODULE_AUTO_INIT
-    // gpio_toggle(MODULES_GPIO_PIN);
-    gpio_toggle(STARTUP_GPIO_PIN);
+    gpio_toggle(MODULES_GPIO_PIN);
+    // gpio_toggle(STARTUP_GPIO_PIN);
     auto_init();
-    gpio_toggle(STARTUP_GPIO_PIN);
-    // gpio_toggle(MODULES_GPIO_PIN);
+    // gpio_toggle(STARTUP_GPIO_PIN);
+    gpio_toggle(MODULES_GPIO_PIN);
 #endif
 
 #ifdef MODULE_SCHEDSTATISTICS
@@ -60,7 +60,7 @@ static void *main_trampoline(void *arg)
     ss->laststart = 0;
 #endif
 
-    // gpio_toggle(STARTUP_GPIO_PIN);
+    gpio_toggle(STARTUP_GPIO_PIN);
     LOG_INFO("main(): This is RIOT! (Version: " RIOT_VERSION ")\n");
 
     main();
@@ -88,19 +88,19 @@ void kernel_init(void)
 {
     (void) irq_disable();
 
-    // gpio_toggle(MODULES_GPIO_PIN);
+    gpio_toggle(MODULES_GPIO_PIN);
     thread_create(idle_stack, sizeof(idle_stack),
             THREAD_PRIORITY_IDLE,
             THREAD_CREATE_WOUT_YIELD | THREAD_CREATE_STACKTEST,
             idle_thread, NULL, idle_name);
-    // gpio_toggle(MODULES_GPIO_PIN);
+    gpio_toggle(MODULES_GPIO_PIN);
 
-    // gpio_toggle(MODULES_GPIO_PIN);
+    gpio_toggle(MODULES_GPIO_PIN);
     thread_create(main_stack, sizeof(main_stack),
             THREAD_PRIORITY_MAIN,
             THREAD_CREATE_WOUT_YIELD | THREAD_CREATE_STACKTEST,
             main_trampoline, NULL, main_name);
-    // gpio_toggle(MODULES_GPIO_PIN);
+    gpio_toggle(MODULES_GPIO_PIN);
 
     cpu_switch_context_exit();
 }
