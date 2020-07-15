@@ -90,7 +90,7 @@
 #include "net/asymcute.h"
 #endif
 
-#define ENABLE_DEBUG (0)
+#define ENABLE_DEBUG (1)
 #include "debug.h"
 
 void auto_init(void)
@@ -377,190 +377,237 @@ void auto_init(void)
     DEBUG("auto_init SAUL\n");
 
 #ifdef MODULE_SAUL_ADC
+    DEBUG("Auto init SAUL ADC.\n");
     extern void auto_init_adc(void);
     auto_init_adc();
 #endif
 #ifdef MODULE_SAUL_GPIO
+    DEBUG("Auto init SAUL GPIO.\n");
     extern void auto_init_gpio(void);
     auto_init_gpio();
 #endif
 #ifdef MODULE_SAUL_NRF_TEMPERATURE
+    DEBUG("Auto init SAUL NRF TEMPERATURE.\n");
     extern void auto_init_nrf_temperature(void);
     auto_init_nrf_temperature();
 #endif
 #ifdef MODULE_AD7746
+    DEBUG("Auto init AD7746.\n");
     extern void auto_init_ad7746(void);
     auto_init_ad7746();
 #endif
 #ifdef MODULE_ADCXX1C
+    DEBUG("Auto init ADCXX1C.\n");
     extern void auto_init_adcxx1c(void);
     auto_init_adcxx1c();
 #endif
 #ifdef MODULE_ADS101X
+    DEBUG("Auto init ADS101X.\n");
     extern void auto_init_ads101x(void);
     auto_init_ads101x();
 #endif
 #ifdef MODULE_ADXL345
+    DEBUG("Auto init ADXL345.\n");
     extern void auto_init_adxl345(void);
     auto_init_adxl345();
 #endif
 #ifdef MODULE_BMP180
+    DEBUG("Auto init BMP180.\n");
     extern void auto_init_bmp180(void);
     auto_init_bmp180();
 #endif
 #if defined(MODULE_BME280) || defined(MODULE_BMP280)
+    DEBUG("Auto init BME280.\n");
     extern void auto_init_bmx280(void);
     auto_init_bmx280();
 #endif
 #ifdef MODULE_BMX055
+    DEBUG("Auto init BMX055.\n");
     extern void auto_init_bmx055(void);
     auto_init_bmx055();
 #endif
 #ifdef MODULE_CCS811
+    DEBUG("Auto init CCS811.\n");
     extern void auto_init_ccs811(void);
     auto_init_ccs811();
 #endif
 #ifdef MODULE_DHT
+    DEBUG("Auto init DHT.\n");
     extern void auto_init_dht(void);
     auto_init_dht();
 #endif
 #ifdef MODULE_DS18
+    DEBUG("Auto init DS18.\n");
     extern void auto_init_ds18(void);
     auto_init_ds18();
 #endif
 #ifdef MODULE_DS75LX
+    DEBUG("Auto init DS75LX.\n");
     extern void auto_init_ds75lx(void);
     auto_init_ds75lx();
 #endif
 #ifdef MODULE_FXOS8700
+    DEBUG("Auto init FXOS8700.\n");
     extern void auto_init_fxos8700(void);
     auto_init_fxos8700();
 #endif
 #ifdef MODULE_GROVE_LEDBAR
+    DEBUG("Auto init GROVE LEDBAR.\n");
     extern void auto_init_grove_ledbar(void);
     auto_init_grove_ledbar();
 #endif
 #ifdef MODULE_HDC1000
+    DEBUG("Auto init HDC1000.\n");
     extern void auto_init_hdc1000(void);
     auto_init_hdc1000();
 #endif
 #ifdef MODULE_HTS221
+    DEBUG("Auto init HTS221.\n");
     extern void auto_init_hts221(void);
     auto_init_hts221();
 #endif
 #ifdef MODULE_IO1_XPLAINED
+    DEBUG("Auto init I01 XPLAINED.\n");
     extern void auto_init_io1_xplained(void);
     auto_init_io1_xplained();
 #endif
 #ifdef MODULE_ISL29020
+    DEBUG("Auto init ISL29020.\n");
     extern void auto_init_isl29020(void);
     auto_init_isl29020();
 #endif
 #ifdef MODULE_JC42
+    DEBUG("Auto init JC42.\n");
     extern void auto_init_jc42(void);
     auto_init_jc42();
 #endif
 #ifdef MODULE_L3G4200D
+    DEBUG("Auto init L3G4200D.\n");
     extern void auto_init_l3g4200d(void);
     auto_init_l3g4200d();
 #endif
 #ifdef MODULE_LIS2DH12
+    DEBUG("Auto init LIS2DH12.\n");
     extern void auto_init_lis2dh12(void);
     auto_init_lis2dh12();
 #endif
 #ifdef MODULE_LIS3DH
+    DEBUG("Auto init LIS3DH.\n");
     extern void auto_init_lis3dh(void);
     auto_init_lis3dh();
 #endif
 #ifdef MODULE_LIS3MDL
+    DEBUG("Auto init LIS3MDL.\n");
     extern void auto_init_lis3mdl(void);
     auto_init_lis3mdl();
 #endif
 #ifdef MODULE_LPSXXX
+    DEBUG("Auto init LPSXXX.\n");
     extern void auto_init_lpsxxx(void);
     auto_init_lpsxxx();
 #endif
 #ifdef MODULE_LSM303DLHC
+    DEBUG("Auto init LSM303DLHC.\n");
     extern void auto_init_lsm303dlhc(void);
     auto_init_lsm303dlhc();
 #endif
 #ifdef MODULE_LSM6DSL
+    DEBUG("Auto init LSM6DSL.\n");
     extern void auto_init_lsm6dsl(void);
     auto_init_lsm6dsl();
 #endif
 #ifdef MODULE_LTC4150
+    DEBUG("Auto init LTC4150.\n");
     extern void auto_init_ltc4150(void);
     auto_init_ltc4150();
  #endif
 #ifdef MODULE_MAG3110
+    DEBUG("Auto init MAG3110.\n");
     extern void auto_init_mag3110(void);
     auto_init_mag3110();
 #endif
 #ifdef MODULE_MMA7660
+    DEBUG("Auto init MMA7660.\n");
     extern void auto_init_mma7660(void);
     auto_init_mma7660();
 #endif
 #ifdef MODULE_MMA8X5X
+    DEBUG("Auto init MMA8X5X.\n");
     extern void auto_init_mma8x5x(void);
     auto_init_mma8x5x();
 #endif
 #ifdef MODULE_MPL3115A2
+    DEBUG("Auto init MPL3115A2.\n");
     extern void auto_init_mpl3115a2(void);
     auto_init_mpl3115a2();
 #endif
 #ifdef MODULE_MPU9150
+    DEBUG("Auto init MPU9150.\n");
     extern void auto_init_mpu9150(void);
     auto_init_mpu9150();
 #endif
 #ifdef MODULE_PIR
+    DEBUG("Auto init PIR.\n");
     extern void auto_init_pir(void);
     auto_init_pir();
 #endif
 #ifdef MODULE_PULSE_COUNTER
+    DEBUG("Auto init PULSE COUNTER.\n");
     extern void auto_init_pulse_counter(void);
     auto_init_pulse_counter();
 #endif
 #ifdef MODULE_SHT2X
+    DEBUG("Auto init SHT2X.\n");
     extern void auto_init_sht2x(void);
     auto_init_sht2x();
 #endif
 #ifdef MODULE_SHT3X
+    DEBUG("Auto init SHT3X.\n");
     extern void auto_init_sht3x(void);
     auto_init_sht3x();
 #endif
 #ifdef MODULE_SDS011
+    DEBUG("Auto init SDS011.\n");
     extern void auto_init_sds011(void);
     auto_init_sds011();
 #endif
 #ifdef MODULE_SI114X
+    DEBUG("Auto init SI114X.\n");
     extern void auto_init_si114x(void);
     auto_init_si114x();
 #endif
 #ifdef MODULE_SI70XX
+    DEBUG("Auto init SI70XX.\n");
     extern void auto_init_si70xx(void);
     auto_init_si70xx();
 #endif
 #ifdef MODULE_TCS37727
+    DEBUG("Auto init TCS37727.\n");
     extern void auto_init_tcs37727(void);
     auto_init_tcs37727();
 #endif
 #ifdef MODULE_TMP006
+    DEBUG("Auto init TMP006.\n");
     extern void auto_init_tmp006(void);
     auto_init_tmp006();
 #endif
 #ifdef MODULE_TSL2561
+    DEBUG("Auto init TSL2561.\n");
     extern void auto_init_tsl2561(void);
     auto_init_tsl2561();
 #endif
 #ifdef MODULE_TSL4531X
+    DEBUG("Auto init TSL4531X.\n");
     extern void auto_init_tsl4531x(void);
     auto_init_tsl4531x();
 #endif
 #ifdef MODULE_VCNL40X0
+    DEBUG("Auto init VCNL40X0.\n");
     extern void auto_init_vcnl40x0(void);
     auto_init_vcnl40x0();
 #endif
 #ifdef MODULE_VEML6070
+    DEBUG("Auto init VEML6070.\n");
     extern void auto_init_veml6070(void);
     auto_init_veml6070();
 #endif
