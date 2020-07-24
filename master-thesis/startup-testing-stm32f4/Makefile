@@ -3,7 +3,10 @@ APPLICATION = default
 
 # If no BOARD is found in the environment, use this default:
 # BOARD ?= native
-BOARD ?= nucleo-l073rz
+# BOARD ?= inga-red
+
+# BOARD ?= nucleo-l073rz
+BOARD ?= stm32f4discovery
 
 # This has to be the absolute path to the RIOT base directory:
 RIOTBASE ?= $(CURDIR)/../..
@@ -23,7 +26,7 @@ RIOTBASE ?= $(CURDIR)/../..
 # Comment this out to disable code in RIOT that does safety checking
 # which is not needed in a production environment but helps in the
 # development process:
-DEVELHELP ?= 0
+DEVELHELP ?= 1
 
 # Change this to 0 show compiler invocation lines by default:
 QUIET ?= 1
@@ -34,6 +37,14 @@ USEMODULE += shell_commands
 USEMODULE += ps
 # include and auto-initialize all available sensors
 USEMODULE += saul_default
+
+ifneq (,$(filter $(BOARD),stm32f4discovery))
+  USEMODULE += stdio_cdc_acm
+
+  # FEATURES_REQUIRED += periph_spi
+  # USEMODULE += lis3dsh
+  # USEMODULE += usbus_cdc_acm
+endif
 
 BOARD_PROVIDES_NETIF := acd52832 adafruit-clue airfy-beacon atmega256rfr2-xpro \
         arduino-nano-33-ble avr-rss2 b-l072z-lrwan1 cc2538dk fox \

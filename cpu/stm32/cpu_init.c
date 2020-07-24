@@ -173,6 +173,7 @@ void cpu_init(void)
     /* Init GPIO Pins for startup measurement */
     gpio_init(STARTUP_GPIO_PIN, GPIO_OUT);
     gpio_init(MODULES_GPIO_PIN, GPIO_OUT);
+    // gpio_set(STARTUP_GPIO_PIN); // active low
     gpio_toggle(STARTUP_GPIO_PIN);
     // gpio_toggle(MODULES_GPIO_PIN);
     // gpio_init(GPIO_PIN(PORT_D, 6), GPIO_OUT);
