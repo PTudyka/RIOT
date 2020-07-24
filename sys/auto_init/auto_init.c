@@ -90,7 +90,7 @@
 #include "net/asymcute.h"
 #endif
 
-#define ENABLE_DEBUG (1)
+#define ENABLE_DEBUG (0)
 #include "debug.h"
 
 void auto_init(void)
@@ -409,7 +409,9 @@ void auto_init(void)
 #ifdef MODULE_ADXL345
     DEBUG("Auto init ADXL345.\n");
     extern void auto_init_adxl345(void);
+    // gpio_toggle(MODULES_GPIO_PIN);
     auto_init_adxl345();
+    // gpio_toggle(MODULES_GPIO_PIN);
 #endif
 #ifdef MODULE_BMP180
     DEBUG("Auto init BMP180.\n");
@@ -484,7 +486,9 @@ void auto_init(void)
 #ifdef MODULE_L3G4200D
     DEBUG("Auto init L3G4200D.\n");
     extern void auto_init_l3g4200d(void);
+    // gpio_toggle(MODULES_GPIO_PIN);
     auto_init_l3g4200d();
+    // gpio_toggle(MODULES_GPIO_PIN);
 #endif
 #ifdef MODULE_LIS2DH12
     DEBUG("Auto init LIS2DH12.\n");
@@ -524,7 +528,9 @@ void auto_init(void)
 #ifdef MODULE_MAG3110
     DEBUG("Auto init MAG3110.\n");
     extern void auto_init_mag3110(void);
+    // gpio_toggle(MODULES_GPIO_PIN);
     auto_init_mag3110();
+    // gpio_toggle(MODULES_GPIO_PIN);
 #endif
 #ifdef MODULE_MMA7660
     DEBUG("Auto init MMA7660.\n");

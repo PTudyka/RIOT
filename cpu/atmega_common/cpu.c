@@ -111,7 +111,7 @@ void cpu_init(void)
     /* Init GPIO Pins for timing measurements */
     gpio_init(STARTUP_GPIO_PIN, GPIO_OUT);
     gpio_init(MODULES_GPIO_PIN, GPIO_OUT);
-    gpio_set(STARTUP_GPIO_PIN); // active low
+    // gpio_set(STARTUP_GPIO_PIN); // active low
     gpio_toggle(STARTUP_GPIO_PIN);
 
     /* Initialize peripherals for which modules are included in the makefile.*/

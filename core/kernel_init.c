@@ -60,9 +60,13 @@ static void *main_trampoline(void *arg)
     ss->laststart = 0;
 #endif
 
-    gpio_toggle(STARTUP_GPIO_PIN);
+    // gpio_toggle(STARTUP_GPIO_PIN);
+    gpio_toggle(MODULES_GPIO_PIN);
     LOG_INFO("main(): This is RIOT! (Version: " RIOT_VERSION ")\n");
+    gpio_toggle(MODULES_GPIO_PIN);
 
+
+    gpio_toggle(MODULES_GPIO_PIN);
     main();
     return NULL;
 }
