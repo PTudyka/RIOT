@@ -33,14 +33,15 @@ QUIET ?= 1
 # Modules to include:
 USEMODULE += shell
 USEMODULE += shell_commands
-# USEMODULE += ps
+#USEMODULE += ps
 # include and auto-initialize all available sensors
 USEMODULE += saul_default
 
 ifneq (,$(filter $(BOARD),inga_red))
-  USEMODULE += adxl345
-  USEMODULE += l3g4200d
-  USEMODULE += mag3110
+#  USEMODULE += adxl345
+#  USEMODULE += l3g4200d
+#  USEMODULE += bmp180
+#  USEMODULE += mag3110
 endif
 
 BOARD_PROVIDES_NETIF := acd52832 adafruit-clue airfy-beacon atmega256rfr2-xpro \
@@ -71,6 +72,8 @@ ifneq (,$(filter $(BOARD),stm32f4discovery))
   USEMODULE += stdio_cdc_acm
   # USEMODULE += usbus_cdc_acm
 endif
+
+#CFLAGS=-DDEBUG_ASSERT_VERBOSE
 
   # We use only the lower layers of the GNRC network stack, hence, we can
   # reduce the size of the packet buffer a bit

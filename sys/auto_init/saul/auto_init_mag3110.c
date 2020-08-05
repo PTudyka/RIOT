@@ -69,6 +69,9 @@ void auto_init_mag3110(void)
         saul_entries[i].name = mag3110_saul_info[i].name;
         saul_entries[i].driver = &mag3110_saul_driver;
         saul_reg_add(&(saul_entries[i]));
+
+        // Disable magnetometer right after init
+//        mag3110_set_standby(&mag3110_devs[i]);
     }
 }
 

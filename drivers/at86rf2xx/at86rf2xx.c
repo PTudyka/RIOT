@@ -46,6 +46,8 @@ void at86rf2xx_setup(at86rf2xx_t *dev, const at86rf2xx_params_t *params)
     dev->params = *params;
     /* State to return after receiving or transmitting */
     dev->idle_state = AT86RF2XX_STATE_TRX_OFF;
+//    dev->idle_state = AT86RF2XX_STATE_RX_AACK_ON;
+//    dev->idle_state = AT86RF2XX_STATE_SLEEP;
     /* radio state is P_ON when first powered-on */
     dev->state = AT86RF2XX_STATE_P_ON;
     dev->pending_tx = 0;
@@ -124,8 +126,12 @@ void at86rf2xx_reset(at86rf2xx_t *dev)
 
     /* State to return after receiving or transmitting */
     dev->idle_state = AT86RF2XX_STATE_RX_AACK_ON;
+//    dev->idle_state = AT86RF2XX_STATE_FORCE_TRX_OFF;
+//    dev->idle_state = AT86RF2XX_STATE_RX_ON;
     /* go into RX state */
     at86rf2xx_set_state(dev, AT86RF2XX_STATE_RX_AACK_ON);
+//    at86rf2xx_set_state(dev, AT86RF2XX_STATE_FORCE_TRX_OFF);
+//    at86rf2xx_set_state(dev, AT86RF2XX_STATE_RX_ON);
 
     DEBUG("at86rf2xx_reset(): reset complete.\n");
 }

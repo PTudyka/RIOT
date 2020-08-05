@@ -20,18 +20,22 @@
  */
 
 #include <stdio.h>
+#include "board.h"
 
 int main(void)
 {
     puts("Hello World!");
 
-    int i=0;
-    while (1)
-    {
-        i += 1;
-    }
+    LED1_OFF;
+    LED2_OFF;
 
-    printf("%d", i);
+//    int i=0;
+//    while (1)
+//    {
+//        i += 1;
+//    }
+
+//    printf("%d", i);
     printf("You are running RIOT on a(n) %s board.\n", RIOT_BOARD);
     printf("This board features a(n) %s MCU.\n", RIOT_MCU);
 
