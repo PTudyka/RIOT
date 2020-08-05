@@ -38,10 +38,10 @@ USEMODULE += shell_commands
 USEMODULE += saul_default
 
 ifneq (,$(filter $(BOARD),inga_red))
-#  USEMODULE += adxl345
-#  USEMODULE += l3g4200d
-#  USEMODULE += bmp180
-#  USEMODULE += mag3110
+ USEMODULE += adxl345
+ USEMODULE += l3g4200d
+ USEMODULE += bmp180
+ USEMODULE += mag3110
 endif
 
 BOARD_PROVIDES_NETIF := acd52832 adafruit-clue airfy-beacon atmega256rfr2-xpro \

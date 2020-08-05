@@ -41,9 +41,9 @@ void board_init(void)
     cpu_init();
 
     /* initialize STDIO over UART */
-    gpio_toggle(MODULES_GPIO_PIN);
+    // gpio_toggle(MODULES_GPIO_PIN);
     stdio_init();
-    gpio_toggle(MODULES_GPIO_PIN);
+    // gpio_toggle(MODULES_GPIO_PIN);
     stdout = &uart_stdout;
     stdin = &uart_stdin;
     puts("\f");

@@ -97,16 +97,16 @@ void auto_init(void)
 {
 #ifdef MODULE_PRNG
     void auto_init_random(void);
-    // gpio_toggle(MODULES_GPIO_PIN);
+    gpio_toggle(MODULES_GPIO_PIN);
     DEBUG("Auto init Random module\n");
     auto_init_random();
-    // gpio_toggle(MODULES_GPIO_PIN);
+    gpio_toggle(MODULES_GPIO_PIN);
 #endif
 #ifdef MODULE_XTIMER
     DEBUG("Auto init xtimer module.\n");
-    // gpio_toggle(MODULES_GPIO_PIN);
+    gpio_toggle(MODULES_GPIO_PIN);
     xtimer_init();
-    // gpio_toggle(MODULES_GPIO_PIN);
+    gpio_toggle(MODULES_GPIO_PIN);
 #endif
 #ifdef MODULE_MCI
     DEBUG("Auto init mci module.\n");
@@ -119,15 +119,15 @@ void auto_init(void)
 #endif
 #ifdef MODULE_GNRC_PKTBUF
     DEBUG("Auto init gnrc_pktbuf module\n");
-    // gpio_toggle(MODULES_GPIO_PIN);
+    gpio_toggle(MODULES_GPIO_PIN);
     gnrc_pktbuf_init();
-    // gpio_toggle(MODULES_GPIO_PIN);
+    gpio_toggle(MODULES_GPIO_PIN);
 #endif
 #ifdef MODULE_GNRC_PKTDUMP
     DEBUG("Auto init gnrc_pktdump module.\n");
-    // gpio_toggle(MODULES_GPIO_PIN);
+    gpio_toggle(MODULES_GPIO_PIN);
     gnrc_pktdump_init();
-    // gpio_toggle(MODULES_GPIO_PIN);
+    gpio_toggle(MODULES_GPIO_PIN);
 #endif
 #ifdef MODULE_GNRC_SIXLOWPAN
     DEBUG("Auto init gnrc_sixlowpan module.\n");
@@ -217,9 +217,9 @@ void auto_init(void)
 #ifdef MODULE_AT86RF2XX
     DEBUG("Auto init AT86RF2xx\n");
     extern void auto_init_at86rf2xx(void);
-    // gpio_toggle(MODULES_GPIO_PIN);
+    gpio_toggle(MODULES_GPIO_PIN);
     auto_init_at86rf2xx();
-    // gpio_toggle(MODULES_GPIO_PIN);
+    gpio_toggle(MODULES_GPIO_PIN);
 #endif
 
 #ifdef MODULE_MRF24J40
@@ -409,14 +409,16 @@ void auto_init(void)
 #ifdef MODULE_ADXL345
     DEBUG("Auto init ADXL345.\n");
     extern void auto_init_adxl345(void);
-    // gpio_toggle(MODULES_GPIO_PIN);
+    gpio_toggle(MODULES_GPIO_PIN);
     auto_init_adxl345();
-    // gpio_toggle(MODULES_GPIO_PIN);
+    gpio_toggle(MODULES_GPIO_PIN);
 #endif
 #ifdef MODULE_BMP180
     DEBUG("Auto init BMP180.\n");
     extern void auto_init_bmp180(void);
+    gpio_toggle(MODULES_GPIO_PIN);
     auto_init_bmp180();
+    gpio_toggle(MODULES_GPIO_PIN);
 #endif
 #if defined(MODULE_BME280) || defined(MODULE_BMP280)
     DEBUG("Auto init BME280.\n");
@@ -486,9 +488,9 @@ void auto_init(void)
 #ifdef MODULE_L3G4200D
     DEBUG("Auto init L3G4200D.\n");
     extern void auto_init_l3g4200d(void);
-    // gpio_toggle(MODULES_GPIO_PIN);
+    gpio_toggle(MODULES_GPIO_PIN);
     auto_init_l3g4200d();
-    // gpio_toggle(MODULES_GPIO_PIN);
+    gpio_toggle(MODULES_GPIO_PIN);
 #endif
 #ifdef MODULE_LIS2DH12
     DEBUG("Auto init LIS2DH12.\n");
@@ -528,9 +530,9 @@ void auto_init(void)
 #ifdef MODULE_MAG3110
     DEBUG("Auto init MAG3110.\n");
     extern void auto_init_mag3110(void);
-    // gpio_toggle(MODULES_GPIO_PIN);
+    gpio_toggle(MODULES_GPIO_PIN);
     auto_init_mag3110();
-    // gpio_toggle(MODULES_GPIO_PIN);
+    gpio_toggle(MODULES_GPIO_PIN);
 #endif
 #ifdef MODULE_MMA7660
     DEBUG("Auto init MMA7660.\n");
