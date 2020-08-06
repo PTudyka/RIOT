@@ -93,7 +93,7 @@ int main(void)
 
     char line_buf[SHELL_DEFAULT_BUFSIZE];
 
-    gpio_toggle(STARTUP_GPIO_PIN);
+    // gpio_toggle(STARTUP_GPIO_PIN);
     shell_run(NULL, line_buf, SHELL_DEFAULT_BUFSIZE);
 #endif
 

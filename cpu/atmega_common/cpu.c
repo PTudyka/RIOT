@@ -111,14 +111,16 @@ void cpu_init(void)
     gpio_init(STARTUP_GPIO_PIN, GPIO_OUT);
     gpio_init(MODULES_GPIO_PIN, GPIO_OUT);
     // gpio_set(STARTUP_GPIO_PIN); // active low
-    // gpio_toggle(STARTUP_GPIO_PIN);
+    gpio_toggle(STARTUP_GPIO_PIN);
 
     /* Initialize peripherals for which modules are included in the makefile.*/
     /* spi_init */
     /* rtc_init */
     /* hwrng_init */
     // gpio_toggle(MODULES_GPIO_PIN);
+    // gpio_toggle(STARTUP_GPIO_PIN);
     periph_init();
+    // gpio_toggle(STARTUP_GPIO_PIN);
     // gpio_toggle(MODULES_GPIO_PIN);
 }
 

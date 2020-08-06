@@ -25,7 +25,7 @@ RIOTBASE ?= $(CURDIR)/../..
 # Comment this out to disable code in RIOT that does safety checking
 # which is not needed in a production environment but helps in the
 # development process:
-DEVELHELP ?= 1
+DEVELHELP ?= 0
 
 # Change this to 0 show compiler invocation lines by default:
 QUIET ?= 1
@@ -41,7 +41,7 @@ ifneq (,$(filter $(BOARD),inga_red))
  USEMODULE += adxl345
  USEMODULE += l3g4200d
  USEMODULE += bmp180
- USEMODULE += mag3110
+#  USEMODULE += mag3110
 endif
 
 BOARD_PROVIDES_NETIF := acd52832 adafruit-clue airfy-beacon atmega256rfr2-xpro \
@@ -66,12 +66,12 @@ ifneq (,$(filter $(BOARD),$(BOARD_PROVIDES_NETIF)))
   # the application dumps received packets to stdout
   USEMODULE += gnrc_pktdump
 
-ifneq (,$(filter $(BOARD),stm32f4discovery))
-  GNRC_NETIF_NUMOF := 2
-  USEMODULE += at86rf215
-  USEMODULE += stdio_cdc_acm
-  # USEMODULE += usbus_cdc_acm
-endif
+# ifneq (,$(filter $(BOARD),stm32f4discovery))
+#   GNRC_NETIF_NUMOF := 2
+#   USEMODULE += at86rf215
+#   USEMODULE += stdio_cdc_acm
+#   # USEMODULE += usbus_cdc_acm
+# endif
 
 #CFLAGS=-DDEBUG_ASSERT_VERBOSE
 

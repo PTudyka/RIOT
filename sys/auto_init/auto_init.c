@@ -530,9 +530,9 @@ void auto_init(void)
 #ifdef MODULE_MAG3110
     DEBUG("Auto init MAG3110.\n");
     extern void auto_init_mag3110(void);
-    gpio_toggle(MODULES_GPIO_PIN);
+    // gpio_toggle(MODULES_GPIO_PIN);
     auto_init_mag3110();
-    gpio_toggle(MODULES_GPIO_PIN);
+    // gpio_toggle(MODULES_GPIO_PIN);
 #endif
 #ifdef MODULE_MMA7660
     DEBUG("Auto init MMA7660.\n");
