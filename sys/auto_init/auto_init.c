@@ -33,9 +33,9 @@ void auto_init(void)
     if (IS_USED(MODULE_AUTO_INIT_RANDOM)) {
         LOG_DEBUG("Auto init random.\n");
         extern void auto_init_random(void);
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
         auto_init_random();
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
     }
     // else
     // {
@@ -55,9 +55,9 @@ void auto_init(void)
             !IS_USED(MODULE_ZTIMER_XTIMER_COMPAT)) {
         LOG_DEBUG("Auto init xtimer.\n");
         extern void xtimer_init(void);
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
         xtimer_init();
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
     }
     if (IS_USED(MODULE_SCHEDSTATISTICS)) {
         LOG_DEBUG("Auto init schedstatistics.\n");
@@ -96,16 +96,16 @@ void auto_init(void)
     if (IS_USED(MODULE_AUTO_INIT_GNRC_PKTBUF)) {
         LOG_DEBUG("Auto init gnrc_pktbuf.\n");
         extern void gnrc_pktbuf_init(void);
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
         gnrc_pktbuf_init();
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
     }
     if (IS_USED(MODULE_AUTO_INIT_GNRC_PKTDUMP)) {
         LOG_DEBUG("Auto init gnrc_pktdump.\n");
         extern void gnrc_pktdump_init(void);
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
         gnrc_pktdump_init();
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
     }
     if (IS_USED(MODULE_AUTO_INIT_GNRC_SIXLOWPAN)) {
         LOG_DEBUG("Auto init gnrc_sixlowpan.\n");
@@ -225,9 +225,9 @@ void auto_init(void)
     if (IS_USED(MODULE_AUTO_INIT_USBUS)) {
         LOG_DEBUG("Auto init USB.\n");
         extern void auto_init_usb(void);
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
         auto_init_usb();
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
     }
 
     /* initialize network devices */

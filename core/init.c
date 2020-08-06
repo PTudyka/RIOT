@@ -46,11 +46,11 @@ static void *main_trampoline(void *arg)
     DEBUG("AUTO INIT\n");
 
 #ifdef MODULE_AUTO_INIT
-    gpio_toggle(MODULES_GPIO_PIN);
+    // gpio_toggle(MODULES_GPIO_PIN);
     // gpio_toggle(STARTUP_GPIO_PIN);
     auto_init();
     // gpio_toggle(STARTUP_GPIO_PIN);
-    gpio_toggle(MODULES_GPIO_PIN);
+    // gpio_toggle(MODULES_GPIO_PIN);
 #endif
 
     DEBUG("MAIN FUNCTION CALL\n");
@@ -63,7 +63,7 @@ static void *main_trampoline(void *arg)
     gpio_toggle(MODULES_GPIO_PIN);
 
 
-    gpio_toggle(MODULES_GPIO_PIN);
+    gpio_toggle(STARTUP_GPIO_PIN);
     main();
 
     return NULL;

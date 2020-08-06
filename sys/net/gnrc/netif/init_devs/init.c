@@ -38,9 +38,9 @@ void gnrc_netif_init_devs(void)
     if (IS_USED(MODULE_AUTO_INIT_AT86RF215)) {
         LOG_DEBUG("Auto init GNRC AT86RF215.\n");
         extern void auto_init_at86rf215(void);
-        LOG_DEBUG("Auto init SAUL GPIO.\n");
+        gpio_toggle(MODULES_GPIO_PIN);
         auto_init_at86rf215();
-        LOG_DEBUG("Auto init SAUL GPIO.\n");
+        gpio_toggle(MODULES_GPIO_PIN);
     }
 
     if (IS_USED(MODULE_AUTO_INIT_AT86RF2XX)) {

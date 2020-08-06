@@ -37,9 +37,9 @@ void saul_init_devs(void)
     if (IS_USED(MODULE_SAUL_GPIO)) {
         LOG_DEBUG("Auto init SAUL GPIO.\n");
         extern void auto_init_gpio(void);
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
         auto_init_gpio();
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
     }
     if (IS_USED(MODULE_SAUL_NRF_TEMPERATURE)) {
         extern void auto_init_nrf_temperature(void);

@@ -198,8 +198,9 @@ void cpu_init(void)
 #endif
 
     /* trigger static peripheral initialization */
-    gpio_toggle(MODULES_GPIO_PIN);
+    // gpio_toggle(MODULES_GPIO_PIN);
+    // gpio_toggle(STARTUP_GPIO_PIN);
     periph_init();
-    gpio_toggle(MODULES_GPIO_PIN);
+    // gpio_toggle(STARTUP_GPIO_PIN);
     // gpio_toggle(MODULES_GPIO_PIN);
 }
