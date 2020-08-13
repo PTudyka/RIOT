@@ -38,6 +38,8 @@
 #include "shell.h"
 #include "shell_commands.h"
 
+#include "board.h"
+
 #define ETX '\x03'  /** ASCII "End-of-Text", or ctrl-C */
 #define BS  '\x08'  /** ASCII "Backspace" */
 #define DEL '\x7f'  /** ASCII "Delete" */
@@ -239,12 +241,16 @@ static void handle_input_line(const shell_command_t *command_list, char *line)
 
 static inline void print_prompt(void)
 {
+    // gpio_toggle(MODULES_GPIO_PIN);
     if (PROMPT_ON) {
         putchar('>');
         putchar(' ');
     }
+    // gpio_toggle(MODULES_GPIO_PIN);
 
+    // gpio_toggle(MODULES_GPIO_PIN);
     flush_if_needed();
+    // gpio_toggle(MODULES_GPIO_PIN);
 }
 
 static inline void echo_char(char c)
@@ -359,6 +365,9 @@ void shell_run_once(const shell_command_t *shell_commands,
                     char *line_buf, int len)
 {
     print_prompt();
+
+    gpio_toggle(MODULES_GPIO_PIN);
+    gpio_toggle(STARTUP_GPIO_PIN);
 
     while (1) {
         int res = readline(line_buf, len);

@@ -47,9 +47,9 @@ void auto_init(void)
     if (IS_USED(MODULE_AUTO_INIT_ZTIMER)) {
         LOG_DEBUG("Auto init ztimer.\n");
         void ztimer_init(void);
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
         ztimer_init();
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
     }
     if (IS_USED(MODULE_AUTO_INIT_XTIMER) &&
             !IS_USED(MODULE_ZTIMER_XTIMER_COMPAT)) {
@@ -62,36 +62,36 @@ void auto_init(void)
     if (IS_USED(MODULE_SCHEDSTATISTICS)) {
         LOG_DEBUG("Auto init schedstatistics.\n");
         extern void init_schedstatistics(void);
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
         init_schedstatistics();
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
     }
     if (IS_USED(MODULE_DUMMY_THREAD)) {
         extern void dummy_thread_create(void);
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
         dummy_thread_create();
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
     }
     if (IS_USED(MODULE_EVENT_THREAD)) {
         LOG_DEBUG("Auto init event threads.\n");
         extern void auto_init_event_thread(void);
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
         auto_init_event_thread();
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
     }
     if (IS_USED(MODULE_MCI)) {
         LOG_DEBUG("Auto init mci.\n");
         extern void mci_initialize(void);
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
         mci_initialize();
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
     }
     if (IS_USED(MODULE_PROFILING)) {
         LOG_DEBUG("Auto init profiling.\n");
         extern void profiling_init(void);
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
         profiling_init();
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
     }
     if (IS_USED(MODULE_AUTO_INIT_GNRC_PKTBUF)) {
         LOG_DEBUG("Auto init gnrc_pktbuf.\n");
@@ -110,115 +110,115 @@ void auto_init(void)
     if (IS_USED(MODULE_AUTO_INIT_GNRC_SIXLOWPAN)) {
         LOG_DEBUG("Auto init gnrc_sixlowpan.\n");
         extern void gnrc_sixlowpan_init(void);
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
         gnrc_sixlowpan_init();
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
     }
     if (IS_USED(MODULE_AUTO_INIT_GNRC_IPV6)) {
         LOG_DEBUG("Auto init gnrc_ipv6.\n");
         extern void gnrc_ipv6_init(void);
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
         gnrc_ipv6_init();
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
     }
     if (IS_USED(MODULE_AUTO_INIT_GNRC_UDP)) {
         LOG_DEBUG("Auto init gnrc_udp.\n");
         extern void gnrc_udp_init(void);
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
         gnrc_udp_init();
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
     }
     if (IS_USED(MODULE_AUTO_INIT_GNRC_TCP)) {
         LOG_DEBUG("Auto init gnrc_tcp.\n");
         extern void gnrc_tcp_init(void);
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
         gnrc_tcp_init();
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
     }
     if (IS_USED(MODULE_AUTO_INIT_LWIP)) {
         LOG_DEBUG("Bootstraping lwIP.\n");
         extern void lwip_bootstrap(void);
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
         lwip_bootstrap();
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
     }
     if (IS_USED(MODULE_OPENTHREAD)) {
         LOG_DEBUG("Bootstrapping openthread.\n");
         extern void openthread_bootstrap(void);
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
         openthread_bootstrap();
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
     }
     if (IS_USED(MODULE_GCOAP) &&
         !IS_ACTIVE(CONFIG_GCOAP_NO_AUTO_INIT)) {
         LOG_DEBUG("Auto init gcoap.\n");
         extern void gcoap_init(void);
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
         gcoap_init();
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
     }
     if (IS_USED(MODULE_DEVFS)) {
         LOG_DEBUG("Mounting /dev.\n");
         extern void auto_init_devfs(void);
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
         auto_init_devfs();
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
     }
     if (IS_USED(MODULE_AUTO_INIT_GNRC_IPV6_NIB)) {
         LOG_DEBUG("Auto init gnrc_ipv6_nib.\n");
         extern void gnrc_ipv6_nib_init(void);
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
         gnrc_ipv6_nib_init();
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
     }
     if (IS_USED(MODULE_SKALD)) {
         LOG_DEBUG("Auto init Skald.\n");
         extern void skald_init(void);
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
         skald_init();
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
     }
     if (IS_USED(MODULE_CORD_COMMON)) {
         LOG_DEBUG("Auto init cord_common.\n");
         extern void cord_common_init(void);
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
         cord_common_init();
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
     }
     if (IS_USED(MODULE_CORD_EP_STANDALONE)) {
         LOG_DEBUG("Auto init cord_ep_standalone.\n");
         extern void cord_ep_standalone_run(void);
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
         cord_ep_standalone_run();
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
     }
     if (IS_USED(MODULE_ASYMCUTE)) {
         LOG_DEBUG("Auto init Asymcute.\n");
         extern void asymcute_handler_run(void);
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
         asymcute_handler_run();
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
     }
     if (IS_USED(MODULE_NIMBLE)) {
         LOG_DEBUG("Auto init NimBLE.\n");
         extern void nimble_riot_init(void);
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
         nimble_riot_init();
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
     }
     if (IS_USED(MODULE_AUTO_INIT_LORAMAC)) {
         LOG_DEBUG("Auto init loramac.\n");
         extern void auto_init_loramac(void);
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
         auto_init_loramac();
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
     }
     if (IS_USED(MODULE_SOCK_DTLS)) {
         LOG_DEBUG("Auto init sock_dtls.\n");
         extern void sock_dtls_init(void);
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
         sock_dtls_init();
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
     }
 
     /* initialize USB devices */
@@ -242,18 +242,18 @@ void auto_init(void)
     if (IS_USED(MODULE_AUTO_INIT_GNRC_UHCPC)) {
         LOG_DEBUG("Auto init gnrc_uhcpc.\n");
         extern void auto_init_gnrc_uhcpc(void);
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
         auto_init_gnrc_uhcpc();
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
     }
 
     /* initialize NDN module after the network devices are initialized */
     if (IS_USED(MODULE_NDN_RIOT)) {
         LOG_DEBUG("Auto init NDN.\n");
         extern void ndn_init(void);
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
         ndn_init();
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
     }
 
     /* initialize sensors and actuators */
@@ -264,9 +264,9 @@ void auto_init(void)
          */
         LOG_DEBUG("Auto init sht1x.\n");
         extern void auto_init_sht1x(void);
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
         auto_init_sht1x();
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
     }
 
     if (IS_USED(MODULE_AUTO_INIT_SAUL)) {
@@ -280,9 +280,9 @@ void auto_init(void)
     if (IS_USED(MODULE_AUTO_INIT_GNRC_RPL)) {
         LOG_DEBUG("Auto init gnrc_rpl.\n");
         extern void auto_init_gnrc_rpl(void);
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
         auto_init_gnrc_rpl();
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
     }
 
     /* initialize storage devices */
@@ -291,9 +291,9 @@ void auto_init(void)
 
         if (IS_USED(MODULE_SDCARD_SPI)) {
             extern void auto_init_sdcard_spi(void);
-            // gpio_toggle(MODULES_GPIO_PIN);
+            gpio_toggle(MODULES_GPIO_PIN);
             auto_init_sdcard_spi();
-            // gpio_toggle(MODULES_GPIO_PIN);
+            gpio_toggle(MODULES_GPIO_PIN);
         }
     }
 
@@ -302,49 +302,49 @@ void auto_init(void)
         LOG_DEBUG("Auto init CAN.\n");
 
         extern void auto_init_candev(void);
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
         auto_init_candev();
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
     }
 
     if (IS_USED(MODULE_SUIT)) {
         LOG_DEBUG("Auto init SUIT conditions.\n");
         extern void suit_init_conditions(void);
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
         suit_init_conditions();
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
     }
 
     if (IS_USED(MODULE_AUTO_INIT_SECURITY)) {
         if (IS_USED(MODULE_CRYPTOAUTHLIB)) {
             LOG_DEBUG("Auto init cryptoauthlib.\n");
             extern void auto_init_atca(void);
-            // gpio_toggle(MODULES_GPIO_PIN);
+            gpio_toggle(MODULES_GPIO_PIN);
             auto_init_atca();
-            // gpio_toggle(MODULES_GPIO_PIN);
+            gpio_toggle(MODULES_GPIO_PIN);
         }
     }
 
     if (IS_USED(MODULE_TEST_UTILS_INTERACTIVE_SYNC) && !IS_USED(MODULE_SHELL)) {
         extern void test_utils_interactive_sync(void);
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
         test_utils_interactive_sync();
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
     }
 
     if (IS_USED(MODULE_AUTO_INIT_DHCPV6_CLIENT)) {
         LOG_DEBUG("Auto init DHCPv6 client.\n");
         extern void dhcpv6_client_auto_init(void);
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
         dhcpv6_client_auto_init();
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
     }
 
     if (IS_USED(MODULE_GNRC_DHCPV6_CLIENT_6LBR)) {
         LOG_DEBUG("Auto init 6LoWPAN border router DHCPv6 client\n");
         extern void gnrc_dhcpv6_client_6lbr_init(void);
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
         gnrc_dhcpv6_client_6lbr_init();
-        // gpio_toggle(MODULES_GPIO_PIN);
+        gpio_toggle(MODULES_GPIO_PIN);
     }
 }

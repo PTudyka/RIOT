@@ -38,6 +38,9 @@ USEMODULE += ps
 # include and auto-initialize all available sensors
 USEMODULE += saul_default
 
+#MODULE_NEWLIB
+# DISABLE_MODULE += newlib 
+
 ifneq (,$(filter $(BOARD),stm32f4discovery))
   USEMODULE += stdio_cdc_acm
 

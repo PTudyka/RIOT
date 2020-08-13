@@ -25,9 +25,11 @@
 #include <stdio.h>
 #include <string.h>
 
+#ifdef MODULE_SHELL
 #include "thread.h"
 #include "shell.h"
 #include "shell_commands.h"
+#endif
 
 #include "xtimer.h"
 
@@ -40,7 +42,8 @@
 
 int main(void)
 {
-    // gpio_toggle(MODULES_GPIO_PIN);
+    // gpio_toggle(STARTUP_GPIO_PIN);
+    gpio_toggle(MODULES_GPIO_PIN);
 
 #ifdef MODULE_NETIF
     // gpio_toggle(MODULES_GPIO_PIN);
@@ -52,14 +55,20 @@ int main(void)
 
     // (void) puts("Welcome to RIOT!");
 
+    // int i=0;
     // while(1)
     // {
-        
+    //     // i+= 1;
     // }
+
+    // printf("%d", i);
 
     char line_buf[SHELL_DEFAULT_BUFSIZE];
     
-    // gpio_toggle(STARTUP_GPIO_PIN);
+    // gpio_toggle(MODULES_GPIO_PIN);
+    // gpio_toggle(MODULES_GPIO_PIN);
+    gpio_toggle(MODULES_GPIO_PIN);
+    // // gpio_toggle(STARTUP_GPIO_PIN);
     shell_run(NULL, line_buf, SHELL_DEFAULT_BUFSIZE);
 
     return 0;

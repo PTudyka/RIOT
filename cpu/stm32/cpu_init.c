@@ -38,6 +38,7 @@
 #include "periph_cpu.h"
 #include "periph/init.h"
 #include "board.h"
+// #include "adc.h"
 
 #define ENABLE_DEBUG (0)
 #include "debug.h"

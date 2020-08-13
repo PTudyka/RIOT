@@ -62,8 +62,8 @@ static void *main_trampoline(void *arg)
     LOG_INFO("main(): This is RIOT! (Version: " RIOT_VERSION ")\n");
     gpio_toggle(MODULES_GPIO_PIN);
 
-
-    gpio_toggle(STARTUP_GPIO_PIN);
+    // gpio_toggle(MODULES_GPIO_PIN);
+    // gpio_toggle(STARTUP_GPIO_PIN);
     main();
 
     return NULL;
@@ -73,6 +73,7 @@ static void *idle_thread(void *arg)
 {
     (void)arg;
 
+    // gpio_toggle(STARTUP_GPIO_PIN);
     while (1) {
         pm_set_lowest();
     }
@@ -89,6 +90,11 @@ void kernel_init(void)
     irq_disable();
 
     DEBUG("IDLE THREAD INIT\n");
+
+    /// Here happens Peak of measurement -> Thread creation!
+    // while(1) {
+
+    // }
 
     gpio_toggle(MODULES_GPIO_PIN);
     thread_create(idle_stack, sizeof(idle_stack),

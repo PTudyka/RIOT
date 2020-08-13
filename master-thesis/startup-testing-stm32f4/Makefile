@@ -38,6 +38,12 @@ USEMODULE += ps
 # include and auto-initialize all available sensors
 USEMODULE += saul_default
 
+# Don't use saul gpio, because we have used gpio pins!
+# DISABLE_MODULE += saul_gpio
+
+# For measuring supply voltage
+FEATURES_REQUIRED = periph_adc
+
 ifneq (,$(filter $(BOARD),stm32f4discovery))
   USEMODULE += stdio_cdc_acm
 

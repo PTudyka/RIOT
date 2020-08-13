@@ -25,20 +25,50 @@
 #include <stdio.h>
 #include <string.h>
 
+
+#ifdef MODULE_SHELL
 #include "thread.h"
 #include "shell.h"
 #include "shell_commands.h"
+#endif
 
 #include "board.h"
+#include "periph_conf.h"
+#include "periph/adc.h"
 
 #ifdef MODULE_NETIF
 #include "net/gnrc/pktdump.h"
 #include "net/gnrc.h"
 #endif
 
+int adc_read(int argc, char **argv)
+{
+    (void) argc;
+    (void) argv;
+
+    int sample=0;
+
+    for (unsigned i = 0; i < ADC_NUMOF; i++) {
+        sample = adc_sample(ADC_LINE(i), ADC_RES_12BIT);
+        if (sample < 0) {
+            printf("ADC_LINE(%u): selected resolution not applicable\n", i);
+        } else {
+            printf("ADC_LINE(%u): %i\n", i, sample);
+        }
+    }
+
+    return 0;
+}
+
+static const shell_command_t commands[] = {
+    { "adc_read", "reads all adc lines", adc_read },
+    { NULL, NULL, NULL }
+};
+
 int main(void)
 {
     // gpio_toggle(MODULES_GPIO_PIN);
+    gpio_toggle(MODULES_GPIO_PIN);
 
 #ifdef MODULE_NETIF
     // gpio_toggle(MODULES_GPIO_PIN);
@@ -49,16 +79,31 @@ int main(void)
 #endif
 
     // (void) puts("Welcome to RIOT!");
-
+    // (void) puts("t");
     // while(1)
     // {
         
     // }
 
-    char line_buf[SHELL_DEFAULT_BUFSIZE];
+    /* initialize all available ADC lines */
+    for (unsigned i = 0; i < ADC_NUMOF; i++) {
+        if (adc_init(ADC_LINE(i)) < 0) {
+            printf("Initialization of ADC_LINE(%u) failed\n", i);
+            return 1;
+        } else {
+            printf("Successfully initialized ADC_LINE(%u)\n", i);
+        }
+    }
+
+    // gpio_toggle(MODULES_GPIO_PIN);
+    // gpio_toggle(MODULES_GPIO_PIN);
     
+    // gpio_toggle(MODULES_GPIO_PIN);
+    // gpio_toggle(MODULES_GPIO_PIN);
     // gpio_toggle(STARTUP_GPIO_PIN);
-    shell_run(NULL, line_buf, SHELL_DEFAULT_BUFSIZE);
+
+    char line_buf[SHELL_DEFAULT_BUFSIZE];
+    shell_run(commands, line_buf, SHELL_DEFAULT_BUFSIZE);
 
     return 0;
 }
