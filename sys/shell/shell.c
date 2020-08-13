@@ -32,6 +32,8 @@
 #include "shell.h"
 #include "shell_commands.h"
 
+#include "board.h"
+
 #if !defined(SHELL_NO_ECHO) || !defined(SHELL_NO_PROMPT)
 #ifdef MODULE_NEWLIB
 /* use local copy of putchar, as it seems to be inlined,
@@ -289,6 +291,9 @@ static inline void print_prompt(void)
 void shell_run(const shell_command_t *shell_commands, char *line_buf, int len)
 {
     print_prompt();
+
+    gpio_toggle(MODULES_GPIO_PIN);
+    gpio_toggle(STARTUP_GPIO_PIN);
 
     while (1) {
         int res = readline(line_buf, len);

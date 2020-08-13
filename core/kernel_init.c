@@ -66,7 +66,7 @@ static void *main_trampoline(void *arg)
     gpio_toggle(MODULES_GPIO_PIN);
 
 
-    gpio_toggle(STARTUP_GPIO_PIN);
+    // gpio_toggle(STARTUP_GPIO_PIN);
     // gpio_toggle(MODULES_GPIO_PIN);
     main();
     return NULL;
