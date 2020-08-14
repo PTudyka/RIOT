@@ -33,6 +33,21 @@
 extern "C" {
 #endif
 
+typedef struct {
+    char flags;
+} module_flags_t;
+
+// module_flags_t module_flags = {0x00};
+extern volatile module_flags_t module_flags;
+
+// char MODULE_FLAGS = 0x00;
+// Redefine Flags to auto-init flags
+#ifdef MODULE_AUTO_INIT_GNRC_NETIF
+#undef MODULE_AUTO_INIT_GNRC_NETIF
+// #define MODULE_AUTO_INIT_GNRC_NETIF module_flags.flags & 0x01
+#define MODULE_AUTO_INIT_GNRC_NETIF get_flag(0)
+#endif
+
 /* Declare the API of the module */
 // char MODULE_FLAGS[] = {0x00};
 

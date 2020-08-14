@@ -34,11 +34,13 @@ int toggle(int argc, char **argv)
     (void) argc;
     (void) argv;
 
-    toggle_flag();
+    // toggle_flag();
 
-    printf("MODULES_FLAG: %d", get_flag(0));
+    printf("MODULES_FLAG: %d\n", get_flag(0));
 
-    pm_reboot();
+    printf("MODULE_AUTO_INIT_GNRC_NETIF: %d\n", MODULE_AUTO_INIT_GNRC_NETIF);
+
+    // pm_reboot();
 
     return 0;
 }
