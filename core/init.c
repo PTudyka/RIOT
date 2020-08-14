@@ -69,6 +69,9 @@ static void *main_trampoline(void *arg)
     return NULL;
 }
 
+static char main_stack[THREAD_STACKSIZE_MAIN];
+static char idle_stack[THREAD_STACKSIZE_IDLE];
+
 static void *idle_thread(void *arg)
 {
     (void)arg;
@@ -81,8 +84,6 @@ static void *idle_thread(void *arg)
     return NULL;
 }
 
-static char main_stack[THREAD_STACKSIZE_MAIN];
-static char idle_stack[THREAD_STACKSIZE_IDLE];
 
 void kernel_init(void)
 {
@@ -96,12 +97,12 @@ void kernel_init(void)
 
     // }
 
-    gpio_toggle(MODULES_GPIO_PIN);
-    thread_create(idle_stack, sizeof(idle_stack),
-                  THREAD_PRIORITY_IDLE,
-                  THREAD_CREATE_WOUT_YIELD | THREAD_CREATE_STACKTEST,
-                  idle_thread, NULL, "idle");
-    gpio_toggle(MODULES_GPIO_PIN);
+    if (IS_USED(MODULE_CORE_IDLE_THREAD)) {
+        thread_create(idle_stack, sizeof(idle_stack),
+                      THREAD_PRIORITY_IDLE,
+                      THREAD_CREATE_WOUT_YIELD | THREAD_CREATE_STACKTEST,
+                      idle_thread, NULL, "idle");
+    }
 
     DEBUG("MAIN THREAD INIT\n");
     gpio_toggle(MODULES_GPIO_PIN);

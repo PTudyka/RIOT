@@ -1,24 +1,51 @@
 include ../Makefile.tests_common
 
 BOARD_WHITELIST += arduino-duemilanove \
+                   arduino-leonardo \
+                   arduino-mega2560 \
                    arduino-nano \
                    arduino-uno \
+                   atmega1284p \
+                   atmega256rfr2-xpro \
                    atmega328p \
+                   avr-rss2 \
                    cc1312-launchpad \
                    cc1352-launchpad \
                    cc1352p-launchpad \
+                   cc2538dk \
                    cc2650-launchpad \
                    cc2650stk \
+                   chronos \
+                   derfmega128 \
+                   derfmega256 \
+                   firefly \
+                   hifive1 \
+                   hifive1b \
                    ikea-tradfri \
+                   mega-xplained \
+                   microduino-corerf \
+                   msb-430 \
+                   msb-430h \
+                   openmote-b \
+                   openmote-cc2538 \
+                   remote-pa \
+                   remote-reva \
+                   remote-revb \
                    samr21-xpro \
                    slstk3401a \
                    slstk3402a \
                    sltb001a \
                    slwstk6000b-slwrb4150a \
                    slwstk6000b-slwrb4162a \
+                   slwstk6220a \
                    stk3600 \
-                   stk3700
-
+                   stk3700 \
+                   telosb \
+                   waspmote-pro \
+                   wsn430-v1_3b \
+                   wsn430-v1_4 \
+                   z1
+                   #
 
 all: checks
 

@@ -43,7 +43,7 @@
 #define ENABLE_DEBUG (0)
 #include "debug.h"
 
-#if defined (CPU_FAM_STM32L4)
+#if defined (CPU_FAM_STM32L4) || defined (CPU_FAM_STM32G4)
 #define BIT_APB_PWREN       RCC_APB1ENR1_PWREN
 #else
 #define BIT_APB_PWREN       RCC_APB1ENR_PWREN

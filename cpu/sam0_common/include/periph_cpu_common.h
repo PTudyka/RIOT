@@ -263,6 +263,16 @@ typedef enum {
     SPI_CLK_10MHZ  = 10000000U  /**< drive the SPI bus with 10MHz */
 } spi_clk_t;
 /** @} */
+
+/**
+ * @brief   SPI pin getters
+ * @{
+ */
+#define spi_pin_mosi(dev) spi_config[dev].mosi_pin
+#define spi_pin_miso(dev) spi_config[dev].miso_pin
+#define spi_pin_clk(dev)  spi_config[dev].clk_pin
+/** @} */
+
 #endif /* ndef DOXYGEN */
 
 /**
@@ -353,7 +363,7 @@ typedef struct {
 /**
  * @brief   Number of available timer channels
  */
-#define TIMER_CHANNELS      (2)
+#define TIMER_CHANNEL_NUMOF (2)
 
 /**
  * @brief   Set up alternate function (PMUX setting) for a PORT pin
