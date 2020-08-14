@@ -19,5 +19,34 @@
  */
 
 #include "dyn_boot.h"
+#include "stdio.h"
 
 /* Implementation of the module */
+char MODULE_FLAGS = 0x01;
+
+int get_flag(char bit)
+{
+    return (MODULE_FLAGS & (1 << bit));
+}
+
+int auto_select_modules(void)
+{
+    // (void) puts(MODULES_LIST);
+    const char *modules = MODULES_LIST;
+    (void) puts(modules);
+
+    return -1;
+}
+
+void toggle_flag(void)
+{
+    // char val = MODULE_FLAGS[0];
+    if (MODULE_FLAGS)
+    {
+        MODULE_FLAGS = 0x00;
+    }
+    else
+    {
+        MODULE_FLAGS = 0x01;
+    }
+}

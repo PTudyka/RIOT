@@ -1,0 +1,15 @@
+pcint enabled
+Warning: no PORT set!
+pcint enabled
+pcint enabled
+[1;32mBuilding application "smart-farm-example" for "inga_red" with MCU "atmega1284p".[0m
+
+"make" -C /home/elitedose/Dokumente/Masterarbeit/Fork/INGA_RIOT/boards/inga_red
+"make" -C /home/elitedose/Dokumente/Masterarbeit/Fork/INGA_RIOT/boards/common/inga
+"make" -C /home/elitedose/Dokumente/Masterarbeit/Fork/INGA_RIOT/core
+"make" -C /home/elitedose/Dokumente/Masterarbeit/Fork/INGA_RIOT/cpu/atmega1284p
+"make" -C /home/elitedose/Dokumente/Masterarbeit/Fork/INGA_RIOT/cpu/atmega_common
+"make" -C /home/elitedose/Dokumente/Masterarbeit/Fork/INGA_RIOT/cpu/atmega_common/avr_libc_extra
+"make" -C /home/elitedose/Dokumente/Masterarbeit/Fork/INGA_RIOT/cpu/atmega_common/periph
+"make" -C /home/elitedose/Dokumente/Masterarbeit/Fork/INGA_RIOT/drivers
+"make" -C /home/elitedose/Dokumente/Masterarbeit/Fork/INGA_RIOT/drivers/at86rf2xx
