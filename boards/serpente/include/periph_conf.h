@@ -86,10 +86,8 @@ static const tc32_conf_t timer_config[] = {
         .gclk_ctrl      = GCLK_CLKCTRL_ID_TCC2_TC3,
 #if CLOCK_USE_PLL || CLOCK_USE_XOSC32_DFLL
         .gclk_src       = SAM0_GCLK_1MHZ,
-        .prescaler      = TC_CTRLA_PRESCALER_DIV1,
 #else
         .gclk_src       = SAM0_GCLK_MAIN,
-        .prescaler      = TC_CTRLA_PRESCALER_DIV8,
 #endif
         .flags          = TC_CTRLA_MODE_COUNT16,
     },
@@ -100,10 +98,8 @@ static const tc32_conf_t timer_config[] = {
         .gclk_ctrl      = GCLK_CLKCTRL_ID_TC4_TC5,
 #if CLOCK_USE_PLL || CLOCK_USE_XOSC32_DFLL
         .gclk_src       = SAM0_GCLK_1MHZ,
-        .prescaler      = TC_CTRLA_PRESCALER_DIV1,
 #else
         .gclk_src       = SAM0_GCLK_MAIN,
-        .prescaler      = TC_CTRLA_PRESCALER_DIV8,
 #endif
         .flags          = TC_CTRLA_MODE_COUNT32,
     }
@@ -168,6 +164,10 @@ static const spi_conf_t spi_config[] = {
         .miso_pad = SPI_PAD_MISO_2,
         .mosi_pad = SPI_PAD_MOSI_0_SCK_1,
         .gclk_src = SAM0_GCLK_MAIN,
+#ifdef MODULE_PERIPH_DMA
+        .tx_trigger = SERCOM1_DMAC_ID_TX,
+        .rx_trigger = SERCOM1_DMAC_ID_RX,
+#endif
     },
     {   /* D0 … D2 (user pins) */
         .dev      = &SERCOM0->SPI,
@@ -180,6 +180,10 @@ static const spi_conf_t spi_config[] = {
         .miso_pad = SPI_PAD_MISO_2,
         .mosi_pad = SPI_PAD_MOSI_0_SCK_1,
         .gclk_src = SAM0_GCLK_MAIN,
+#ifdef MODULE_PERIPH_DMA
+        .tx_trigger = SERCOM0_DMAC_ID_TX,
+        .rx_trigger = SERCOM0_DMAC_ID_RX,
+#endif
     },
 };
 
@@ -208,8 +212,9 @@ static const i2c_conf_t i2c_config[] = {
  * @name    RTT configuration
  * @{
  */
-#define RTT_MAX_VALUE       (0xffffffff)
+#ifndef RTT_FREQUENCY
 #define RTT_FREQUENCY       (32768U)    /* in Hz. For changes see `rtt.c` */
+#endif
 /** @} */
 
 /**

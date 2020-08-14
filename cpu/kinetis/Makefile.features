@@ -1,4 +1,5 @@
 FEATURES_PROVIDED += periph_cpuid
+FEATURES_PROVIDED += periph_pm
 
 # TRNG driver is not implemented for mkw41z models
 _KINETIS_CPU_MODELS_WITHOUT_HWRNG += mkw41z256vht4 mkw41z512vht4
@@ -25,5 +26,9 @@ ifneq (,$(filter mkw% mk%,$(CPU_MODEL)))
   FEATURES_PROVIDED += periph_flashpage
   FEATURES_PROVIDED += periph_flashpage_raw
 endif
+
+# Parse parameters from CPU_MODEL using the kinetis-info.mk script in the same
+# directory as this Makefile.
+include $(LAST_MAKEFILEDIR)/kinetis-info.mk
 
 include $(RIOTCPU)/cortexm_common/Makefile.features
