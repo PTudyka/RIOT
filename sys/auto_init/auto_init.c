@@ -93,13 +93,17 @@
 #define ENABLE_DEBUG (0)
 #include "debug.h"
 
+#include "dyn_boot.h"
+
 void auto_init(void)
 {
+    auto_select_modules();
+
 #ifdef MODULE_PRNG
     void auto_init_random(void);
     gpio_toggle(MODULES_GPIO_PIN);
     DEBUG("Auto init Random module\n");
-    auto_init_random();
+    if(dyn_boot_get_flag(DYN_BOOT_MODULE_PRNG)) auto_init_random();
     gpio_toggle(MODULES_GPIO_PIN);
 #endif
 #ifdef MODULE_XTIMER
@@ -120,13 +124,13 @@ void auto_init(void)
 #ifdef MODULE_GNRC_PKTBUF
     DEBUG("Auto init gnrc_pktbuf module\n");
     gpio_toggle(MODULES_GPIO_PIN);
-    gnrc_pktbuf_init();
+    if(dyn_boot_get_flag(DYN_BOOT_GNRC)) gnrc_pktbuf_init();
     gpio_toggle(MODULES_GPIO_PIN);
 #endif
 #ifdef MODULE_GNRC_PKTDUMP
     DEBUG("Auto init gnrc_pktdump module.\n");
     gpio_toggle(MODULES_GPIO_PIN);
-    gnrc_pktdump_init();
+    if(dyn_boot_get_flag(DYN_BOOT_GNRC)) gnrc_pktdump_init();
     gpio_toggle(MODULES_GPIO_PIN);
 #endif
 #ifdef MODULE_GNRC_SIXLOWPAN
@@ -309,7 +313,7 @@ void auto_init(void)
 #ifdef MODULE_NETDEV_TAP
     DEBUG("Auto init NETDEV TAP\n");
     extern void auto_init_netdev_tap(void);
-    auto_init_netdev_tap();
+    if(dyn_boot_get_flag(DYN_BOOT_GNRC)) auto_init_netdev_tap();
 #endif
 
 #ifdef MODULE_SOCKET_ZEP

@@ -35,6 +35,9 @@ extern "C" {
 #include "mtd_native.h"
 #endif
 
+#define STARTUP_GPIO_PIN 1
+#define MODULES_GPIO_PIN 1
+
 /**
  * @name    LED handlers
  * @{
