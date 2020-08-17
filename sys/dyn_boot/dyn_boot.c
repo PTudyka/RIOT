@@ -22,7 +22,7 @@
 #include "stdio.h"
 
 /* Implementation of the module */
-__uint8_t MODULE_FLAGS[DYN_BOOT_MODULES_COUNT >> 3 | 1];
+unsigned char MODULE_FLAGS[DYN_BOOT_MODULES_COUNT >> 3 | 1];
 
 int dyn_boot_get_flag(dyn_boot_modules_t module)
 {

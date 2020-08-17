@@ -109,7 +109,7 @@ void auto_init(void)
 #ifdef MODULE_XTIMER
     DEBUG("Auto init xtimer module.\n");
     gpio_toggle(MODULES_GPIO_PIN);
-    xtimer_init();
+    if(dyn_boot_get_flag(DYN_BOOT_MODULE_XTIMER)) xtimer_init();
     gpio_toggle(MODULES_GPIO_PIN);
 #endif
 #ifdef MODULE_MCI
@@ -222,7 +222,7 @@ void auto_init(void)
     DEBUG("Auto init AT86RF2xx\n");
     extern void auto_init_at86rf2xx(void);
     gpio_toggle(MODULES_GPIO_PIN);
-    auto_init_at86rf2xx();
+    if(dyn_boot_get_flag(DYN_BOOT_GNRC)) auto_init_at86rf2xx();
     gpio_toggle(MODULES_GPIO_PIN);
 #endif
 
@@ -414,14 +414,14 @@ void auto_init(void)
     DEBUG("Auto init ADXL345.\n");
     extern void auto_init_adxl345(void);
     gpio_toggle(MODULES_GPIO_PIN);
-    auto_init_adxl345();
+    if(dyn_boot_get_flag(DYN_BOOT_MODULE_ADXL345)) auto_init_adxl345();
     gpio_toggle(MODULES_GPIO_PIN);
 #endif
 #ifdef MODULE_BMP180
     DEBUG("Auto init BMP180.\n");
     extern void auto_init_bmp180(void);
     gpio_toggle(MODULES_GPIO_PIN);
-    auto_init_bmp180();
+    if(dyn_boot_get_flag(DYN_BOOT_MODULE_BMP180)) auto_init_bmp180();
     gpio_toggle(MODULES_GPIO_PIN);
 #endif
 #if defined(MODULE_BME280) || defined(MODULE_BMP280)
@@ -493,7 +493,7 @@ void auto_init(void)
     DEBUG("Auto init L3G4200D.\n");
     extern void auto_init_l3g4200d(void);
     gpio_toggle(MODULES_GPIO_PIN);
-    auto_init_l3g4200d();
+    if(dyn_boot_get_flag(DYN_BOOT_MODULE_L3G4200D)) auto_init_l3g4200d();
     gpio_toggle(MODULES_GPIO_PIN);
 #endif
 #ifdef MODULE_LIS2DH12

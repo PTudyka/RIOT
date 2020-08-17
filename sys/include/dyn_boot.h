@@ -34,6 +34,10 @@ extern "C" {
 #endif
 
 typedef enum {
+
+    /*
+     * Modules
+     */
 #ifdef MODULE_GNRC 
 /*|| MODULE_GNRC_PKTBUF || MODULE_GNRC_PKTDUMP || \
         MODULE_GNRC_SIXLOWPAN || MODULE_GNRC_IPV6 || MODULE_GNRC_UDP || \
@@ -67,6 +71,32 @@ typedef enum {
 #ifdef MODULE_SHELL
     DYN_BOOT_MODULE_SHELL,
 #endif
+#ifdef MODULE_ADXL345
+    DYN_BOOT_MODULE_ADXL345,
+#endif
+#ifdef MODULE_BMP180
+    DYN_BOOT_MODULE_BMP180,
+#endif
+#ifdef MODULE_L3G4200D
+    DYN_BOOT_MODULE_L3G4200D,
+#endif
+#ifdef MODULE_XTIMER
+    DYN_BOOT_MODULE_XTIMER,
+#endif
+
+    /*
+     * Peripherals
+     */
+#ifdef MODULE_PERIPH_I2C
+    DYN_BOOT_PERIPH_I2C,
+#endif
+#ifdef MODULE_PERIPH_SPI
+    DYN_BOOT_PERIPH_SPI,
+#endif
+#ifdef MODULE_PERIPH_RTC
+    DYN_BOOT_PERIPH_RTC,
+#endif
+
     DYN_BOOT_MODULES_COUNT
 } dyn_boot_modules_t;
 
