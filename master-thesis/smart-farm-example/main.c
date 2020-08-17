@@ -36,7 +36,7 @@ int toggle(int argc, char **argv)
 
     // toggle_flag();
 
-    printf("MODULES_FLAG: %d\n", dyn_boot_get_flag(DYN_BOOT_MODULE_PS));
+    printf("MODULES_FLAG: %d\n", dyn_boot_get_flag(DYN_BOOT_MODULE_SAUL));
 
     // pm_reboot();
 

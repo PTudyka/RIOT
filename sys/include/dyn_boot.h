@@ -28,13 +28,18 @@
 // // #else
 // // #define MODULES_LIST "YES MODULES"
 // #endif
+#include "stdio.h"
+#include "stdbool.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-typedef enum {
+// Datatype for saving module flag information
+typedef unsigned char module_flags_t;
 
+// Create enum with every used module
+typedef enum {
     /*
      * Modules
      */
@@ -97,10 +102,11 @@ typedef enum {
     DYN_BOOT_PERIPH_RTC,
 #endif
 
+    // End type to get length of enum
     DYN_BOOT_MODULES_COUNT
 } dyn_boot_modules_t;
 
-int dyn_boot_get_flag(dyn_boot_modules_t module);
+bool dyn_boot_get_flag(dyn_boot_modules_t module);
 
 int auto_select_modules(void);
 
