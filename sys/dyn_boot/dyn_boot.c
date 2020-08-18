@@ -21,7 +21,8 @@
 #include "dyn_boot.h"
 
 /* Implementation of the module */
-module_flags_t MODULE_FLAGS[DYN_BOOT_MODULES_COUNT >> 3 | 1];
+#define MODULE_FLAGS_SIZE ((DYN_BOOT_MODULES_COUNT & 7) == 0 ? (DYN_BOOT_MODULES_COUNT >> 3) : ((DYN_BOOT_MODULES_COUNT >> 3) +1))
+module_flags_t MODULE_FLAGS[MODULE_FLAGS_SIZE];
 
 bool dyn_boot_get_flag(dyn_boot_modules_t module)
 {
@@ -46,13 +47,15 @@ static inline void _dyn_boot_set_flag(dyn_boot_modules_t module, bool val)
 
 int auto_select_modules(void)
 {
-    printf("MODULE_FLAGS size: %d\n", DYN_BOOT_MODULES_COUNT >> 3);
+    // printf("MODULE_FLAGS size: %d\n", DYN_BOOT_MODULES_COUNT >> 3);
+    printf("Modules Count: %d\n", DYN_BOOT_MODULES_COUNT);
+    printf("Calculated Count: %d\n", MODULE_FLAGS_SIZE);
 
     // Fill with zeros at start
     unsigned i;
-    for(i=0; i < (sizeof(MODULE_FLAGS)); ++i)
+    for(i=0; i < MODULE_FLAGS_SIZE; ++i)
     {
-        MODULE_FLAGS[i] = 0x00;
+        MODULE_FLAGS[i] = 0xFF;
         printf("MODULES_FLAGS: %d\n", MODULE_FLAGS[i]);
     }
     // (void) puts(MODULES_LIST);
@@ -62,10 +65,10 @@ int auto_select_modules(void)
     /*
      * Deactivate SAUL, if not a single sensor is activated
      */
-    bool sensor_count = false;
+    // bool sensor_count = (MODULE_FLAGS[0] > 0x00);
     // if (dyn_boot_get_flag)
 
-    _dyn_boot_set_flag(DYN_BOOT_MODULE_SAUL, sensor_count);
+    // _dyn_boot_set_flag(DYN_BOOT_MODULE_SAUL, sensor_count);
 
     return -1;
 }
