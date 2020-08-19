@@ -46,6 +46,7 @@ endif
 
 # Dynamic boot behaviour
 USEMODULE += dyn_boot
+FEATURES_REQUIRED = periph_adc
 
 BOARD_PROVIDES_NETIF := acd52832 adafruit-clue airfy-beacon atmega256rfr2-xpro \
         arduino-nano-33-ble avr-rss2 b-l072z-lrwan1 cc2538dk fox \

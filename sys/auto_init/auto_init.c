@@ -97,7 +97,7 @@
 
 void auto_init(void)
 {
-    auto_select_modules();
+    // auto_select_modules();
 
 #ifdef MODULE_PRNG
     void auto_init_random(void);

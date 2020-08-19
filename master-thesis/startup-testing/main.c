@@ -47,6 +47,33 @@
 #include "net/gnrc/pktdump.h"
 #endif
 
+
+#include "periph_conf.h"
+#include "periph/adc.h"
+#define RES ADC_RES_10BIT
+#define LINE 0b11110
+
+int get_supply_voltage(int argc, char **argv)
+{
+    (void) argc;
+    (void) argv;
+
+    // Init adc line for bandgap measurement
+    // adc_init(LINE);
+
+    // Measure bandgap reference
+    // ADMUX |= 0x01;
+    uint16_t adc_result = adc_sample(LINE, RES);
+    printf("ADC Result: %d\n", adc_result);
+
+    return 0;
+}
+
+static const shell_command_t commands[] = {
+    { "get_supply_v", "get supply voltage via ADC", get_supply_voltage },
+    { NULL, NULL, NULL }
+};
+
 int main(void)
 {
    gpio_toggle(MODULES_GPIO_PIN);
@@ -94,7 +121,7 @@ int main(void)
     char line_buf[SHELL_DEFAULT_BUFSIZE];
 
     // gpio_toggle(STARTUP_GPIO_PIN);
-    shell_run(NULL, line_buf, SHELL_DEFAULT_BUFSIZE);
+    shell_run(commands, line_buf, SHELL_DEFAULT_BUFSIZE);
 
     return 0;
 }

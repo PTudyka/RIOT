@@ -24,6 +24,12 @@
 #define MODULE_FLAGS_SIZE ((DYN_BOOT_MODULES_COUNT & 7) == 0 ? (DYN_BOOT_MODULES_COUNT >> 3) : ((DYN_BOOT_MODULES_COUNT >> 3) +1))
 module_flags_t MODULE_FLAGS[MODULE_FLAGS_SIZE];
 
+#define ADC_3_3_V   342
+#define ADC_3_0_V   376
+#define ADC_2_7_V   418
+#define ADC_2_4_V   470
+#define ADC_2_1_V   537
+
 bool dyn_boot_get_flag(dyn_boot_modules_t module)
 {
     /*
@@ -45,22 +51,66 @@ static inline void _dyn_boot_set_flag(dyn_boot_modules_t module, bool val)
     }
 }
 
+static inline uint16_t _get_supply_voltage(void)
+{
+    // Measure bandgap reference
+    // ADMUX |= 0x01;
+    if(adc_init(LINE))
+    {
+        LOG_ERROR("Init ADC failed!\n");
+    }
+
+    // Sample 5 times before "real" measurement
+    uint8_t i;
+    uint16_t adc_result = 0;
+
+    // First values are not good, bandgap voltage reference needs to stabilize
+    for (i=0; i < 3; ++i)
+    {
+        (void) adc_sample(LINE, RES);
+    }
+    adc_result = adc_sample(LINE, RES);
+
+    return adc_result;
+}
+
 int auto_select_modules(void)
 {
-    // printf("MODULE_FLAGS size: %d\n", DYN_BOOT_MODULES_COUNT >> 3);
-    printf("Modules Count: %d\n", DYN_BOOT_MODULES_COUNT);
-    printf("Calculated Count: %d\n", MODULE_FLAGS_SIZE);
+    uint16_t supply_v_adc = _get_supply_voltage();
 
-    // Fill with zeros at start
+    // printf("MODULE_FLAGS size: %d\n", DYN_BOOT_MODULES_COUNT >> 3);
+    // printf("Modules Count: %d\n", DYN_BOOT_MODULES_COUNT);
+    // printf("Calculated Count: %d\n", MODULE_FLAGS_SIZE);
+
+    // Fill with 1 at start
     unsigned i;
     for(i=0; i < MODULE_FLAGS_SIZE; ++i)
     {
         MODULE_FLAGS[i] = 0xFF;
-        printf("MODULES_FLAGS: %d\n", MODULE_FLAGS[i]);
+        // printf("MODULES_FLAGS: %d\n", MODULE_FLAGS[i]);
     }
     // (void) puts(MODULES_LIST);
     // const char *modules = MODULES_LIST;
     // (void) puts(modules);
+
+    // Disable modules at different voltages
+    printf("ADC Result: %d\n", supply_v_adc);
+    if(supply_v_adc > ADC_3_3_V)
+    {
+        _dyn_boot_set_flag(DYN_BOOT_MODULE_ADXL345, false);
+    }
+    if(supply_v_adc > ADC_3_0_V)
+    {
+        _dyn_boot_set_flag(DYN_BOOT_MODULE_BMP180, false);
+    }
+    if(supply_v_adc > ADC_2_7_V)
+    {
+        _dyn_boot_set_flag(DYN_BOOT_MODULE_L3G4200D, false);
+    }
+    if(supply_v_adc > ADC_2_4_V)
+    {
+        _dyn_boot_set_flag(DYN_BOOT_GNRC, false);
+    }
 
     /*
      * Deactivate SAUL, if not a single sensor is activated

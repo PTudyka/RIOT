@@ -25,6 +25,14 @@
 extern "C" {
 #endif
 
+#ifndef ADC_NUMOF
+#if defined(CPU_ATMEGA1284P)
+    #define ADC_NUMOF           (8U)
+#else
+    #define ADC_NUMOF           (0U)
+#endif
+#endif /* ADC_NUMOF */
+
 #ifdef __cplusplus
 }
 #endif

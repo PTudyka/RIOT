@@ -47,9 +47,9 @@ static inline void _done(void)
 int adc_init(adc_t line)
 {
     /* check if the line is valid */
-    if (line >= ADC_NUMOF) {
-        return -1;
-    }
+    // if (line >= ADC_NUMOF) {
+    //     return -1;
+    // }
 
     _prep();
 
