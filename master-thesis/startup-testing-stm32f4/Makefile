@@ -43,6 +43,7 @@ USEMODULE += saul_default
 
 # For measuring supply voltage
 FEATURES_REQUIRED = periph_adc
+# USEMODULE += dyn_boot
 
 ifneq (,$(filter $(BOARD),stm32f4discovery))
   USEMODULE += stdio_cdc_acm
