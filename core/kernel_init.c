@@ -41,14 +41,12 @@
 #endif
 
 #include "board.h"
-#include "dyn_boot.h"
+// #include "dyn_boot.h"
 
 extern int main(void);
 static void *main_trampoline(void *arg)
 {
     (void) arg;
-
-    auto_select_modules();
 
 #ifdef MODULE_AUTO_INIT
     // gpio_toggle(MODULES_GPIO_PIN);

@@ -36,6 +36,8 @@
 #define ENABLE_DEBUG (0)
 #include "debug.h"
 
+#include "dyn_boot.h"
+
 /*
 * Since atmega MCUs do not feature a software reset, the watchdog timer
 * is being used. It will be set to the shortest time and then force a
@@ -112,6 +114,8 @@ void cpu_init(void)
     gpio_init(MODULES_GPIO_PIN, GPIO_OUT);
     // gpio_set(STARTUP_GPIO_PIN); // active low
     gpio_toggle(STARTUP_GPIO_PIN);
+
+    auto_select_modules();
 
     /* Initialize peripherals for which modules are included in the makefile.*/
     /* spi_init */

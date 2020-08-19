@@ -57,7 +57,8 @@ static inline uint16_t _get_supply_voltage(void)
     // ADMUX |= 0x01;
     if(adc_init(LINE))
     {
-        LOG_ERROR("Init ADC failed!\n");
+        // LOG_ERROR("Init ADC failed!\n");
+        return 0xFFFF;
     }
 
     // Sample 5 times before "real" measurement
@@ -94,7 +95,7 @@ int auto_select_modules(void)
     // (void) puts(modules);
 
     // Disable modules at different voltages
-    printf("ADC Result: %d\n", supply_v_adc);
+    // printf("ADC Result: %d\n", supply_v_adc);
     if(supply_v_adc > ADC_3_3_V)
     {
         _dyn_boot_set_flag(DYN_BOOT_MODULE_ADXL345, false);
