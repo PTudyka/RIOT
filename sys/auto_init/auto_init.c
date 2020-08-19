@@ -27,9 +27,12 @@
 #include "log.h"
 
 #include "board.h"
+// #include "dyn_boot.h"
 
 void auto_init(void)
 {
+    // auto_select_modules();
+
     if (IS_USED(MODULE_AUTO_INIT_RANDOM)) {
         LOG_DEBUG("Auto init random.\n");
         extern void auto_init_random(void);
@@ -240,6 +243,7 @@ void auto_init(void)
         LOG_DEBUG("Auto init gnrc_netif.\n");
         extern void gnrc_netif_init_devs(void);
         // gpio_toggle(MODULES_GPIO_PIN);
+        // if(get_flag(0)) gnrc_netif_init_devs();
         gnrc_netif_init_devs();
         // gpio_toggle(MODULES_GPIO_PIN);
     }

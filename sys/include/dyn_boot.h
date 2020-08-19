@@ -23,39 +23,102 @@
 
 /* Add header includes here */
 // #define MODULES_LIST ED
-#ifndef MODULES_LIST
-#define MODULES_LIST "NO MODULES"
-// #else
-// #define MODULES_LIST "YES MODULES"
-#endif
+// #ifndef MODULES_LIST
+// #define MODULES_LIST "NO MODULES"
+// // #else
+// // #define MODULES_LIST "YES MODULES"
+// #endif
+#include <stdio.h>
+#include <stdbool.h>
+
+
+#include "log.h"
+#include "periph_conf.h"
+#include "periph/adc.h"
+#define RES ADC_RES_10BIT
+#define LINE 0b11110
+
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-typedef struct {
-    char flags;
-} module_flags_t;
+// Datatype for saving module flag information
+typedef unsigned char module_flags_t;
 
-// module_flags_t module_flags = {0x00};
-extern volatile module_flags_t module_flags;
-
-// char MODULE_FLAGS = 0x00;
-// Redefine Flags to auto-init flags
-#ifdef MODULE_AUTO_INIT_GNRC_NETIF
-#undef MODULE_AUTO_INIT_GNRC_NETIF
-// #define MODULE_AUTO_INIT_GNRC_NETIF module_flags.flags & 0x01
-#define MODULE_AUTO_INIT_GNRC_NETIF get_flag(0)
+// Create enum with every used module
+typedef enum {
+    /*
+     * Modules
+     */
+#ifdef MODULE_GNRC 
+/*|| MODULE_GNRC_PKTBUF || MODULE_GNRC_PKTDUMP || \
+        MODULE_GNRC_SIXLOWPAN || MODULE_GNRC_IPV6 || MODULE_GNRC_UDP || \
+        MODULE_GNRC_TCP || MODULE_AUTO_INIT_GNRC_NETIF || \
+        MODULE_GNRC_UHCPC || MODULE_AUTO_INIT_GNRC_RPL || \
+        MODULE_GNRC_RPL  
+*/
+    DYN_BOOT_GNRC,
+#endif
+#ifdef MODULE_PS
+    DYN_BOOT_MODULE_PS,
+#endif
+#ifdef MODULE_SAUL
+    DYN_BOOT_MODULE_SAUL,
+#endif
+#ifdef MODULE_PRNG
+    DYN_BOOT_MODULE_PRNG,
+#endif
+#ifdef MODULE_PERIPH_HWRNG
+    DYN_BOOT_MODULE_HWRNG,
+#endif
+#ifdef MODULE_PERIPH_PM
+    DYN_BOOT_MODULE_PM,
+#endif
+#ifdef MODULE_PERIPH_UART
+    DYN_BOOT_MODULE_UART,
+#endif
+#ifdef MODULE_RANDOM
+    DYN_BOOT_MODULE_RANDOM,
+#endif
+#ifdef MODULE_SHELL
+    DYN_BOOT_MODULE_SHELL,
+#endif
+#ifdef MODULE_ADXL345
+    DYN_BOOT_MODULE_ADXL345,
+#endif
+#ifdef MODULE_BMP180
+    DYN_BOOT_MODULE_BMP180,
+#endif
+#ifdef MODULE_L3G4200D
+    DYN_BOOT_MODULE_L3G4200D,
+#endif
+#ifdef MODULE_XTIMER
+    DYN_BOOT_MODULE_XTIMER,
 #endif
 
-/* Declare the API of the module */
-// char MODULE_FLAGS[] = {0x00};
+    /*
+     * Peripherals
+     */
+#ifdef MODULE_PERIPH_I2C
+    DYN_BOOT_PERIPH_I2C,
+#endif
+#ifdef MODULE_PERIPH_SPI
+    DYN_BOOT_PERIPH_SPI,
+#endif
+#ifdef MODULE_PERIPH_RTC
+    DYN_BOOT_PERIPH_RTC,
+#endif
 
-int get_flag(char byte);
+    // End type to get length of enum
+    DYN_BOOT_MODULES_COUNT
+} dyn_boot_modules_t;
+
+bool dyn_boot_get_flag(dyn_boot_modules_t module);
 
 int auto_select_modules(void);
 
-void toggle_flag(void);
+// void toggle_flag(void);
 
 #ifdef __cplusplus
 }
