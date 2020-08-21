@@ -24,11 +24,19 @@
 #define MODULE_FLAGS_SIZE ((DYN_BOOT_MODULES_COUNT & 7) == 0 ? (DYN_BOOT_MODULES_COUNT >> 3) : ((DYN_BOOT_MODULES_COUNT >> 3) +1))
 module_flags_t MODULE_FLAGS[MODULE_FLAGS_SIZE];
 
+#ifdef BOARD_INGA_RED
 #define ADC_3_3_V   342
 #define ADC_3_0_V   376
 #define ADC_2_7_V   418
 #define ADC_2_4_V   470
 #define ADC_2_1_V   537
+#else
+#define ADC_3_3_V   0xFFFF
+#define ADC_3_0_V   0xFFFF
+#define ADC_2_7_V   0xFFFF
+#define ADC_2_4_V   0xFFFF
+#define ADC_2_1_V   0xFFFF
+#endif
 
 bool dyn_boot_get_flag(dyn_boot_modules_t module)
 {
