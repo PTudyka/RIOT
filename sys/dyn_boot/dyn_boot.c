@@ -59,7 +59,7 @@ static inline void _dyn_boot_set_flag(dyn_boot_modules_t module, bool val)
     }
 }
 
-static inline uint16_t _get_supply_voltage(void)
+static inline uint16_t _get_supply_voltage_adc(void)
 {
     // Measure bandgap reference
     // ADMUX |= 0x01;
@@ -80,12 +80,31 @@ static inline uint16_t _get_supply_voltage(void)
     }
     adc_result = adc_sample(LINE, RES);
 
+    if(adc_result > ADC_3_3_V)
+    {
+        set_run_level(RUN_LEVEL_3);
+    }
+    if(adc_result > ADC_3_0_V)
+    {
+        set_run_level(RUN_LEVEL_2);
+    }
+    if(adc_result > ADC_2_7_V)
+    {
+        set_run_level(RUN_LEVEL_1);
+    }
+    if(adc_result > ADC_2_4_V)
+    {
+        set_run_level(RUN_LEVEL_0);
+    }
+
     return adc_result;
 }
 
 int auto_select_modules(void)
 {
-    uint16_t supply_v_adc = _get_supply_voltage();
+    // uint16_t supply_v_adc = _get_supply_voltage();
+
+    run_level_t run_level = get_run_level();
 
     // printf("MODULE_FLAGS size: %d\n", DYN_BOOT_MODULES_COUNT >> 3);
     // printf("Modules Count: %d\n", DYN_BOOT_MODULES_COUNT);
@@ -104,21 +123,46 @@ int auto_select_modules(void)
 
     // Disable modules at different voltages
     // printf("ADC Result: %d\n", supply_v_adc);
-    if(supply_v_adc > ADC_3_3_V)
+    // if(supply_v_adc > ADC_3_3_V)
+    // {
+    //     _dyn_boot_set_flag(DYN_BOOT_MODULE_ADXL345, false);
+    // }
+    // if(supply_v_adc > ADC_3_0_V)
+    // {
+    //     _dyn_boot_set_flag(DYN_BOOT_MODULE_BMP180, false);
+    // }
+    // if(supply_v_adc > ADC_2_7_V)
+    // {
+    //     _dyn_boot_set_flag(DYN_BOOT_MODULE_L3G4200D, false);
+    // }
+    // if(supply_v_adc > ADC_2_4_V)
+    // {
+    //     _dyn_boot_set_flag(DYN_BOOT_GNRC, false);
+    // }
+
+    switch (run_level)
     {
-        _dyn_boot_set_flag(DYN_BOOT_MODULE_ADXL345, false);
-    }
-    if(supply_v_adc > ADC_3_0_V)
-    {
-        _dyn_boot_set_flag(DYN_BOOT_MODULE_BMP180, false);
-    }
-    if(supply_v_adc > ADC_2_7_V)
-    {
-        _dyn_boot_set_flag(DYN_BOOT_MODULE_L3G4200D, false);
-    }
-    if(supply_v_adc > ADC_2_4_V)
-    {
-        _dyn_boot_set_flag(DYN_BOOT_GNRC, false);
+        case RUN_LEVEL_0:
+            _dyn_boot_set_flag(DYN_BOOT_GNRC, false);
+            // fall through
+        case RUN_LEVEL_1:
+            _dyn_boot_set_flag(DYN_BOOT_MODULE_L3G4200D, false);
+            // fall through
+        case RUN_LEVEL_2:
+            _dyn_boot_set_flag(DYN_BOOT_MODULE_BMP180, false);
+            // fall through
+        case RUN_LEVEL_3:
+            _dyn_boot_set_flag(DYN_BOOT_MODULE_ADXL345, false);
+            // fall through
+        case RUN_LEVEL_4:
+            // fall through
+        case RUN_LEVEL_5:
+            // fall through
+        case RUN_LEVEL_6:
+            // fall through
+        case RUN_LEVEL_7:
+            // Deactivate nothing
+            break;
     }
 
     /*

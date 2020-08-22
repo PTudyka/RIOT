@@ -31,6 +31,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+#include "dyn_boot_run_levels.h"
 
 #include "log.h"
 #include "periph_conf.h"
