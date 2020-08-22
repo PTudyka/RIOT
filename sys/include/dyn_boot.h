@@ -31,7 +31,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-#include "dyn_boot_run_levels.h"
+// #include "dyn_boot_run_levels.h"
 
 #include "log.h"
 #include "periph_conf.h"
@@ -43,6 +43,20 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/*
+ * Enum of possible run levels for dynamic boot
+ */
+typedef enum {
+    RUN_LEVEL_0,
+    RUN_LEVEL_1,
+    RUN_LEVEL_2,
+    RUN_LEVEL_3,
+    RUN_LEVEL_4,
+    RUN_LEVEL_5,
+    RUN_LEVEL_6,
+    RUN_LEVEL_7
+} run_level_t;
 
 // Datatype for saving module flag information
 typedef unsigned char module_flags_t;
@@ -115,11 +129,33 @@ typedef enum {
     DYN_BOOT_MODULES_COUNT
 } dyn_boot_modules_t;
 
+/*
+ * @brief Returns current active run level 
+ * 
+ * @return run_level_t
+ */
+run_level_t get_run_level(void);
+
+/*
+ * @brief Sets given run level as active run level
+ * 
+ * @param[in] run_level New active run level
+ */
+void set_run_level(run_level_t run_level);
+
+/*
+ * @brief Returns flag for given module. Determines, if module should be initialized or not.
+ * 
+ * @param[in] module Module to get flag for
+ * @return 0, if module should not be loaded. 1 if module should be loaded.
+ */
 bool dyn_boot_get_flag(dyn_boot_modules_t module);
 
+/*
+ * Determines at current run_level, which modules should be initialized.
+ * Sets module flags accordingly.
+ */
 int auto_select_modules(void);
-
-// void toggle_flag(void);
 
 #ifdef __cplusplus
 }
