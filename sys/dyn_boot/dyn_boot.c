@@ -21,7 +21,11 @@
 #include "dyn_boot.h"
 
 /* Implementation of the module */
+
+/* Size of array for saving module flags */
 #define MODULE_FLAGS_SIZE ((DYN_BOOT_MODULES_COUNT & 7) == 0 ? (DYN_BOOT_MODULES_COUNT >> 3) : ((DYN_BOOT_MODULES_COUNT >> 3) +1))
+
+/* For each module group, a flag is saved as Bit, if this module group should be loaded */
 module_flags_t MODULE_FLAGS[MODULE_FLAGS_SIZE];
 
 // #ifdef BOARD_INGA_RED

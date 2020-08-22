@@ -33,13 +33,6 @@
 
 // #include "dyn_boot_run_levels.h"
 
-#include "log.h"
-#include "periph_conf.h"
-#include "periph/adc.h"
-#define RES ADC_RES_10BIT
-#define LINE 0b11110
-
-
 #ifdef __cplusplus
 extern "C" {
 #endif

@@ -24,6 +24,10 @@
 /* Includes */
 #include "dyn_boot.h"
 
+#include "log.h"
+#include "periph_conf.h"
+#include "periph/adc.h"
+
 /* Defines */
 #ifdef BOARD_INGA_RED
 #define ADC_3_3_V   342
@@ -31,12 +35,18 @@
 #define ADC_2_7_V   418
 #define ADC_2_4_V   470
 #define ADC_2_1_V   537
+
+#define RES ADC_RES_10BIT
+#define LINE 0b11110
 #else
 #define ADC_3_3_V   0xFFFF
 #define ADC_3_0_V   0xFFFF
 #define ADC_2_7_V   0xFFFF
 #define ADC_2_4_V   0xFFFF
 #define ADC_2_1_V   0xFFFF
+
+#define RES (0)
+#define LINE (-1)
 #endif
 
 #ifdef __cplusplus
@@ -46,8 +56,10 @@ extern "C" {
 // TODO: needs adjustement, maybe not sufficient for all three boards
 /*
  * @brief Sets current run_level according to adc measurement (bandgap reference)
+ * 
+ * @return 0 on success
  */
-void set_run_level_adc(void);
+int set_run_level_adc(void);
 
 /*
  * @brief Sets run_level according to given gpio pin pattern. Useful for evaluation.

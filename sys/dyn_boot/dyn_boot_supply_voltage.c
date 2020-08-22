@@ -22,14 +22,14 @@
 
 /* Implementation of the module */
 
-void set_run_level_adc(void)
+int set_run_level_adc(void)
 {
     // Measure bandgap reference
     // ADMUX |= 0x01;
     if(adc_init(LINE))
     {
         // LOG_ERROR("Init ADC failed!\n");
-        return;
+        return -1;
     }
 
     // Sample 5 times before "real" measurement
@@ -60,6 +60,8 @@ void set_run_level_adc(void)
     {
         set_run_level(RUN_LEVEL_0);
     }
+
+    return 0;
 }
 
 void set_run_level_gpio(unsigned char gpio_pins)
