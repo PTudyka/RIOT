@@ -64,7 +64,23 @@ int set_run_level_adc(void)
     return 0;
 }
 
-void set_run_level_gpio(unsigned char gpio_pins)
+// TODO: make GPIO Pins to set run_level abstract (in header e.g.)
+void set_run_level_gpio(void)
 {
-    set_run_level(gpio_pins & 0x7);
+    /* Init GPIO Pins for setting run_level */
+    gpio_init(0, GPIO_IN);
+    gpio_init(1, GPIO_IN);
+    gpio_init(2, GPIO_IN);
+
+    unsigned char gpio_bits = 0;
+    gpio_bits |= (gpio_read(0) ? 1 : 0) << 2;
+    gpio_bits |= (gpio_read(1) ? 1 : 0) << 1;
+    gpio_bits |= (gpio_read(2) ? 1 : 0);
+
+    set_run_level(gpio_bits);
+}
+
+void set_run_level_manually(run_level_t run_level)
+{
+    set_run_level(run_level);
 }

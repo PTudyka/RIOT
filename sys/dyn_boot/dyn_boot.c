@@ -26,7 +26,7 @@
 #define MODULE_FLAGS_SIZE ((DYN_BOOT_MODULES_COUNT & 7) == 0 ? (DYN_BOOT_MODULES_COUNT >> 3) : ((DYN_BOOT_MODULES_COUNT >> 3) +1))
 
 /* For each module group, a flag is saved as Bit, if this module group should be loaded */
-module_flags_t MODULE_FLAGS[MODULE_FLAGS_SIZE];
+static module_flags_t MODULE_FLAGS[MODULE_FLAGS_SIZE];
 
 // #ifdef BOARD_INGA_RED
 // #define ADC_3_3_V   342
@@ -43,7 +43,7 @@ module_flags_t MODULE_FLAGS[MODULE_FLAGS_SIZE];
 // #endif
 
 /* Current active run level for determining modules for dyn_boot */
-run_level_t _run_level = RUN_LEVEL_7;
+static run_level_t _run_level = RUN_LEVEL_7;
 
 run_level_t get_run_level(void)
 {
@@ -155,6 +155,7 @@ int auto_select_modules(void)
     //     _dyn_boot_set_flag(DYN_BOOT_GNRC, false);
     // }
 
+    /* Set module flags according to run level */
     // run_level_t run_level = get_run_level();
     switch (_run_level)
     {

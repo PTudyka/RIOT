@@ -37,6 +37,7 @@
 #include "debug.h"
 
 #include "dyn_boot.h"
+#include "dyn_boot_supply_voltage.h"
 
 /*
 * Since atmega MCUs do not feature a software reset, the watchdog timer
@@ -115,6 +116,8 @@ void cpu_init(void)
     // gpio_set(STARTUP_GPIO_PIN); // active low
     gpio_toggle(STARTUP_GPIO_PIN);
 
+    // Set run_level manually
+    set_run_level(RUN_LEVEL_7);
     auto_select_modules();
 
     /* Initialize peripherals for which modules are included in the makefile.*/

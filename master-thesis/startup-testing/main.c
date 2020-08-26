@@ -48,6 +48,7 @@
 #endif
 
 
+#include "dyn_boot.h"
 #include "periph_conf.h"
 #include "periph/adc.h"
 #define RES ADC_RES_10BIT
@@ -69,8 +70,20 @@ int get_supply_voltage(int argc, char **argv)
     return 0;
 }
 
+int get_current_run_level(int argc, char **argv)
+{
+    (void) argc;
+    (void) argv;
+
+    run_level_t run_level = get_run_level();
+    printf("Run Level: %d\n", run_level);
+
+    return 0;
+}
+
 static const shell_command_t commands[] = {
     { "get_supply_v", "get supply voltage via ADC", get_supply_voltage },
+    { "run_level", "get current run level", get_current_run_level },
     { NULL, NULL, NULL }
 };
 

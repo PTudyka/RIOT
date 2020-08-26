@@ -27,8 +27,14 @@
 #include "log.h"
 #include "periph_conf.h"
 #include "periph/adc.h"
+#include "periph/gpio.h"
 
 /* Defines */
+
+/* 
+ * //TODO: make defines for ADC abstract (header e.g.)
+ * -> easier to add more boards
+ */
 #ifdef BOARD_INGA_RED
 #define ADC_3_3_V   342
 #define ADC_3_0_V   376
@@ -66,7 +72,14 @@ int set_run_level_adc(void);
  * 
  * @param[in] gpio_pins Given gpio pin pattern (3 Pins -> 8 possible values)
  */
-void set_run_level_gpio(unsigned char gpio_pins);
+void set_run_level_gpio(void);
+
+/*
+ * @brief Sets run_level manually, according to given run_level_t
+ * 
+ * @param[in] run_level run_level_t to set
+ */
+void set_run_level_manually(run_level_t run_level);
 
 #ifdef __cplusplus
 }
