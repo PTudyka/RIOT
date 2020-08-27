@@ -37,7 +37,6 @@
 #include "debug.h"
 
 #include "dyn_boot.h"
-#include "dyn_boot_supply_voltage.h"
 
 /*
 * Since atmega MCUs do not feature a software reset, the watchdog timer

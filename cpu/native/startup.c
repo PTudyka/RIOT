@@ -45,6 +45,8 @@
 
 #include "periph/init.h"
 
+#include "dyn_boot.h"
+
 #define ENABLE_DEBUG (0)
 #include "debug.h"
 
@@ -537,6 +539,10 @@ __attribute__((constructor)) static void startup(int argc, char **argv, char **e
         netdev_tap_params[i].tap_name = &argv[optind + i];
     }
 #endif
+
+    // Set run_level manually
+    set_run_level(RUN_LEVEL_0);
+    auto_select_modules();
 
     periph_init();
     board_init();
