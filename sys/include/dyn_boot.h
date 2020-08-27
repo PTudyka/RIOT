@@ -31,6 +31,8 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+#include "board.h"
+#include "periph/adc.h"
 // #include "dyn_boot_run_levels.h"
 
 #ifdef __cplusplus
@@ -122,6 +124,34 @@ typedef enum {
     DYN_BOOT_MODULES_COUNT
 } dyn_boot_modules_t;
 
+#define RUN_LEVEL_0_MODULES {         \
+            { DYN_BOOT_GNRC }          \
+}
+
+/* 
+ * //TODO: make defines for ADC abstract (header e.g.)
+ * -> easier to add more boards
+ */
+#ifdef BOARD_INGA_RED
+#define ADC_3_3_V   342
+#define ADC_3_0_V   376
+#define ADC_2_7_V   418
+#define ADC_2_4_V   470
+#define ADC_2_1_V   537
+
+#define RES ADC_RES_10BIT
+#define LINE 0b11110
+#else
+#define ADC_3_3_V   0xFFFF
+#define ADC_3_0_V   0xFFFF
+#define ADC_2_7_V   0xFFFF
+#define ADC_2_4_V   0xFFFF
+#define ADC_2_1_V   0xFFFF
+
+#define RES (0)
+#define LINE (-1)
+#endif
+
 /*
  * @brief Returns current active run level 
  * 
@@ -149,6 +179,21 @@ bool dyn_boot_get_flag(dyn_boot_modules_t module);
  * Sets module flags accordingly.
  */
 int auto_select_modules(void);
+
+// TODO: needs adjustement, maybe not sufficient for all three boards
+/*
+ * @brief Sets current run_level according to adc measurement (bandgap reference)
+ * 
+ * @return 0 on success
+ */
+int set_run_level_adc(void);
+
+/*
+ * @brief Sets run_level according to given gpio pin pattern. Useful for evaluation.
+ * 
+ * @param[in] gpio_pins Given gpio pin pattern (3 Pins -> 8 possible values)
+ */
+void set_run_level_gpio(void);
 
 #ifdef __cplusplus
 }

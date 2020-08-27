@@ -68,14 +68,20 @@ int set_run_level_adc(void)
 void set_run_level_gpio(void)
 {
     /* Init GPIO Pins for setting run_level */
-    gpio_init(0, GPIO_IN);
-    gpio_init(1, GPIO_IN);
-    gpio_init(2, GPIO_IN);
+    // gpio_init(0, GPIO_IN);
+    // gpio_init(1, GPIO_IN);
+    // gpio_init(2, GPIO_IN);
+    gpio_t pin0 = GPIO_PIN(PORT_C, 3);
+    gpio_t pin1 = GPIO_PIN(PORT_C, 4);
+    gpio_t pin2 = GPIO_PIN(PORT_C, 5);
+    gpio_init(pin0, GPIO_IN_PD);
+    gpio_init(pin1, GPIO_IN_PD);
+    gpio_init(pin2, GPIO_IN_PD);
 
     unsigned char gpio_bits = 0;
-    gpio_bits |= (gpio_read(0) ? 1 : 0) << 2;
-    gpio_bits |= (gpio_read(1) ? 1 : 0) << 1;
-    gpio_bits |= (gpio_read(2) ? 1 : 0);
+    gpio_bits |= (gpio_read(pin0) ? 1 : 0) << 2;
+    gpio_bits |= (gpio_read(pin1) ? 1 : 0) << 1;
+    gpio_bits |= (gpio_read(pin2) ? 1 : 0);
 
     set_run_level(gpio_bits);
 }

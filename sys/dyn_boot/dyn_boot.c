@@ -28,20 +28,6 @@
 /* For each module group, a flag is saved as Bit, if this module group should be loaded */
 static module_flags_t MODULE_FLAGS[MODULE_FLAGS_SIZE];
 
-// #ifdef BOARD_INGA_RED
-// #define ADC_3_3_V   342
-// #define ADC_3_0_V   376
-// #define ADC_2_7_V   418
-// #define ADC_2_4_V   470
-// #define ADC_2_1_V   537
-// #else
-// #define ADC_3_3_V   0xFFFF
-// #define ADC_3_0_V   0xFFFF
-// #define ADC_2_7_V   0xFFFF
-// #define ADC_2_4_V   0xFFFF
-// #define ADC_2_1_V   0xFFFF
-// #endif
-
 /* Current active run level for determining modules for dyn_boot */
 static run_level_t _run_level = RUN_LEVEL_7;
 
@@ -75,47 +61,6 @@ static inline void _dyn_boot_set_flag(dyn_boot_modules_t module, bool val)
         MODULE_FLAGS[module >> 3] &= ~(1 << (module & 7));
     }
 }
-
-// static uint16_t _get_supply_voltage_adc(void)
-// {
-//     // Measure bandgap reference
-//     // ADMUX |= 0x01;
-//     if(adc_init(LINE))
-//     {
-//         // LOG_ERROR("Init ADC failed!\n");
-//         return 0xFFFF;
-//     }
-
-//     // Sample 5 times before "real" measurement
-//     uint8_t i;
-//     uint16_t adc_result = 0;
-
-//     // First values are not good, bandgap voltage reference needs to stabilize
-//     for (i=0; i < 3; ++i)
-//     {
-//         (void) adc_sample(LINE, RES);
-//     }
-//     adc_result = adc_sample(LINE, RES);
-
-//     if(adc_result > ADC_3_3_V)
-//     {
-//         set_run_level(RUN_LEVEL_3);
-//     }
-//     if(adc_result > ADC_3_0_V)
-//     {
-//         set_run_level(RUN_LEVEL_2);
-//     }
-//     if(adc_result > ADC_2_7_V)
-//     {
-//         set_run_level(RUN_LEVEL_1);
-//     }
-//     if(adc_result > ADC_2_4_V)
-//     {
-//         set_run_level(RUN_LEVEL_0);
-//     }
-
-//     return adc_result;
-// }
 
 int auto_select_modules(void)
 {
@@ -191,4 +136,68 @@ int auto_select_modules(void)
     // _dyn_boot_set_flag(DYN_BOOT_MODULE_SAUL, sensor_count);
 
     return -1;
+}
+
+int set_run_level_adc(void)
+{
+    // Measure bandgap reference
+    // ADMUX |= 0x01;
+    if(adc_init(LINE))
+    {
+        // LOG_ERROR("Init ADC failed!\n");
+        return -1;
+    }
+
+    // Sample 5 times before "real" measurement
+    uint8_t i;
+    uint16_t adc_result = 0;
+
+    // First values are not good, bandgap voltage reference needs to stabilize
+    for (i=0; i < 3; ++i)
+    {
+        (void) adc_sample(LINE, RES);
+    }
+    adc_result = adc_sample(LINE, RES);
+
+    // Set run_level according to adc sample
+    if(adc_result > ADC_3_3_V)
+    {
+        set_run_level(RUN_LEVEL_3);
+    }
+    if(adc_result > ADC_3_0_V)
+    {
+        set_run_level(RUN_LEVEL_2);
+    }
+    if(adc_result > ADC_2_7_V)
+    {
+        set_run_level(RUN_LEVEL_1);
+    }
+    if(adc_result > ADC_2_4_V)
+    {
+        set_run_level(RUN_LEVEL_0);
+    }
+
+    return 0;
+}
+
+// TODO: make GPIO Pins to set run_level abstract (in header e.g.)
+void set_run_level_gpio(void)
+{
+    /* Init GPIO Pins for setting run_level */
+    // gpio_init(0, GPIO_IN);
+    // gpio_init(1, GPIO_IN);
+    // gpio_init(2, GPIO_IN);
+    gpio_t pin0 = GPIO_PIN(PORT_C, 3);
+    gpio_t pin1 = GPIO_PIN(PORT_C, 4);
+    gpio_t pin2 = GPIO_PIN(PORT_C, 5);
+    gpio_init(pin0, GPIO_IN_PD);
+    gpio_init(pin1, GPIO_IN_PD);
+    gpio_init(pin2, GPIO_IN_PD);
+
+    unsigned char gpio_bits = 0;
+    gpio_bits |= (gpio_read(pin0) ? 1 : 0) << 2;
+    gpio_bits |= (gpio_read(pin1) ? 1 : 0) << 1;
+    gpio_bits |= (gpio_read(pin2) ? 1 : 0);
+
+    set_run_level(gpio_bits);
 }
