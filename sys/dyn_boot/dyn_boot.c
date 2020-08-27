@@ -70,80 +70,12 @@ static inline void _dyn_boot_set_flag(modules_t module, bool val)
 
 int auto_select_modules(void)
 {
-    // uint16_t supply_v_adc = _get_supply_voltage();
-
-    // printf("MODULE_FLAGS size: %d\n", DYN_BOOT_MODULES_COUNT >> 3);
-    // printf("Modules Count: %d\n", DYN_BOOT_MODULES_COUNT);
-    // printf("Calculated Count: %d\n", MODULE_FLAGS_SIZE);
-
     // Fill with 1 at start
     unsigned i;
     for(i=0; i < MODULE_FLAGS_SIZE; ++i)
     {
         MODULE_FLAGS[i] = 0xFF;
-        // printf("MODULES_FLAGS: %d\n", MODULE_FLAGS[i]);
     }
-    // (void) puts(MODULES_LIST);
-    // const char *modules = MODULES_LIST;
-    // (void) puts(modules);
-
-    // Disable modules at different voltages
-    // printf("ADC Result: %d\n", supply_v_adc);
-    // if(supply_v_adc > ADC_3_3_V)
-    // {
-    //     _dyn_boot_set_flag(DYN_BOOT_MODULE_ADXL345, false);
-    // }
-    // if(supply_v_adc > ADC_3_0_V)
-    // {
-    //     _dyn_boot_set_flag(DYN_BOOT_MODULE_BMP180, false);
-    // }
-    // if(supply_v_adc > ADC_2_7_V)
-    // {
-    //     _dyn_boot_set_flag(DYN_BOOT_MODULE_L3G4200D, false);
-    // }
-    // if(supply_v_adc > ADC_2_4_V)
-    // {
-    //     _dyn_boot_set_flag(DYN_BOOT_GNRC, false);
-    // }
-
-    /* Set module flags according to run level */
-    // run_level_t run_level = get_run_level();
-
-#ifndef BOARD_NATIVE
-    switch (_run_level)
-    {
-        case RUN_LEVEL_0:
-            _dyn_boot_set_flag(DYN_BOOT_GNRC, false);
-            // fall through
-        case RUN_LEVEL_1:
-            _dyn_boot_set_flag(DYN_BOOT_MODULE_L3G4200D, false);
-            // fall through
-        case RUN_LEVEL_2:
-            _dyn_boot_set_flag(DYN_BOOT_MODULE_BMP180, false);
-            // fall through
-        case RUN_LEVEL_3:
-            _dyn_boot_set_flag(DYN_BOOT_MODULE_ADXL345, false);
-            // fall through
-        case RUN_LEVEL_4:
-            // fall through
-        case RUN_LEVEL_5:
-            // fall through
-        case RUN_LEVEL_6:
-            // fall through
-        case RUN_LEVEL_7:
-            // Deactivate nothing
-            break;
-    }
-#endif
-
-    // printf("Run_level0 size: %d\n", run_level_0_modules_count);
-    // printf("Run_level1 size: %d\n", run_level_1_modules_count);
-    // printf("Run_level2 size: %d\n", run_level_2_modules_count);
-    // printf("Run_level3 size: %d\n", run_level_3_modules_count);
-    // printf("Run_level4 size: %d\n", run_level_4_modules_count);
-    // printf("Run_level5 size: %d\n", run_level_5_modules_count);
-    // printf("Run_level6 size: %d\n", run_level_6_modules_count);
-    // printf("Run_level7 size: %d\n", run_level_7_modules_count);
 
 #ifdef RUN_LEVEL_MODULES
     printf("Run_level_modules count: %d\n", run_level_modules_count);
@@ -160,6 +92,7 @@ int auto_select_modules(void)
         if (_run_level > _run_level_modules[i].run_level)
         {
             printf("Break loop\n");
+            --i;
             break;
         }
 
@@ -172,20 +105,8 @@ int auto_select_modules(void)
     }
 #endif
 
-    // for (i=0; i < RUN_LEVEL_COUNT; ++i)
-    // {
-    //     printf("Run_Level: %d, Module: %d\n", i, run_level_modules[i].count);
-    // }
-
-    /*
-     * Deactivate SAUL, if not a single sensor is activated
-     */
-    // bool sensor_count = (MODULE_FLAGS[0] > 0x00);
-    // if (dyn_boot_get_flag)
-
-    // _dyn_boot_set_flag(DYN_BOOT_MODULE_SAUL, sensor_count);
-
-    return -1;
+    // Return count of disabled modules
+    return (i+1);
 }
 
 int set_run_level_adc(void)
