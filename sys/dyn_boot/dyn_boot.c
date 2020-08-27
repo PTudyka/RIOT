@@ -31,30 +31,10 @@ static module_flags_t MODULE_FLAGS[MODULE_FLAGS_SIZE];
 /* Current active run level for determining modules for dyn_boot */
 static run_level_t _run_level = RUN_LEVEL_7;
 
-#ifdef __USE_RUN_LEVEL_MODULES_LISTS
-// static const dyn_boot_run_level_modules run_level_modules[] = RUN_LEVEL_MODULES;
-// static const dyn_boot_run_level_modules run_level_0_modules = RUN_LEVEL_0_MODULES;
-// static const dyn_boot_modules_t run_level_0_modules[] = RUN_LEVEL_0_MODULES;
-// static const dyn_boot_modules_t run_level_1_modules[] = RUN_LEVEL_1_MODULES;
-// static const dyn_boot_modules_t run_level_2_modules[] = RUN_LEVEL_2_MODULES;
-// static const dyn_boot_modules_t run_level_3_modules[] = RUN_LEVEL_3_MODULES;
-// static const dyn_boot_modules_t run_level_4_modules[] = RUN_LEVEL_4_MODULES;
-// static const dyn_boot_modules_t run_level_5_modules[] = RUN_LEVEL_5_MODULES;
-// static const dyn_boot_modules_t run_level_6_modules[] = RUN_LEVEL_6_MODULES;
-// static const dyn_boot_modules_t run_level_7_modules[] = RUN_LEVEL_7_MODULES;
-
-// static const int run_level_0_modules_count = (sizeof(run_level_0_modules)/sizeof(dyn_boot_modules_t));
-// static const int run_level_1_modules_count = (sizeof(run_level_1_modules)/sizeof(dyn_boot_modules_t));
-// static const int run_level_2_modules_count = (sizeof(run_level_2_modules)/sizeof(dyn_boot_modules_t));
-// static const int run_level_3_modules_count = (sizeof(run_level_3_modules)/sizeof(dyn_boot_modules_t));
-// static const int run_level_4_modules_count = (sizeof(run_level_4_modules)/sizeof(dyn_boot_modules_t));
-// static const int run_level_5_modules_count = (sizeof(run_level_5_modules)/sizeof(dyn_boot_modules_t));
-// static const int run_level_6_modules_count = (sizeof(run_level_6_modules)/sizeof(dyn_boot_modules_t));
-// static const int run_level_7_modules_count = (sizeof(run_level_7_modules)/sizeof(dyn_boot_modules_t));
-
+/* Array of modules with specific run_levels, at which these modules should be disabled (added by _params file) */
+#ifdef RUN_LEVEL_MODULES
 static const dyn_boot_run_level_modules _run_level_modules[] = RUN_LEVEL_MODULES;
 static const uint16_t run_level_modules_count = (sizeof(_run_level_modules) / sizeof(dyn_boot_run_level_modules));
-
 #endif
 
 run_level_t get_run_level(void)
@@ -156,7 +136,6 @@ int auto_select_modules(void)
     }
 #endif
 
-#ifdef __USE_RUN_LEVEL_MODULES_LISTS
     // printf("Run_level0 size: %d\n", run_level_0_modules_count);
     // printf("Run_level1 size: %d\n", run_level_1_modules_count);
     // printf("Run_level2 size: %d\n", run_level_2_modules_count);
@@ -166,6 +145,7 @@ int auto_select_modules(void)
     // printf("Run_level6 size: %d\n", run_level_6_modules_count);
     // printf("Run_level7 size: %d\n", run_level_7_modules_count);
 
+#ifdef RUN_LEVEL_MODULES
     printf("Run_level_modules count: %d\n", run_level_modules_count);
 
     // Deactivate modules depending on run_level
@@ -183,11 +163,15 @@ int auto_select_modules(void)
             break;
         }
 
-        // Otherwise deactive module, if module is valid
-        if (_run_level_modules[i].module >= 0)
-            _dyn_boot_set_flag(_run_level_modules[i].module, false);
+        // Check if module is valid
+        if (_run_level_modules[i].module >= DYN_BOOT_MODULES_COUNT)
+            break;
+
+        // Deactive module, if run_level is appropriate and module is valid
+        _dyn_boot_set_flag(_run_level_modules[i].module, false);
     }
 #endif
+
     // for (i=0; i < RUN_LEVEL_COUNT; ++i)
     // {
     //     printf("Run_Level: %d, Module: %d\n", i, run_level_modules[i].count);

@@ -129,55 +129,18 @@ typedef enum {
  * Defines Module list for every run level
  */
 
-#define __USE_RUN_LEVEL_MODULES_LISTS 1
-#ifdef __USE_RUN_LEVEL_MODULES_LISTS
 typedef struct {
     run_level_t run_level;
     dyn_boot_modules_t module;
 } dyn_boot_run_level_modules;
 
 #define __EMPTY_MODULE (-1)
-/*
-#define RUN_LEVEL_0_MODULES {   \
-     MODULE_SHELL               \
-}
-#define RUN_LEVEL_1_MODULES {   \
-     __EMPTY_MODULE             \
-}
-#define RUN_LEVEL_2_MODULES {   \
-     __EMPTY_MODULE             \
-}
-#define RUN_LEVEL_3_MODULES {   \
-     DYN_BOOT_GNRC,             \
-     DYN_BOOT_MODULE_SAUL       \
-}
-#define RUN_LEVEL_4_MODULES {   \
-     __EMPTY_MODULE             \
-}
-#define RUN_LEVEL_5_MODULES {   \
-     DYN_BOOT_MODULE_RANDOM     \
-}
-#define RUN_LEVEL_6_MODULES {   \
-    __EMPTY_MODULE      \
-}
-#define RUN_LEVEL_7_MODULES {   \
-     DYN_BOOT_MODULE_PS         \
-}
-*/
-
-// Sorted descending from highest run_level
+// Use list with one default item, if no specific list if defined
+#ifndef RUN_LEVEL_MODULES
 #define RUN_LEVEL_MODULES {                     \
-    { RUN_LEVEL_7, DYN_BOOT_MODULE_PS },        \
-    { RUN_LEVEL_5, DYN_BOOT_MODULE_RANDOM },    \
-    { RUN_LEVEL_3, DYN_BOOT_MODULE_SAUL },      \
-    { RUN_LEVEL_3, DYN_BOOT_GNRC },             \
-    { RUN_LEVEL_0, MODULE_SHELL }               \
+    { RUN_LEVEL_0, DYN_BOOT_MODULES_COUNT }     \
 }
-#define RUN_LEVEL_MODULES_SIZE (5)
-/*
-    { RUN_LEVEL_1, __EMPTY_MODULE },        \
-    { RUN_LEVEL_2, __EMPTY_MODULE },    \
-*/
+#define RUN_LEVEL_MODULES_SIZE (1)
 #endif
 
 /* 
