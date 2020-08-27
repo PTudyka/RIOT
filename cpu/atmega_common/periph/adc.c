@@ -47,9 +47,11 @@ static inline void _done(void)
 int adc_init(adc_t line)
 {
     /* check if the line is valid */
-    // if (line >= ADC_NUMOF) {
-    //     return -1;
-    // }
+#ifndef MODULE_DYN_BOOT
+    if (line >= ADC_NUMOF) {
+        return -1;
+    }
+#endif
 
     _prep();
 
