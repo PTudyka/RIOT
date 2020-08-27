@@ -34,6 +34,7 @@
 #include "board.h"
 #include "periph/adc.h"
 // #include "dyn_boot_run_levels.h"
+// #include "dyn_boot_params.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -123,7 +124,7 @@ typedef enum {
 
     // End type to get length of enum
     DYN_BOOT_MODULES_COUNT
-} dyn_boot_modules_t;
+} modules_t;
 
 /*
  * Defines Module list for every run level
@@ -131,17 +132,8 @@ typedef enum {
 
 typedef struct {
     run_level_t run_level;
-    dyn_boot_modules_t module;
-} dyn_boot_run_level_modules;
-
-#define __EMPTY_MODULE (-1)
-// Use list with one default item, if no specific list if defined
-#ifndef RUN_LEVEL_MODULES
-#define RUN_LEVEL_MODULES {                     \
-    { RUN_LEVEL_0, DYN_BOOT_MODULES_COUNT }     \
-}
-#define RUN_LEVEL_MODULES_SIZE (1)
-#endif
+    modules_t module;
+} run_level_modules_t;
 
 /* 
  * //TODO: make defines for ADC abstract (header e.g.)
@@ -187,7 +179,7 @@ void set_run_level(run_level_t run_level);
  * @param[in] module Module to get flag for
  * @return 0, if module should not be loaded. 1 if module should be loaded.
  */
-bool dyn_boot_get_flag(dyn_boot_modules_t module);
+bool dyn_boot_get_flag(modules_t module);
 
 /*
  * Determines at current run_level, which modules should be initialized.

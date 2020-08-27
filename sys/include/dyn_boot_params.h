@@ -40,14 +40,13 @@ extern "C" {
  * }
  *  
  */
-#define __EMPTY_MODULE (-1)
 
-// Use list with one (empty) item, if no specific list if defined
+// Use list with one default item, if no specific list if defined
 #ifndef RUN_LEVEL_MODULES
-#define RUN_LEVEL_MODULES {             \
-    { RUN_LEVEL_0, __EMPTY_MODULE }     \
+#define RUN_LEVEL_MODULES {                     \
+    { RUN_LEVEL_0, DYN_BOOT_MODULES_COUNT }     \
 }
-#define RUN_LEVEL_MODULES_SIZE (5)
+#define RUN_LEVEL_MODULES_SIZE (1)
 #endif
 
 

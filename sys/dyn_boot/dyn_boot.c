@@ -33,8 +33,8 @@ static run_level_t _run_level = RUN_LEVEL_7;
 
 /* Array of modules with specific run_levels, at which these modules should be disabled (added by _params file) */
 #ifdef RUN_LEVEL_MODULES
-static const dyn_boot_run_level_modules _run_level_modules[] = RUN_LEVEL_MODULES;
-static const uint16_t run_level_modules_count = (sizeof(_run_level_modules) / sizeof(dyn_boot_run_level_modules));
+static const run_level_modules_t _run_level_modules[] = RUN_LEVEL_MODULES;
+static const uint16_t run_level_modules_count = (sizeof(_run_level_modules) / sizeof(run_level_modules_t));
 #endif
 
 run_level_t get_run_level(void)
@@ -47,7 +47,7 @@ void set_run_level(run_level_t run_level)
     _run_level = run_level;
 }
 
-bool dyn_boot_get_flag(dyn_boot_modules_t module)
+bool dyn_boot_get_flag(modules_t module)
 {
     /*
      * module / 8 to get array index (module >> 3)
@@ -56,7 +56,7 @@ bool dyn_boot_get_flag(dyn_boot_modules_t module)
     return (MODULE_FLAGS[module >> 3] & (1 << (module & 7)));
 }
 
-static inline void _dyn_boot_set_flag(dyn_boot_modules_t module, bool val)
+static inline void _dyn_boot_set_flag(modules_t module, bool val)
 {
     if (val)
     {
@@ -165,7 +165,7 @@ int auto_select_modules(void)
 
         // Check if module is valid
         if (_run_level_modules[i].module >= DYN_BOOT_MODULES_COUNT)
-            break;
+            continue;
 
         // Deactive module, if run_level is appropriate and module is valid
         _dyn_boot_set_flag(_run_level_modules[i].module, false);
