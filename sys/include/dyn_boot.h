@@ -173,6 +173,18 @@ typedef struct {
     int adc_level_7;
 } dyn_boot_adc_t;
 
+#define DYN_BOOT_ADC_CONF {     \
+    0,  \
+    0,  \
+    0,  \
+    0,  \
+    0,  \
+    0,  \
+    0,  \
+    0,  \
+    0,  \
+}
+
 /*
  * GPIO Run Level Input
  */
@@ -181,6 +193,12 @@ typedef struct {
     gpio_t GPIO_PIN_2;
     gpio_t GPIO_PIN_4;
 } dyn_boot_gpio_t;
+
+#define DYN_BOOT_GPIO_CONF {    \
+    GPIO_PIN(0, 0),             \
+    GPIO_PIN(0, 0),             \
+    GPIO_PIN(0, 0)              \
+}
 
 /*
  * @brief Returns current active run level 

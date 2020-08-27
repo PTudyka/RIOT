@@ -37,6 +37,15 @@ static const run_level_modules_t _run_level_modules[] = RUN_LEVEL_MODULES;
 static const uint16_t run_level_modules_count = (sizeof(_run_level_modules) / sizeof(run_level_modules_t));
 #endif
 
+#ifdef DYN_BOOT_GPIO_CONF
+static const dyn_boot_gpio_t _dyn_boot_gpio = DYN_BOOT_GPIO_CONF;
+#endif
+
+#ifdef DYN_BOOT_ADC_CONF
+static const dyn_boot_adc_t _dyn_boot_adc = DYN_BOOT_ADC_CONF;
+#endif
+
+
 run_level_t get_run_level(void)
 {
     return _run_level;
@@ -112,10 +121,10 @@ int auto_select_modules(void)
 int set_run_level_adc(void)
 {
 
-#ifndef BOARD_NATIVE
+#ifdef DYN_BOOT_ADC_CONF
     // Measure bandgap reference
     // ADMUX |= 0x01;
-    if(adc_init(LINE))
+    if(adc_init(_dyn_boot_adc.adc_aref_line)/*adc_init(LINE)*/)
     {
         // LOG_ERROR("Init ADC failed!\n");
         return -1;
@@ -123,32 +132,32 @@ int set_run_level_adc(void)
 
     // Sample 5 times before "real" measurement
     uint8_t i;
-    uint16_t adc_result = 0;
+    int adc_result = 0;
 
     // First values are not good, bandgap voltage reference needs to stabilize
     for (i=0; i < 3; ++i)
     {
-        (void) adc_sample(LINE, RES);
+        (void) adc_sample(_dyn_boot_adc.adc_aref_line, RES);
     }
-    adc_result = adc_sample(LINE, RES);
-
+    adc_result = adc_sample(_dyn_boot_adc.adc_aref_line, RES);
+    (void) adc_result;
     // Set run_level according to adc sample
-    if(adc_result > ADC_3_3_V)
-    {
-        set_run_level(RUN_LEVEL_3);
-    }
-    if(adc_result > ADC_3_0_V)
-    {
-        set_run_level(RUN_LEVEL_2);
-    }
-    if(adc_result > ADC_2_7_V)
-    {
-        set_run_level(RUN_LEVEL_1);
-    }
-    if(adc_result > ADC_2_4_V)
-    {
-        set_run_level(RUN_LEVEL_0);
-    }
+    // if(adc_result > _dyn_boot_adc.adc_aref_line)
+    // {
+    //     set_run_level(RUN_LEVEL_3);
+    // }
+    // if(adc_result > ADC_3_0_V)
+    // {
+    //     set_run_level(RUN_LEVEL_2);
+    // }
+    // if(adc_result > ADC_2_7_V)
+    // {
+    //     set_run_level(RUN_LEVEL_1);
+    // }
+    // if(adc_result > ADC_2_4_V)
+    // {
+    //     set_run_level(RUN_LEVEL_0);
+    // }
 #endif
 
     return 0;
@@ -157,26 +166,17 @@ int set_run_level_adc(void)
 // TODO: make GPIO Pins to set run_level abstract (in header e.g.)
 void set_run_level_gpio(void)
 {
-    /* Init GPIO Pins for setting run_level */
-    // gpio_init(0, GPIO_IN);
-    // gpio_init(1, GPIO_IN);
-    // gpio_init(2, GPIO_IN);
 
-#ifndef BOARD_NATIVE
-    gpio_t pin0 = GPIO_PIN(PORT_C, 3);
-    gpio_t pin1 = GPIO_PIN(PORT_C, 4);
-    gpio_t pin2 = GPIO_PIN(PORT_C, 5);
-    gpio_init(pin0, GPIO_IN_PD);
-    gpio_init(pin1, GPIO_IN_PD);
-    gpio_init(pin2, GPIO_IN_PD);
+#ifdef DYN_BOOT_GPIO_CONF
+    gpio_init(_dyn_boot_gpio.GPIO_PIN_0, GPIO_IN_PD);
+    gpio_init(_dyn_boot_gpio.GPIO_PIN_2, GPIO_IN_PD);
+    gpio_init(_dyn_boot_gpio.GPIO_PIN_4, GPIO_IN_PD);
 
     unsigned char gpio_bits = 0;
-    gpio_bits |= (gpio_read(pin0) ? 1 : 0) << 2;
-    gpio_bits |= (gpio_read(pin1) ? 1 : 0) << 1;
-    gpio_bits |= (gpio_read(pin2) ? 1 : 0);
+    gpio_bits |= (gpio_read(_dyn_boot_gpio.GPIO_PIN_0) ? 1 : 0) << 2;
+    gpio_bits |= (gpio_read(_dyn_boot_gpio.GPIO_PIN_2) ? 1 : 0) << 1;
+    gpio_bits |= (gpio_read(_dyn_boot_gpio.GPIO_PIN_4) ? 1 : 0);
 
     set_run_level(gpio_bits);
-#else
-    set_run_level(RUN_LEVEL_7);
 #endif
 }
