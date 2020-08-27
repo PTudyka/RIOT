@@ -31,6 +31,32 @@ static module_flags_t MODULE_FLAGS[MODULE_FLAGS_SIZE];
 /* Current active run level for determining modules for dyn_boot */
 static run_level_t _run_level = RUN_LEVEL_7;
 
+#ifdef __USE_RUN_LEVEL_MODULES_LISTS
+// static const dyn_boot_run_level_modules run_level_modules[] = RUN_LEVEL_MODULES;
+// static const dyn_boot_run_level_modules run_level_0_modules = RUN_LEVEL_0_MODULES;
+// static const dyn_boot_modules_t run_level_0_modules[] = RUN_LEVEL_0_MODULES;
+// static const dyn_boot_modules_t run_level_1_modules[] = RUN_LEVEL_1_MODULES;
+// static const dyn_boot_modules_t run_level_2_modules[] = RUN_LEVEL_2_MODULES;
+// static const dyn_boot_modules_t run_level_3_modules[] = RUN_LEVEL_3_MODULES;
+// static const dyn_boot_modules_t run_level_4_modules[] = RUN_LEVEL_4_MODULES;
+// static const dyn_boot_modules_t run_level_5_modules[] = RUN_LEVEL_5_MODULES;
+// static const dyn_boot_modules_t run_level_6_modules[] = RUN_LEVEL_6_MODULES;
+// static const dyn_boot_modules_t run_level_7_modules[] = RUN_LEVEL_7_MODULES;
+
+// static const int run_level_0_modules_count = (sizeof(run_level_0_modules)/sizeof(dyn_boot_modules_t));
+// static const int run_level_1_modules_count = (sizeof(run_level_1_modules)/sizeof(dyn_boot_modules_t));
+// static const int run_level_2_modules_count = (sizeof(run_level_2_modules)/sizeof(dyn_boot_modules_t));
+// static const int run_level_3_modules_count = (sizeof(run_level_3_modules)/sizeof(dyn_boot_modules_t));
+// static const int run_level_4_modules_count = (sizeof(run_level_4_modules)/sizeof(dyn_boot_modules_t));
+// static const int run_level_5_modules_count = (sizeof(run_level_5_modules)/sizeof(dyn_boot_modules_t));
+// static const int run_level_6_modules_count = (sizeof(run_level_6_modules)/sizeof(dyn_boot_modules_t));
+// static const int run_level_7_modules_count = (sizeof(run_level_7_modules)/sizeof(dyn_boot_modules_t));
+
+static const dyn_boot_run_level_modules _run_level_modules[] = RUN_LEVEL_MODULES;
+static const uint16_t run_level_modules_count = (sizeof(_run_level_modules) / sizeof(dyn_boot_run_level_modules));
+
+#endif
+
 run_level_t get_run_level(void)
 {
     return _run_level;
@@ -102,6 +128,8 @@ int auto_select_modules(void)
 
     /* Set module flags according to run level */
     // run_level_t run_level = get_run_level();
+
+#ifndef BOARD_NATIVE
     switch (_run_level)
     {
         case RUN_LEVEL_0:
@@ -126,6 +154,43 @@ int auto_select_modules(void)
             // Deactivate nothing
             break;
     }
+#endif
+
+#ifdef __USE_RUN_LEVEL_MODULES_LISTS
+    // printf("Run_level0 size: %d\n", run_level_0_modules_count);
+    // printf("Run_level1 size: %d\n", run_level_1_modules_count);
+    // printf("Run_level2 size: %d\n", run_level_2_modules_count);
+    // printf("Run_level3 size: %d\n", run_level_3_modules_count);
+    // printf("Run_level4 size: %d\n", run_level_4_modules_count);
+    // printf("Run_level5 size: %d\n", run_level_5_modules_count);
+    // printf("Run_level6 size: %d\n", run_level_6_modules_count);
+    // printf("Run_level7 size: %d\n", run_level_7_modules_count);
+
+    printf("Run_level_modules count: %d\n", run_level_modules_count);
+
+    // Deactivate modules depending on run_level
+    for (i=0; i < run_level_modules_count; ++i)
+    {
+        printf("Current run_level: %d, run_level of module: %d\n", _run_level, _run_level_modules[i].run_level);
+
+        /* If current run_level is higher than next item in list 
+         *  -> higher modules should not be disabled
+         *  -> break loop earlier to save time
+         */
+        if (_run_level > _run_level_modules[i].run_level)
+        {
+            printf("Break loop\n");
+            break;
+        }
+
+        // Otherwise deactive module
+        _dyn_boot_set_flag(_run_level_modules[i].module, false);
+    }
+#endif
+    // for (i=0; i < RUN_LEVEL_COUNT; ++i)
+    // {
+    //     printf("Run_Level: %d, Module: %d\n", i, run_level_modules[i].count);
+    // }
 
     /*
      * Deactivate SAUL, if not a single sensor is activated
@@ -140,6 +205,8 @@ int auto_select_modules(void)
 
 int set_run_level_adc(void)
 {
+
+#ifndef BOARD_NATIVE
     // Measure bandgap reference
     // ADMUX |= 0x01;
     if(adc_init(LINE))
@@ -176,6 +243,7 @@ int set_run_level_adc(void)
     {
         set_run_level(RUN_LEVEL_0);
     }
+#endif
 
     return 0;
 }
@@ -187,6 +255,8 @@ void set_run_level_gpio(void)
     // gpio_init(0, GPIO_IN);
     // gpio_init(1, GPIO_IN);
     // gpio_init(2, GPIO_IN);
+
+#ifndef BOARD_NATIVE
     gpio_t pin0 = GPIO_PIN(PORT_C, 3);
     gpio_t pin1 = GPIO_PIN(PORT_C, 4);
     gpio_t pin2 = GPIO_PIN(PORT_C, 5);
@@ -200,4 +270,7 @@ void set_run_level_gpio(void)
     gpio_bits |= (gpio_read(pin2) ? 1 : 0);
 
     set_run_level(gpio_bits);
+#else
+    set_run_level(RUN_LEVEL_7);
+#endif
 }
