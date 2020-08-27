@@ -81,9 +81,30 @@ int get_current_run_level(int argc, char **argv)
     return 0;
 }
 
+int get_gpios(int argc, char **argv)
+{
+    (void) argc;
+    (void) argv;
+
+    // gpio_init(GPIO_PIN(PORT_C, 2), GPIO_IN);
+    gpio_init(GPIO_PIN(PORT_C, 3), GPIO_IN_PD);
+    gpio_init(GPIO_PIN(PORT_C, 4), GPIO_IN_PD);
+    gpio_init(GPIO_PIN(PORT_C, 5), GPIO_IN_PD);
+
+    // uint8_t pc2 = gpio_read(GPIO_PIN(PORT_C, 2));
+    uint8_t pc3 = gpio_read(GPIO_PIN(PORT_C, 3));
+    uint8_t pc4 = gpio_read(GPIO_PIN(PORT_C, 4));
+    uint8_t pc5 = gpio_read(GPIO_PIN(PORT_C, 5));
+
+    printf("PC3: %d, PC4: %d, PC5: %d\n", pc3, pc4, pc5);
+
+    return 0;
+}
+
 static const shell_command_t commands[] = {
     { "get_supply_v", "get supply voltage via ADC", get_supply_voltage },
     { "run_level", "get current run level", get_current_run_level },
+    { "get_gpios", "get current gpio states for PC2,3,4,5", get_gpios },
     { NULL, NULL, NULL }
 };
 
