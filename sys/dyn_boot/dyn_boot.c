@@ -183,8 +183,9 @@ int auto_select_modules(void)
             break;
         }
 
-        // Otherwise deactive module
-        _dyn_boot_set_flag(_run_level_modules[i].module, false);
+        // Otherwise deactive module, if module is valid
+        if (_run_level_modules[i].module >= 0)
+            _dyn_boot_set_flag(_run_level_modules[i].module, false);
     }
 #endif
     // for (i=0; i < RUN_LEVEL_COUNT; ++i)
