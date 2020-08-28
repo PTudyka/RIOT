@@ -138,6 +138,7 @@ typedef struct {
  * //TODO: make defines for ADC abstract (header e.g.)
  * -> easier to add more boards
  */
+/*
 #ifdef BOARD_INGA_RED
 #define ADC_3_3_V   342
 #define ADC_3_0_V   376
@@ -157,22 +158,34 @@ typedef struct {
 #define RES (0)
 #define LINE (-1)
 #endif
+*/
 
 /*
  * ADC Supply voltage measurements for Run Level determination
  */
 typedef struct {
-    adc_t adc_aref_line;
-    int adc_level_0;
-    int adc_level_1;
-    int adc_level_2;
-    int adc_level_3;
-    int adc_level_4;
-    int adc_level_5;
-    int adc_level_6;
-    int adc_level_7;
+    adc_t v_ref_line;
+    adc_res_t resolution;
+    int level_0;
+    int level_1;
+    int level_2;
+    int level_3;
+    int level_4;
+    int level_5;
+    int level_6;
+    int level_7;
 } dyn_boot_adc_t;
 
+/*
+ * GPIO Run Level Input
+ */
+typedef struct {
+    gpio_t GPIO_PIN_0;
+    gpio_t GPIO_PIN_2;
+    gpio_t GPIO_PIN_4;
+} dyn_boot_gpio_t;
+
+/*
 #define DYN_BOOT_ADC_CONF {     \
     0,  \
     0,  \
@@ -185,20 +198,12 @@ typedef struct {
     0,  \
 }
 
-/*
- * GPIO Run Level Input
- */
-typedef struct {
-    gpio_t GPIO_PIN_0;
-    gpio_t GPIO_PIN_2;
-    gpio_t GPIO_PIN_4;
-} dyn_boot_gpio_t;
-
 #define DYN_BOOT_GPIO_CONF {    \
     GPIO_PIN(0, 0),             \
     GPIO_PIN(0, 0),             \
     GPIO_PIN(0, 0)              \
 }
+*/
 
 /*
  * @brief Returns current active run level 

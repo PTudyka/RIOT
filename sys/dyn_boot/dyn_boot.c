@@ -19,6 +19,7 @@
  */
 
 #include "dyn_boot.h"
+#include "dyn_boot_params.h"
 
 /* Implementation of the module */
 
@@ -86,6 +87,17 @@ int auto_select_modules(void)
         MODULE_FLAGS[i] = 0xFF;
     }
 
+//     puts("Are required macros defined?");
+// #ifdef RUN_LEVEL_MODULES
+//     puts("RUN_LEVEL_MODULES defined");
+// #endif
+// #ifdef DYN_BOOT_ADC_CONF
+//     puts("DYN_BOOT_ADC_CONF defined");
+// #endif
+// #ifdef DYN_BOOT_GPIO_CONF
+//     puts("DYN_BOOT_GPIO_CONF defined");
+// #endif
+
 #ifdef RUN_LEVEL_MODULES
     printf("Run_level_modules count: %d\n", run_level_modules_count);
 
@@ -101,7 +113,6 @@ int auto_select_modules(void)
         if (_run_level > _run_level_modules[i].run_level)
         {
             printf("Break loop\n");
-            --i;
             break;
         }
 
@@ -115,7 +126,7 @@ int auto_select_modules(void)
 #endif
 
     // Return count of disabled modules
-    return (i+1);
+    return 0;
 }
 
 int set_run_level_adc(void)
@@ -124,7 +135,7 @@ int set_run_level_adc(void)
 #ifdef DYN_BOOT_ADC_CONF
     // Measure bandgap reference
     // ADMUX |= 0x01;
-    if(adc_init(_dyn_boot_adc.adc_aref_line)/*adc_init(LINE)*/)
+    if(adc_init(_dyn_boot_adc.v_ref_line)/*adc_init(LINE)*/)
     {
         // LOG_ERROR("Init ADC failed!\n");
         return -1;
@@ -137,9 +148,9 @@ int set_run_level_adc(void)
     // First values are not good, bandgap voltage reference needs to stabilize
     for (i=0; i < 3; ++i)
     {
-        (void) adc_sample(_dyn_boot_adc.adc_aref_line, RES);
+        (void) adc_sample(_dyn_boot_adc.v_ref_line, _dyn_boot_adc.resolution);
     }
-    adc_result = adc_sample(_dyn_boot_adc.adc_aref_line, RES);
+    adc_result = adc_sample(_dyn_boot_adc.v_ref_line, _dyn_boot_adc.resolution);
     (void) adc_result;
     // Set run_level according to adc sample
     // if(adc_result > _dyn_boot_adc.adc_aref_line)

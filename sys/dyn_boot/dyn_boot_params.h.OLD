@@ -42,13 +42,31 @@ extern "C" {
  */
 
 // Use list with one default item, if no specific list if defined
-#ifndef RUN_LEVEL_MODULES
+// #ifndef RUN_LEVEL_MODULES
 #define RUN_LEVEL_MODULES {                     \
-    { RUN_LEVEL_0, DYN_BOOT_MODULES_COUNT }     \
+    { RUN_LEVEL_0, DYN_BOOT_MODULE_PS }     \
 }
 #define RUN_LEVEL_MODULES_SIZE (1)
-#endif
+// #endif
 
+#define DYN_BOOT_ADC_CONF {     \
+    0,  \
+    0,  \
+    0,  \
+    0,  \
+    0,  \
+    0,  \
+    0,  \
+    0,  \
+    0,  \
+    0   \
+}
+
+#define DYN_BOOT_GPIO_CONF {    \
+    GPIO_PIN(0, 0),             \
+    GPIO_PIN(0, 0),             \
+    GPIO_PIN(0, 0)              \
+}
 
 #ifdef __cplusplus
 }

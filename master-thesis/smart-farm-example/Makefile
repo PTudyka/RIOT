@@ -48,6 +48,9 @@ USEMODULE += gnrc_pktdump
 
 # Dynamic boot behaviour
 USEMODULE += dyn_boot
+# Include application directory to use params file 
+# for dyn_boot configuration
+CFLAGS += -I$(CURDIR)
 
 
 # USEMODULE += mci
