@@ -46,6 +46,9 @@ endif
 
 # Dynamic boot behaviour
 USEMODULE += dyn_boot
+# Include application directory to use params file 
+# for dyn_boot configuration
+CFLAGS += -I$(CURDIR)
 FEATURES_REQUIRED = periph_adc
 
 BOARD_PROVIDES_NETIF := acd52832 adafruit-clue airfy-beacon atmega256rfr2-xpro \
