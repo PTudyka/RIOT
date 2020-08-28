@@ -33,7 +33,7 @@
 extern "C" {
 #endif
 
-/* Datatype for saving module flag information efficiently */
+/* Datatype for saving module flag information as 1 Byte(s) */
 typedef unsigned char module_flags_t;
 
 /* 
@@ -181,7 +181,7 @@ bool dyn_boot_get_flag(modules_t module);
  * Determines at current run_level, which modules should be initialized.
  * Sets module flags accordingly.
  */
-int auto_select_modules(void);
+void auto_select_modules(void);
 
 /*
  * @brief Sets current run_level according to adc measurement (bandgap reference)

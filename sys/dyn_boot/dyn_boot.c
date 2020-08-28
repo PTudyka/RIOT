@@ -84,7 +84,7 @@ static inline void _dyn_boot_set_flag(modules_t module, bool val)
     }
 }
 
-int auto_select_modules(void)
+void auto_select_modules(void)
 {
     // Fill with 1 at start
     unsigned i;
@@ -121,7 +121,7 @@ int auto_select_modules(void)
 #endif
 
     // Return count of disabled modules
-    return 0;
+    // return 0;
 }
 
 int set_run_level_adc(void)
@@ -146,8 +146,42 @@ int set_run_level_adc(void)
         (void) adc_sample(_adc_config.v_ref_line, _adc_config.resolution);
     }
     adc_result = adc_sample(_adc_config.v_ref_line, _adc_config.resolution);
-    (void) adc_result;
+    // (void) adc_result;
+    
     // Set run_level according to adc sample
+    if (adc_result > _adc_config.level_0)
+    {
+        set_run_level(RUN_LEVEL_0);
+    }
+    else if (adc_result > _adc_config.level_1)
+    {
+        set_run_level(RUN_LEVEL_1);
+    }
+    else if (adc_result > _adc_config.level_2)
+    {
+        set_run_level(RUN_LEVEL_2);
+    }
+    else if (adc_result > _adc_config.level_3)
+    {
+        set_run_level(RUN_LEVEL_3);
+    }
+    else if (adc_result > _adc_config.level_4)
+    {
+        set_run_level(RUN_LEVEL_4);
+    }
+    else if (adc_result > _adc_config.level_5)
+    {
+        set_run_level(RUN_LEVEL_5);
+    }
+    else if (adc_result > _adc_config.level_6)
+    {
+        set_run_level(RUN_LEVEL_6);
+    }
+    else if (adc_result > _adc_config.level_7)
+    {
+        set_run_level(RUN_LEVEL_7);
+    }
+
     // if(adc_result > _adc_config.adc_aref_line)
     // {
     //     set_run_level(RUN_LEVEL_3);
