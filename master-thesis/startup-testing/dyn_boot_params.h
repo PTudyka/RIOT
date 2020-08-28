@@ -10,6 +10,33 @@
  * @defgroup    sys_dyn_boot Dynamic Boot Behaviour
  * @ingroup     sys
  * @brief       Select and deselects module depending on current supply voltage
+ * 
+ * Define which Modules to deactivate at specific run_level
+ * Sorted descending from highest run_level
+ * Example list:
+ * {
+ *  { RUN_LEVEL_7, DYN_BOOT_MODULE_PS },        \
+ *  { RUN_LEVEL_5, DYN_BOOT_MODULE_RANDOM },    \
+ *  { RUN_LEVEL_3, DYN_BOOT_MODULE_SAUL },      \
+ *  { RUN_LEVEL_3, DYN_BOOT_GNRC },             \
+ *  { RUN_LEVEL_0, MODULE_SHELL }               \
+ * }
+ * 
+ * Define Configuration to get V_Ref supply voltage via ADC
+ * struct: {
+ *  line;
+ *  res;
+ *  level0;
+ *  ...
+ *  level7;
+ * }
+ * 
+ * Define Configuration to get run_level via GPIO Pins
+ * struct: {
+ *  pin0;
+ *  pin2;
+ *  pin4;
+ * }
  *
  * @{
  *
