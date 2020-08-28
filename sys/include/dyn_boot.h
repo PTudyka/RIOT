@@ -22,43 +22,24 @@
 #define DYN_BOOT_H
 
 /* Add header includes here */
-// #define MODULES_LIST ED
-// #ifndef MODULES_LIST
-// #define MODULES_LIST "NO MODULES"
-// // #else
-// // #define MODULES_LIST "YES MODULES"
-// #endif
 #include <stdio.h>
 #include <stdbool.h>
 
+/* For GPIO and ADC configuration */
 #include "board.h"
 #include "periph/adc.h"
-// #include "dyn_boot_run_levels.h"
-// #include "dyn_boot_params.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/*
- * Enum of possible run levels for dynamic boot
- */
-#define RUN_LEVEL_COUNT (8)
-typedef enum {
-    RUN_LEVEL_0,
-    RUN_LEVEL_1,
-    RUN_LEVEL_2,
-    RUN_LEVEL_3,
-    RUN_LEVEL_4,
-    RUN_LEVEL_5,
-    RUN_LEVEL_6,
-    RUN_LEVEL_7
-} run_level_t;
-
-// Datatype for saving module flag information
+/* Datatype for saving module flag information efficiently */
 typedef unsigned char module_flags_t;
 
-// Create enum with every used module
+/* 
+ * Enum with every used module
+ * Will be built at compile time via MODULE_<name> defines
+ */
 typedef enum {
     /*
      * Modules
@@ -122,9 +103,24 @@ typedef enum {
     DYN_BOOT_PERIPH_RTC,
 #endif
 
-    // End type to get length of enum
+    /* End type to get length of enum efficiently */
     DYN_BOOT_MODULES_COUNT
 } modules_t;
+
+/*
+ * Enum of possible run levels for dynamic boot
+ */
+typedef enum {
+    RUN_LEVEL_0,
+    RUN_LEVEL_1,
+    RUN_LEVEL_2,
+    RUN_LEVEL_3,
+    RUN_LEVEL_4,
+    RUN_LEVEL_5,
+    RUN_LEVEL_6,
+    RUN_LEVEL_7
+} run_level_t;
+#define RUN_LEVEL_COUNT (8)
 
 /*
  * Defines Module list for every run level
@@ -133,32 +129,6 @@ typedef struct {
     run_level_t run_level;
     modules_t module;
 } run_level_modules_t;
-
-/* 
- * //TODO: make defines for ADC abstract (header e.g.)
- * -> easier to add more boards
- */
-/*
-#ifdef BOARD_INGA_RED
-#define ADC_3_3_V   342
-#define ADC_3_0_V   376
-#define ADC_2_7_V   418
-#define ADC_2_4_V   470
-#define ADC_2_1_V   537
-
-#define RES ADC_RES_10BIT
-#define LINE 0b11110
-#else
-#define ADC_3_3_V   0xFFFF
-#define ADC_3_0_V   0xFFFF
-#define ADC_2_7_V   0xFFFF
-#define ADC_2_4_V   0xFFFF
-#define ADC_2_1_V   0xFFFF
-
-#define RES (0)
-#define LINE (-1)
-#endif
-*/
 
 /*
  * ADC Supply voltage measurements for Run Level determination
@@ -184,26 +154,6 @@ typedef struct {
     gpio_t GPIO_PIN_2;
     gpio_t GPIO_PIN_4;
 } dyn_boot_gpio_t;
-
-/*
-#define DYN_BOOT_ADC_CONF {     \
-    0,  \
-    0,  \
-    0,  \
-    0,  \
-    0,  \
-    0,  \
-    0,  \
-    0,  \
-    0,  \
-}
-
-#define DYN_BOOT_GPIO_CONF {    \
-    GPIO_PIN(0, 0),             \
-    GPIO_PIN(0, 0),             \
-    GPIO_PIN(0, 0)              \
-}
-*/
 
 /*
  * @brief Returns current active run level 
@@ -233,7 +183,6 @@ bool dyn_boot_get_flag(modules_t module);
  */
 int auto_select_modules(void);
 
-// TODO: needs adjustement, maybe not sufficient for all three boards
 /*
  * @brief Sets current run_level according to adc measurement (bandgap reference)
  * 

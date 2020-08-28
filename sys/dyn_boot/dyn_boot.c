@@ -87,17 +87,6 @@ int auto_select_modules(void)
         MODULE_FLAGS[i] = 0xFF;
     }
 
-//     puts("Are required macros defined?");
-// #ifdef RUN_LEVEL_MODULES
-//     puts("RUN_LEVEL_MODULES defined");
-// #endif
-// #ifdef DYN_BOOT_ADC_CONF
-//     puts("DYN_BOOT_ADC_CONF defined");
-// #endif
-// #ifdef DYN_BOOT_GPIO_CONF
-//     puts("DYN_BOOT_GPIO_CONF defined");
-// #endif
-
 #ifdef RUN_LEVEL_MODULES
     printf("Run_level_modules count: %d\n", run_level_modules_count);
 
