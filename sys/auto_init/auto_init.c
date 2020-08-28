@@ -93,7 +93,9 @@
 #define ENABLE_DEBUG (0)
 #include "debug.h"
 
+#ifdef MODULE_DYN_BOOT
 #include "dyn_boot.h"
+#endif
 
 void auto_init(void)
 {
@@ -103,13 +105,19 @@ void auto_init(void)
     void auto_init_random(void);
     gpio_toggle(MODULES_GPIO_PIN);
     DEBUG("Auto init Random module\n");
-    if(dyn_boot_get_flag(DYN_BOOT_MODULE_PRNG)) auto_init_random();
+    #ifdef MODULE_DYN_BOOT
+    if(dyn_boot_get_flag(DYN_BOOT_MODULE_PRNG))
+    #endif
+    auto_init_random();
     gpio_toggle(MODULES_GPIO_PIN);
 #endif
 #ifdef MODULE_XTIMER
     DEBUG("Auto init xtimer module.\n");
     gpio_toggle(MODULES_GPIO_PIN);
-    if(dyn_boot_get_flag(DYN_BOOT_MODULE_XTIMER)) xtimer_init();
+    #ifdef MODULE_DYN_BOOT
+    if(dyn_boot_get_flag(DYN_BOOT_MODULE_XTIMER))
+    #endif
+    xtimer_init();
     gpio_toggle(MODULES_GPIO_PIN);
 #endif
 #ifdef MODULE_MCI
@@ -124,13 +132,19 @@ void auto_init(void)
 #ifdef MODULE_GNRC_PKTBUF
     DEBUG("Auto init gnrc_pktbuf module\n");
     gpio_toggle(MODULES_GPIO_PIN);
-    if(dyn_boot_get_flag(DYN_BOOT_GNRC)) gnrc_pktbuf_init();
+    #ifdef MODULE_DYN_BOOT
+    if(dyn_boot_get_flag(DYN_BOOT_GNRC))
+    #endif
+    gnrc_pktbuf_init();
     gpio_toggle(MODULES_GPIO_PIN);
 #endif
 #ifdef MODULE_GNRC_PKTDUMP
     DEBUG("Auto init gnrc_pktdump module.\n");
     gpio_toggle(MODULES_GPIO_PIN);
-    if(dyn_boot_get_flag(DYN_BOOT_GNRC)) gnrc_pktdump_init();
+    #ifdef MODULE_DYN_BOOT
+    if(dyn_boot_get_flag(DYN_BOOT_GNRC)) 
+    #endif
+    gnrc_pktdump_init();
     gpio_toggle(MODULES_GPIO_PIN);
 #endif
 #ifdef MODULE_GNRC_SIXLOWPAN
@@ -222,7 +236,10 @@ void auto_init(void)
     DEBUG("Auto init AT86RF2xx\n");
     extern void auto_init_at86rf2xx(void);
     gpio_toggle(MODULES_GPIO_PIN);
-    if(dyn_boot_get_flag(DYN_BOOT_GNRC)) auto_init_at86rf2xx();
+    #ifdef MODULE_DYN_BOOT
+    if(dyn_boot_get_flag(DYN_BOOT_GNRC)) 
+    #endif
+    auto_init_at86rf2xx();
     gpio_toggle(MODULES_GPIO_PIN);
 #endif
 
@@ -313,7 +330,10 @@ void auto_init(void)
 #ifdef MODULE_NETDEV_TAP
     DEBUG("Auto init NETDEV TAP\n");
     extern void auto_init_netdev_tap(void);
-    if(dyn_boot_get_flag(DYN_BOOT_GNRC)) auto_init_netdev_tap();
+    #ifdef MODULE_DYN_BOOT
+    if(dyn_boot_get_flag(DYN_BOOT_GNRC)) 
+    #endif
+    auto_init_netdev_tap();
 #endif
 
 #ifdef MODULE_SOCKET_ZEP
@@ -414,14 +434,20 @@ void auto_init(void)
     DEBUG("Auto init ADXL345.\n");
     extern void auto_init_adxl345(void);
     gpio_toggle(MODULES_GPIO_PIN);
-    if(dyn_boot_get_flag(DYN_BOOT_MODULE_ADXL345)) auto_init_adxl345();
+    #ifdef MODULE_DYN_BOOT
+    if(dyn_boot_get_flag(DYN_BOOT_MODULE_ADXL345)) 
+    #endif
+    auto_init_adxl345();
     gpio_toggle(MODULES_GPIO_PIN);
 #endif
 #ifdef MODULE_BMP180
     DEBUG("Auto init BMP180.\n");
     extern void auto_init_bmp180(void);
     gpio_toggle(MODULES_GPIO_PIN);
-    if(dyn_boot_get_flag(DYN_BOOT_MODULE_BMP180)) auto_init_bmp180();
+    #ifdef MODULE_DYN_BOOT
+    if(dyn_boot_get_flag(DYN_BOOT_MODULE_BMP180)) 
+    #endif
+    auto_init_bmp180();
     gpio_toggle(MODULES_GPIO_PIN);
 #endif
 #if defined(MODULE_BME280) || defined(MODULE_BMP280)
@@ -493,7 +519,10 @@ void auto_init(void)
     DEBUG("Auto init L3G4200D.\n");
     extern void auto_init_l3g4200d(void);
     gpio_toggle(MODULES_GPIO_PIN);
-    if(dyn_boot_get_flag(DYN_BOOT_MODULE_L3G4200D)) auto_init_l3g4200d();
+    #ifdef MODULE_DYN_BOOT
+    if(dyn_boot_get_flag(DYN_BOOT_MODULE_L3G4200D)) 
+    #endif
+    auto_init_l3g4200d();
     gpio_toggle(MODULES_GPIO_PIN);
 #endif
 #ifdef MODULE_LIS2DH12

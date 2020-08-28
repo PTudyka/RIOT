@@ -48,7 +48,9 @@
 #endif
 
 
+#ifdef MODULE_DYN_BOOT
 #include "dyn_boot.h"
+#endif
 #include "periph_conf.h"
 #include "periph/adc.h"
 #define RES ADC_RES_10BIT
@@ -60,11 +62,11 @@ int get_supply_voltage(int argc, char **argv)
     (void) argv;
 
     // Init adc line for bandgap measurement
-    // adc_init(LINE);
+    adc_init(LINE);
 
     // Measure bandgap reference
     // ADMUX |= 0x01;
-    uint16_t adc_result = adc_sample(LINE, RES);
+    int adc_result = adc_sample(LINE, RES);
     printf("ADC Result: %d\n", adc_result);
 
     return 0;
@@ -75,8 +77,10 @@ int get_current_run_level(int argc, char **argv)
     (void) argc;
     (void) argv;
 
+#ifdef MODULE_DYN_BOOT
     run_level_t run_level = get_run_level();
     printf("Run Level: %d\n", run_level);
+#endif
 
     return 0;
 }
