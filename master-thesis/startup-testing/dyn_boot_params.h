@@ -54,37 +54,12 @@ extern "C" {
 
 
 #ifdef BOARD_INGA_RED
-/*
- * Define which Modules to deactivate at specific run_level
- * 
- * Sorted descending from highest run_level
- * 
- * Example list:
- * {
- *  { RUN_LEVEL_7, DYN_BOOT_MODULE_PS },        \
- *  { RUN_LEVEL_5, DYN_BOOT_MODULE_RANDOM },    \
- *  { RUN_LEVEL_3, DYN_BOOT_MODULE_SAUL },      \
- *  { RUN_LEVEL_3, DYN_BOOT_GNRC },             \
- *  { RUN_LEVEL_0, MODULE_SHELL }               \
- * }
- *  
- */
 #define RUN_LEVEL_MODULES {         \
     { RUN_LEVEL_0, DYN_BOOT_GNRC }  \
 }
 // TODO: define array size as macro or will it be calculated at compile time?
 // #define RUN_LEVEL_MODULES_SIZE (1)
 
-/*
- * Define Configuration to get V_Ref supply voltage via ADC
- * struct: {
- *  line;
- *  res;
- *  level0;
- *  ...
- *  level7;
- * }
- */
 #define ADC_3_3_V   342
 #define ADC_3_1_V   364
 #define ADC_2_9_V   389
@@ -107,20 +82,6 @@ extern "C" {
     ADC_2_9_V,  \
     ADC_3_1_V,  \
     ADC_3_3_V   \
-}
-
-/*
- * Define Configuration to get run_level via GPIO Pins
- * struct: {
- *  pin0;
- *  pin2;
- *  pin4;
- * }
- */
-#define DYN_BOOT_GPIO_CONF {    \
-    GPIO_PIN(0, 0),             \
-    GPIO_PIN(0, 0),             \
-    GPIO_PIN(0, 0)              \
 }
 #endif /* BOARD_INGA_RED */
 
