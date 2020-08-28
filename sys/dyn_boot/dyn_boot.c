@@ -94,12 +94,12 @@ void auto_select_modules(void)
     }
 
 #ifdef RUN_LEVEL_MODULES
-    printf("Run_level_modules count: %d\n", RUN_LEVEL_MODULES_SIZE);
+    // printf("Run_level_modules count: %d\n", RUN_LEVEL_MODULES_SIZE);
 
     // Deactivate modules depending on run_level
     for (i=0; i < RUN_LEVEL_MODULES_SIZE; ++i)
     {
-        printf("Current run_level: %d, run_level of module: %d\n", _run_level, _RUN_LEVEL_MODULES[i].run_level);
+        // printf("Current run_level: %d, run_level of module: %d\n", _run_level, _RUN_LEVEL_MODULES[i].run_level);
 
         /* If current run_level is higher than next item in list 
          *  -> higher modules should not be disabled
@@ -107,7 +107,7 @@ void auto_select_modules(void)
          */
         if (_run_level > _RUN_LEVEL_MODULES[i].run_level)
         {
-            printf("Break loop\n");
+            // printf("Break loop\n");
             break;
         }
 
@@ -147,7 +147,7 @@ int set_run_level_adc(void)
     }
     adc_result = adc_sample(_adc_config.v_ref_line, _adc_config.resolution);
     // (void) adc_result;
-    
+
     // Set run_level according to adc sample
     if (adc_result > _adc_config.level_0)
     {
