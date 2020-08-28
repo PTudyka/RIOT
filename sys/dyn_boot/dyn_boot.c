@@ -34,16 +34,16 @@ static run_level_t _run_level = RUN_LEVEL_7;
 
 /* Array of modules with specific run_levels, at which these modules should be disabled (added by _params file) */
 #ifdef RUN_LEVEL_MODULES
-static const run_level_modules_t _run_level_modules[] = RUN_LEVEL_MODULES;
-static const uint16_t run_level_modules_count = (sizeof(_run_level_modules) / sizeof(run_level_modules_t));
+static const run_level_modules_t _RUN_LEVEL_MODULES[] = RUN_LEVEL_MODULES;
+static const uint16_t RUN_LEVEL_MODULES_SIZE = (sizeof(_RUN_LEVEL_MODULES) / sizeof(run_level_modules_t));
 #endif
 
 #ifdef DYN_BOOT_GPIO_CONF
-static const dyn_boot_gpio_t _dyn_boot_gpio = DYN_BOOT_GPIO_CONF;
+static const dyn_boot_gpio_t _gpio_config = DYN_BOOT_GPIO_CONF;
 #endif
 
 #ifdef DYN_BOOT_ADC_CONF
-static const dyn_boot_adc_t _dyn_boot_adc = DYN_BOOT_ADC_CONF;
+static const dyn_boot_adc_t _adc_config = DYN_BOOT_ADC_CONF;
 #endif
 
 
@@ -66,6 +66,12 @@ bool dyn_boot_get_flag(modules_t module)
     return (MODULE_FLAGS[module >> 3] & (1 << (module & 7)));
 }
 
+/*
+ * @brief Inline function to set Flag for a specific module
+ * 
+ * @param[in] module Module to set flag for
+ * @param[in] val Boolean to set flag (true/false)
+ */
 static inline void _dyn_boot_set_flag(modules_t module, bool val)
 {
     if (val)
@@ -88,29 +94,29 @@ int auto_select_modules(void)
     }
 
 #ifdef RUN_LEVEL_MODULES
-    printf("Run_level_modules count: %d\n", run_level_modules_count);
+    printf("Run_level_modules count: %d\n", RUN_LEVEL_MODULES_SIZE);
 
     // Deactivate modules depending on run_level
-    for (i=0; i < run_level_modules_count; ++i)
+    for (i=0; i < RUN_LEVEL_MODULES_SIZE; ++i)
     {
-        printf("Current run_level: %d, run_level of module: %d\n", _run_level, _run_level_modules[i].run_level);
+        printf("Current run_level: %d, run_level of module: %d\n", _run_level, _RUN_LEVEL_MODULES[i].run_level);
 
         /* If current run_level is higher than next item in list 
          *  -> higher modules should not be disabled
          *  -> break loop earlier to save time
          */
-        if (_run_level > _run_level_modules[i].run_level)
+        if (_run_level > _RUN_LEVEL_MODULES[i].run_level)
         {
             printf("Break loop\n");
             break;
         }
 
         // Check if module is valid
-        if (_run_level_modules[i].module >= DYN_BOOT_MODULES_COUNT)
+        if (_RUN_LEVEL_MODULES[i].module >= DYN_BOOT_MODULES_COUNT)
             continue;
 
         // Deactive module, if run_level is appropriate and module is valid
-        _dyn_boot_set_flag(_run_level_modules[i].module, false);
+        _dyn_boot_set_flag(_RUN_LEVEL_MODULES[i].module, false);
     }
 #endif
 
@@ -124,7 +130,7 @@ int set_run_level_adc(void)
 #ifdef DYN_BOOT_ADC_CONF
     // Measure bandgap reference
     // ADMUX |= 0x01;
-    if(adc_init(_dyn_boot_adc.v_ref_line)/*adc_init(LINE)*/)
+    if(adc_init(_adc_config.v_ref_line)/*adc_init(LINE)*/)
     {
         // LOG_ERROR("Init ADC failed!\n");
         return -1;
@@ -137,12 +143,12 @@ int set_run_level_adc(void)
     // First values are not good, bandgap voltage reference needs to stabilize
     for (i=0; i < 3; ++i)
     {
-        (void) adc_sample(_dyn_boot_adc.v_ref_line, _dyn_boot_adc.resolution);
+        (void) adc_sample(_adc_config.v_ref_line, _adc_config.resolution);
     }
-    adc_result = adc_sample(_dyn_boot_adc.v_ref_line, _dyn_boot_adc.resolution);
+    adc_result = adc_sample(_adc_config.v_ref_line, _adc_config.resolution);
     (void) adc_result;
     // Set run_level according to adc sample
-    // if(adc_result > _dyn_boot_adc.adc_aref_line)
+    // if(adc_result > _adc_config.adc_aref_line)
     // {
     //     set_run_level(RUN_LEVEL_3);
     // }
@@ -163,19 +169,18 @@ int set_run_level_adc(void)
     return 0;
 }
 
-// TODO: make GPIO Pins to set run_level abstract (in header e.g.)
 void set_run_level_gpio(void)
 {
 
 #ifdef DYN_BOOT_GPIO_CONF
-    gpio_init(_dyn_boot_gpio.GPIO_PIN_0, GPIO_IN_PD);
-    gpio_init(_dyn_boot_gpio.GPIO_PIN_2, GPIO_IN_PD);
-    gpio_init(_dyn_boot_gpio.GPIO_PIN_4, GPIO_IN_PD);
+    gpio_init(_gpio_config.GPIO_PIN_0, GPIO_IN_PD);
+    gpio_init(_gpio_config.GPIO_PIN_2, GPIO_IN_PD);
+    gpio_init(_gpio_config.GPIO_PIN_4, GPIO_IN_PD);
 
     unsigned char gpio_bits = 0;
-    gpio_bits |= (gpio_read(_dyn_boot_gpio.GPIO_PIN_0) ? 1 : 0) << 2;
-    gpio_bits |= (gpio_read(_dyn_boot_gpio.GPIO_PIN_2) ? 1 : 0) << 1;
-    gpio_bits |= (gpio_read(_dyn_boot_gpio.GPIO_PIN_4) ? 1 : 0);
+    gpio_bits |= (gpio_read(_gpio_config.GPIO_PIN_0) ? 1 : 0) << 2;
+    gpio_bits |= (gpio_read(_gpio_config.GPIO_PIN_2) ? 1 : 0) << 1;
+    gpio_bits |= (gpio_read(_gpio_config.GPIO_PIN_4) ? 1 : 0);
 
     set_run_level(gpio_bits);
 #endif

@@ -40,15 +40,22 @@ extern "C" {
  * }
  *  
  */
-
-// Use list with one default item, if no specific list if defined
-// #ifndef RUN_LEVEL_MODULES
-#define RUN_LEVEL_MODULES {                     \
-    { RUN_LEVEL_0, DYN_BOOT_GNRC }     \
+#define RUN_LEVEL_MODULES {         \
+    { RUN_LEVEL_0, DYN_BOOT_GNRC }  \
 }
-#define RUN_LEVEL_MODULES_SIZE (1)
-// #endif
+// TODO: define array size as macro or will it be calculated at compile time?
+// #define RUN_LEVEL_MODULES_SIZE (1)
 
+/*
+ * Define Configuration to get V_Ref supply voltage via ADC
+ * struct: {
+ *  line;
+ *  res;
+ *  level0;
+ *  ...
+ *  level7;
+ * }
+ */
 #define DYN_BOOT_ADC_CONF {     \
     0,  \
     0,  \
@@ -62,6 +69,14 @@ extern "C" {
     0   \
 }
 
+/*
+ * Define Configuration to get run_level via GPIO Pins
+ * struct: {
+ *  pin0;
+ *  pin2;
+ *  pin4;
+ * }
+ */
 #define DYN_BOOT_GPIO_CONF {    \
     GPIO_PIN(0, 0),             \
     GPIO_PIN(0, 0),             \
