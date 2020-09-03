@@ -38,6 +38,13 @@ USEMODULE += ps
 # include and auto-initialize all available sensors
 USEMODULE += saul_default
 
+FEATURES_REQUIRED += periph_adc
+# Dynamic boot behaviour
+USEMODULE += dyn_boot
+# Include application directory to use params file 
+# for dyn_boot configuration
+CFLAGS += -I$(CURDIR)
+
 #MODULE_NEWLIB
 # DISABLE_MODULE += newlib 
 

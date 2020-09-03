@@ -43,7 +43,11 @@ USEMODULE += saul_default
 
 # For measuring supply voltage
 FEATURES_REQUIRED = periph_adc
-# USEMODULE += dyn_boot
+# Dynamic boot behaviour
+USEMODULE += dyn_boot
+# Include application directory to use params file 
+# for dyn_boot configuration
+CFLAGS += -I$(CURDIR)
 
 ifneq (,$(filter $(BOARD),stm32f4discovery))
   USEMODULE += stdio_cdc_acm

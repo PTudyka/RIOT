@@ -35,33 +35,100 @@
 #include "board.h"
 #include "periph_conf.h"
 #include "periph/adc.h"
+#include "dyn_boot.h"
 
 #ifdef MODULE_NETIF
 #include "net/gnrc/pktdump.h"
 #include "net/gnrc.h"
 #endif
 
-int adc_read(int argc, char **argv)
+// #include "periph/adc.h"
+
+// #define VREFINT_LINE 4
+// #define VREFINT_CAL_ADDR 0x1FFF7A2A
+
+// int adc_read(int argc, char **argv)
+// {
+//     (void) argc;
+//     (void) argv;
+
+//     // int sample=0;
+
+//     // for (unsigned i = 0; i < ADC_NUMOF; i++) {
+//     //     sample = adc_sample(ADC_LINE(i), ADC_RES_12BIT);
+//     //     if (sample < 0) {
+//     //         printf("ADC_LINE(%u): selected resolution not applicable\n", i);
+//     //     } else {
+//     //         printf("ADC_LINE(%u): %i\n", i, sample);
+//     //     }
+//     // }
+
+//     // int adc_result = adc_sample(VREFINT_LINE, ADC_RES_12BIT);
+//     // uint32_t cal_factor = (ADC1->CALFACT/* & 0x3F*/);
+//     // int cal_factor = *((uint16_t*)VREFINT_CAL_ADDR);
+//     // int cal_factor = *((uint16_t*)VREFINT_CAL_ADDR);
+//     // printf("cal_factor: %d\n", cal_factor);
+//     // printf("adc_sample: %d\n", adc_result);
+
+//     // (void) adc_result;
+//     // (void) cal_factor;
+
+//     return 0;
+// }
+
+
+int get_current_run_level(int argc, char **argv)
 {
     (void) argc;
     (void) argv;
 
-    // int sample=0;
-
-    // for (unsigned i = 0; i < ADC_NUMOF; i++) {
-    //     sample = adc_sample(ADC_LINE(i), ADC_RES_12BIT);
-    //     if (sample < 0) {
-    //         printf("ADC_LINE(%u): selected resolution not applicable\n", i);
-    //     } else {
-    //         printf("ADC_LINE(%u): %i\n", i, sample);
-    //     }
-    // }
+    run_level_t run_level = get_run_level();
+    printf("Run Level: %d\n", run_level);
+    // printf("Modules Size: %d\n", MODULE_FLAGS_SIZE);
+    auto_select_modules();
 
     return 0;
 }
 
+// static const gpio_t pin0 = GPIO_PIN(PORT_C, 4);
+// static const gpio_t pin2 = GPIO_PIN(PORT_C, 5);
+// static const gpio_t pin4 = GPIO_PIN(PORT_C, 6);
+
+// int get_gpios(int argc, char **argv)
+// {
+//     (void) argc;
+//     (void) argv;
+
+//     // gpio_init(GPIO_PIN(PORT_C, 3), GPIO_IN);
+//     // gpio_init(GPIO_PIN(PORT_C, 4), GPIO_IN);
+//     // gpio_init(GPIO_PIN(PORT_C, 5), GPIO_IN);
+//     // gpio_init(pin0, GPIO_IN_PD);
+//     // gpio_init(pin2, GPIO_IN_PD);
+//     // gpio_init(pin4, GPIO_IN_PD);
+
+//     int pin0_val = gpio_read(pin0);
+//     int pin2_val = gpio_read(pin2);
+//     int pin4_val = gpio_read(pin4);
+//     // uint8_t pc3 = gpio_read(GPIO_PIN(PORT_C, 3));
+//     // uint8_t pc4 = gpio_read(GPIO_PIN(PORT_C, 4));
+//     // uint8_t pc5 = gpio_read(GPIO_PIN(PORT_C, 5));
+
+//     unsigned char gpio_bits = 0;
+//     gpio_bits |= (gpio_read(pin0) ? 1 : 0);
+//     gpio_bits |= (gpio_read(pin2) ? 1 : 0) << 1;
+//     gpio_bits |= (gpio_read(pin4) ? 1 : 0) << 2;
+
+//     // printf("PC2: %d, PC3: %d, PC4: %d, PC5: %d\n", pc2, pc3, pc4, pc5);
+//     printf("Pin0: %d, Pin2: %d, Pin4: %d\n", pin0_val, pin2_val, pin4_val);
+//     printf("Bitmuster: %d\n", gpio_bits);
+
+//     return 0;
+// }
+
 static const shell_command_t commands[] = {
-    { "adc_read", "reads all adc lines", adc_read },
+    // { "adc_read", "reads all adc lines", adc_read },
+    { "run_level", "get current run level", get_current_run_level },
+    // { "get_gpios", "get current gpio states for PC4,5,6", get_gpios },
     { NULL, NULL, NULL }
 };
 
@@ -101,6 +168,9 @@ int main(void)
     // gpio_toggle(MODULES_GPIO_PIN);
     // gpio_toggle(MODULES_GPIO_PIN);
     // gpio_toggle(STARTUP_GPIO_PIN);
+
+    // printf("adc_init successfull: %d\n", adc_init(VREFINT_LINE));
+    // printf("adc_init successfull: %d\n", adc_init(VREFINT_LINE));
 
     char line_buf[SHELL_DEFAULT_BUFSIZE];
     shell_run(commands, line_buf, SHELL_DEFAULT_BUFSIZE);
