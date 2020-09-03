@@ -1,7 +1,8 @@
 CPU_CORE = cortex-m23
-CPU_FAM  = saml1x
 
-FEATURES_PROVIDED += cortexm_mpu
+# TODO: The cortex-m23 MPU is not ported
+# FEATURES_PROVIDED += cortexm_mpu
+
 FEATURES_PROVIDED += periph_hwrng
 
 include $(RIOTCPU)/sam0_common/Makefile.features

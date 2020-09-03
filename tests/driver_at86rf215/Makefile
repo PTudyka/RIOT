@@ -5,4 +5,4 @@ USEMODULE += at86rf215
 USEMODULE += stdio_cdc_acm
 GNRC_NETIF_NUMOF := 2
 
-include ../driver_netdev_common/Makefile
+include ../driver_netdev_common/Makefile.netdev.mk

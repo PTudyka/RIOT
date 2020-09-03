@@ -17,6 +17,8 @@ USEMODULE += event_timeout
 
 # Use tinydtls for sock_dtls
 USEMODULE += tinydtls_sock_dtls
+# tinydtls needs crypto secure PRNG
+USEMODULE += prng_sha1prng
 
 # Add also the shell, some shell commands
 USEMODULE += shell
@@ -41,5 +43,6 @@ CFLAGS += -DDTLS_DEFAULT_PORT=$(DTLS_PORT)
 
 # FIXME: This is a temporary patch
 CFLAGS += -DTHREAD_STACKSIZE_MAIN=\(2*THREAD_STACKSIZE_LARGE\)
+CFLAGS += -DEVENT_THREAD_MEDIUM_STACKSIZE=\(2*THREAD_STACKSIZE_LARGE\)
 
 include $(RIOTBASE)/Makefile.include

@@ -13,8 +13,6 @@ TIMEOUT_US ?= 3000000
 TEST_ON_CI_BLACKLIST += all
 
 CFLAGS += -DSHELL_NO_ECHO
-CFLAGS += -DGNRC_NETIF_SINGLE           # Only one interface used and it makes
-                                        # shell commands easier
 
 ifeq (native,$(BOARD))
   TERMFLAGS ?= $(TAP)
@@ -30,6 +28,8 @@ USEMODULE += auto_init_gnrc_netif
 USEMODULE += gnrc_ipv6_default
 USEMODULE += gnrc_tcp
 USEMODULE += gnrc_pktbuf_cmd
+USEMODULE += gnrc_netif_single          # Only one interface used and it makes
+                                        # shell commands easier
 USEMODULE += shell
 USEMODULE += shell_commands
 USEMODULE += od
@@ -40,7 +40,7 @@ export TAPDEV = $(TAP)
 .PHONY: ethos
 
 ethos:
-	$(Q)env -u CC -u CFLAGS make -C $(RIOTTOOLS)/ethos
+	$(Q)env -u CC -u CFLAGS $(MAKE) -C $(RIOTTOOLS)/ethos
 
 include $(RIOTBASE)/Makefile.include
 

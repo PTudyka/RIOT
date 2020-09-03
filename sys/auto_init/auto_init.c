@@ -294,18 +294,6 @@ void auto_init(void)
         gpio_toggle(MODULES_GPIO_PIN);
     }
 
-    /* initialize storage devices */
-    if (IS_USED(MODULE_AUTO_INIT_STORAGE)) {
-        LOG_DEBUG("Auto init STORAGE.\n");
-
-        if (IS_USED(MODULE_SDCARD_SPI)) {
-            extern void auto_init_sdcard_spi(void);
-            gpio_toggle(MODULES_GPIO_PIN);
-            auto_init_sdcard_spi();
-            gpio_toggle(MODULES_GPIO_PIN);
-        }
-    }
-
     if (IS_USED(MODULE_AUTO_INIT_CAN)) {
         LOG_DEBUG("Auto init CAN.\n");
 

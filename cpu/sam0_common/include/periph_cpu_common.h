@@ -23,6 +23,7 @@
 
 #include "cpu.h"
 #include "exti_config.h"
+#include "timer_config.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -188,6 +189,15 @@ typedef enum {
     UART_DATA_BITS_8 = 0x0,   /**< 8 data bits */
 } uart_data_bits_t;
 /** @} */
+
+/**
+ * @brief   UART pin getters
+ * @{
+ */
+#define uart_pin_rx(dev) uart_config[dev].rx_pin
+#define uart_pin_tx(dev) uart_config[dev].tx_pin
+/** @} */
+
 #endif /* ndef DOXYGEN */
 
 
@@ -200,6 +210,16 @@ typedef enum {
 
 /**
  * @brief   UART device configuration
+ *
+ *          The frequency f() of the clock `gclk_src` must fulfill the condition
+ *
+ *              16 * baud < f(gclk_src) ≤ 2²⁰ * baud
+ *
+ *          in Asynchronous Arithmetic mode and
+ *
+ *              16 * baud < f(gclk_src) ≤ 2¹⁷ * baud
+ *
+ *          in Asynchronous Fractional mode
  */
 typedef struct {
     SercomUsart *dev;       /**< pointer to the used UART device */
@@ -215,6 +235,57 @@ typedef struct {
     uart_flag_t flags;      /**< set optional SERCOM flags */
     uint8_t gclk_src;       /**< GCLK source which supplys SERCOM */
 } uart_conf_t;
+
+/**
+ * @brief   Common configuration for timer devices
+ */
+typedef struct {
+#ifdef REV_TCC
+    Tcc *dev;                   /**< TCC device to use */
+#endif
+#ifdef MCLK
+    volatile uint32_t *mclk;    /**< Pointer to MCLK->APBxMASK.reg */
+    uint32_t mclk_mask;         /**< MCLK_APBxMASK bits to enable Timer */
+#else
+    uint32_t pm_mask;           /**< PM_APBCMASK bits to enable Timer */
+#endif
+    uint16_t gclk_id;           /**< TCn_GCLK_ID */
+} tcc_cfg_t;
+
+/**
+ * @brief   Static initializer for timer configuration
+ */
+#ifdef MCLK
+#define TCC_CONFIG(tim)                   { \
+        .dev       = tim,                   \
+        .mclk      = MCLK_ ## tim,          \
+        .mclk_mask = MCLK_ ## tim ## _MASK, \
+        .gclk_id   = tim ## _GCLK_ID,     }
+#else
+#define TCC_CONFIG(tim)                   { \
+        .dev       = tim,                   \
+        .pm_mask   = PM_APBCMASK_ ## tim,   \
+        .gclk_id   = tim ## _GCLK_ID,     }
+#endif
+
+/**
+ * @brief   PWM channel configuration data structure
+ */
+typedef struct {
+    gpio_t pin;             /**< GPIO pin */
+    gpio_mux_t mux;         /**< pin function multiplex value */
+    uint8_t chan;           /**< TCC channel to use */
+} pwm_conf_chan_t;
+
+/**
+ * @brief   PWM device configuration data structure
+ */
+typedef struct {
+    tcc_cfg_t tim;                  /**< timer configuration */
+    const pwm_conf_chan_t *chan;    /**< channel configuration */
+    uint8_t chan_numof;             /**< number of channels */
+    uint8_t gclk_src;               /**< GCLK source which clocks TIMER */
+} pwm_conf_t;
 
 /**
  * @brief   Available values for SERCOM SPI MISO pad selection
@@ -331,6 +402,15 @@ typedef enum {
 
 /**
  * @brief   I2C device configuration
+ *          The frequency f() of the clock `gclk_src` must fulfill the condition
+ *
+ *              4 * speed ≤ f(gclk_src) ≤ 512 * speed
+ *
+ *          if speed ≤ 1 MHz and
+ *
+ *             12 * speed ≤ f(gclk_src) ≤ 520 * speed
+ *
+ *          if speed > 1 MHz
  */
 typedef struct {
     SercomI2cm *dev;        /**< pointer to the used I2C device */
@@ -543,9 +623,9 @@ static inline uint8_t sercom_id(const void *sercom)
 static inline void sercom_clk_en(void *sercom)
 {
     const uint8_t id = sercom_id(sercom);
-#if defined(CPU_FAM_SAMD21)
+#if defined(CPU_COMMON_SAMD21)
     PM->APBCMASK.reg |= (PM_APBCMASK_SERCOM0 << id);
-#elif defined (CPU_FAM_SAMD5X)
+#elif defined (CPU_COMMON_SAMD5X)
     if (id < 2) {
         MCLK->APBAMASK.reg |= (1 << (id + 12));
     } else if (id < 4) {
@@ -557,11 +637,11 @@ static inline void sercom_clk_en(void *sercom)
     if (id < 5) {
         MCLK->APBCMASK.reg |= (MCLK_APBCMASK_SERCOM0 << id);
     }
-#if defined(CPU_FAM_SAML21)
+#if defined(CPU_COMMON_SAML21)
     else {
         MCLK->APBDMASK.reg |= (MCLK_APBDMASK_SERCOM5);
     }
-#endif /* CPU_FAM_SAML21 */
+#endif /* CPU_COMMON_SAML21 */
 #endif
 }
 
@@ -573,9 +653,9 @@ static inline void sercom_clk_en(void *sercom)
 static inline void sercom_clk_dis(void *sercom)
 {
     const uint8_t id = sercom_id(sercom);
-#if defined(CPU_FAM_SAMD21)
+#if defined(CPU_COMMON_SAMD21)
     PM->APBCMASK.reg &= ~(PM_APBCMASK_SERCOM0 << id);
-#elif defined (CPU_FAM_SAMD5X)
+#elif defined (CPU_COMMON_SAMD5X)
     if (id < 2) {
         MCLK->APBAMASK.reg &= ~(1 << (id + 12));
     } else if (id < 4) {
@@ -587,15 +667,15 @@ static inline void sercom_clk_dis(void *sercom)
     if (id < 5) {
         MCLK->APBCMASK.reg &= ~(MCLK_APBCMASK_SERCOM0 << id);
     }
-#if defined (CPU_FAM_SAML21)
+#if defined (CPU_COMMON_SAML21)
     else {
         MCLK->APBDMASK.reg &= ~(MCLK_APBDMASK_SERCOM5);
     }
-#endif /* CPU_FAM_SAML21 */
+#endif /* CPU_COMMON_SAML21 */
 #endif
 }
 
-#ifdef CPU_FAM_SAMD5X
+#ifdef CPU_COMMON_SAMD5X
 static inline uint8_t _sercom_gclk_id_core(uint8_t sercom_id) {
     if (sercom_id < 2)
         return sercom_id + 7;
@@ -616,21 +696,21 @@ static inline void sercom_set_gen(void *sercom, uint8_t gclk)
 {
     const uint8_t id = sercom_id(sercom);
     sam0_gclk_enable(gclk);
-#if defined(CPU_FAM_SAMD21)
+#if defined(CPU_COMMON_SAMD21)
     GCLK->CLKCTRL.reg = (GCLK_CLKCTRL_CLKEN | GCLK_CLKCTRL_GEN(gclk) |
                          (SERCOM0_GCLK_ID_CORE + id));
     while (GCLK->STATUS.reg & GCLK_STATUS_SYNCBUSY) {}
-#elif defined(CPU_FAM_SAMD5X)
+#elif defined(CPU_COMMON_SAMD5X)
     GCLK->PCHCTRL[_sercom_gclk_id_core(id)].reg = (GCLK_PCHCTRL_CHEN | GCLK_PCHCTRL_GEN(gclk));
 #else
     if (id < 5) {
         GCLK->PCHCTRL[SERCOM0_GCLK_ID_CORE + id].reg = (GCLK_PCHCTRL_CHEN | GCLK_PCHCTRL_GEN(gclk));
     }
-#if defined(CPU_FAM_SAML21)
+#if defined(CPU_COMMON_SAML21)
     else {
         GCLK->PCHCTRL[SERCOM5_GCLK_ID_CORE].reg = (GCLK_PCHCTRL_CHEN | GCLK_PCHCTRL_GEN(gclk));
     }
-#endif /* CPU_FAM_SAML21 */
+#endif /* CPU_COMMON_SAML21 */
 #endif
 }
 
@@ -741,7 +821,7 @@ typedef struct {
 /**
  * @brief Move the DMA descriptors to the LP SRAM. Required on the SAML21
  */
-#if defined(CPU_FAM_SAML21) || defined(DOXYGEN)
+#if defined(CPU_COMMON_SAML21) || defined(DOXYGEN)
 #define DMA_DESCRIPTOR_IN_LPSRAM
 #endif
 

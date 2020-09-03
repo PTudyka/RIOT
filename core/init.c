@@ -37,6 +37,10 @@
 #include <auto_init.h>
 #endif
 
+#ifndef CONFIG_BOOT_MSG_STRING
+#define CONFIG_BOOT_MSG_STRING "main(): This is RIOT! (Version: " RIOT_VERSION ")"
+#endif
+
 extern int main(void);
 
 static void *main_trampoline(void *arg)
@@ -54,13 +58,11 @@ static void *main_trampoline(void *arg)
 #endif
 
     DEBUG("MAIN FUNCTION CALL\n");
-    // gpio_toggle(MODULES_GPIO_PIN);
-    // gpio_toggle(STARTUP_GPIO_PIN);
-    // gpio_toggle(STARTUP_GPIO_PIN);
-
-    gpio_toggle(MODULES_GPIO_PIN);
-    LOG_INFO("main(): This is RIOT! (Version: " RIOT_VERSION ")\n");
-    gpio_toggle(MODULES_GPIO_PIN);
+    if (!IS_ACTIVE(CONFIG_SKIP_BOOT_MSG)) {
+        gpio_toggle(MODULES_GPIO_PIN);  
+        LOG_INFO(CONFIG_BOOT_MSG_STRING "\n");
+        gpio_toggle(MODULES_GPIO_PIN);
+    }
 
     // gpio_toggle(MODULES_GPIO_PIN);
     // gpio_toggle(STARTUP_GPIO_PIN);

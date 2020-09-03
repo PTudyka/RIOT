@@ -226,7 +226,7 @@ char *thread_stack_init(thread_task_func_t task_func,
 void thread_stack_print(void)
 {
     int count = 0;
-    uint32_t *sp = (uint32_t *)sched_active_thread->sp;
+    uint32_t *sp = (uint32_t *)thread_get_active()->sp;
 
     printf("printing the current stack of thread %" PRIkernel_pid "\n",
            thread_getpid());
@@ -265,15 +265,19 @@ void *thread_isr_stack_start(void)
     return (void *)&_sstack;
 }
 
-__attribute__((naked)) void NORETURN cpu_switch_context_exit(void)
+void NORETURN cpu_switch_context_exit(void)
 {
+    /* enable IRQs to make sure the SVC interrupt is reachable */
+    irq_enable();
+    /* trigger the SVC interrupt */
     __asm__ volatile (
-    "bl     irq_enable               \n" /* enable IRQs to make the SVC
-                                           * interrupt is reachable */
-    "svc    #1                            \n" /* trigger the SVC interrupt */
-    "unreachable%=:                       \n" /* this loop is unreachable */
-    "b      unreachable%=                 \n" /* loop indefinitely */
-    :::);
+        "svc    #1                            \n"
+        : /* no outputs */
+        : /* no inputs */
+        : /* no clobbers */
+    );
+
+    UNREACHABLE();
 }
 
 void thread_yield_higher(void)
@@ -368,6 +372,8 @@ void __attribute__((naked)) __attribute__((used)) isr_pendsv(void) {
                                            * causes end of exception*/
 #endif
     /* {r0-r3,r12,LR,PC,xPSR,s0-s15,FPSCR} are restored automatically on exception return */
+     ".ltorg                           \n" /* literal pool needed to access
+                                            * sched_active_thread */
     );
 }
 
@@ -456,6 +462,7 @@ void sched_arch_idle(void)
      * According to [this](http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.dai0321a/BIHJICIE.html),
      * dynamically changing the priority is not supported on CortexM0(+).
      */
+    unsigned state = irq_disable();
     NVIC_SetPriority(PendSV_IRQn, CPU_CORTEXM_PENDSV_IRQ_PRIO + 1);
     __DSB();
     __ISB();
@@ -465,5 +472,7 @@ void sched_arch_idle(void)
 #else
     __WFI();
 #endif
+    irq_restore(state);
     NVIC_SetPriority(PendSV_IRQn, CPU_CORTEXM_PENDSV_IRQ_PRIO);
+    SCB->ICSR = SCB_ICSR_PENDSVCLR_Msk;
 }

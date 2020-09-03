@@ -19,8 +19,8 @@ PSEUDOMODULES += crypto_%	# crypto_aes or crypto_3des
 PSEUDOMODULES += devfs_%
 PSEUDOMODULES += dhcpv6_%
 PSEUDOMODULES += ecc_%
-PSEUDOMODULES += emb6_router
 PSEUDOMODULES += event_%
+PSEUDOMODULES += evtimer_mbox
 PSEUDOMODULES += fmt_%
 PSEUDOMODULES += gnrc_dhcpv6_%
 PSEUDOMODULES += gnrc_ipv6_default
@@ -42,6 +42,7 @@ PSEUDOMODULES += gnrc_pktbuf_cmd
 PSEUDOMODULES += gnrc_netif_6lo
 PSEUDOMODULES += gnrc_netif_ipv6
 PSEUDOMODULES += gnrc_netif_mac
+PSEUDOMODULES += gnrc_netif_single
 PSEUDOMODULES += gnrc_netif_cmd_%
 PSEUDOMODULES += gnrc_netif_dedup
 PSEUDOMODULES += gnrc_nettype_%
@@ -73,6 +74,7 @@ PSEUDOMODULES += mpu_noexec_ram
 PSEUDOMODULES += nanocoap_%
 PSEUDOMODULES += netdev_default
 PSEUDOMODULES += netdev_ieee802154_%
+PSEUDOMODULES += netdev_register
 PSEUDOMODULES += netstats
 PSEUDOMODULES += netstats_l2
 PSEUDOMODULES += netstats_ipv6
@@ -83,6 +85,8 @@ PSEUDOMODULES += newlib
 PSEUDOMODULES += newlib_gnu_source
 PSEUDOMODULES += newlib_nano
 PSEUDOMODULES += openthread
+PSEUDOMODULES += picolibc
+PSEUDOMODULES += picolibc_stdout_buffered
 PSEUDOMODULES += pktqueue
 PSEUDOMODULES += posix_headers
 PSEUDOMODULES += printf_float
@@ -98,6 +102,7 @@ PSEUDOMODULES += saul_nrf_temperature
 PSEUDOMODULES += scanf_float
 PSEUDOMODULES += sched_cb
 PSEUDOMODULES += semtech_loramac_rx
+PSEUDOMODULES += shell_hooks
 PSEUDOMODULES += slipdev_stdio
 PSEUDOMODULES += sock
 PSEUDOMODULES += sock_async
@@ -105,10 +110,13 @@ PSEUDOMODULES += sock_dtls
 PSEUDOMODULES += sock_ip
 PSEUDOMODULES += sock_tcp
 PSEUDOMODULES += sock_udp
+PSEUDOMODULES += soft_uart_modecfg
 PSEUDOMODULES += stdin
-PSEUDOMODULES += stdio_ethos
 PSEUDOMODULES += stdio_cdc_acm
+PSEUDOMODULES += stdio_ethos
 PSEUDOMODULES += stdio_uart_rx
+PSEUDOMODULES += stm32_eth
+PSEUDOMODULES += stm32_eth_link_up
 PSEUDOMODULES += suit_transport_%
 PSEUDOMODULES += wakaama_objects_%
 PSEUDOMODULES += wifi_enterprise
@@ -130,6 +138,7 @@ PSEUDOMODULES += at86rf23%
 PSEUDOMODULES += at86rf21%
 PSEUDOMODULES += at86rfa1
 PSEUDOMODULES += at86rfr2
+PSEUDOMODULES += at86rf2xx_aes_spi
 NO_PSEUDOMODULES += at86rf215
 
 # include variants of the BME680 drivers as pseudo modules
@@ -184,6 +193,9 @@ PSEUDOMODULES += ina220
 
 # include variants of mrf24j40 drivers as pseudo modules
 PSEUDOMODULES += mrf24j40m%
+
+# include variants of sdp3x drivers as pseudo modules
+PSEUDOMODULES += sdp3x_irq
 
 # include variants of SX127X drivers as pseudo modules
 PSEUDOMODULES += sx1272
@@ -257,7 +269,6 @@ NO_PSEUDOMODULES += auto_init_can
 NO_PSEUDOMODULES += auto_init_loramac
 NO_PSEUDOMODULES += auto_init_multimedia
 NO_PSEUDOMODULES += auto_init_security
-NO_PSEUDOMODULES += auto_init_storage
 NO_PSEUDOMODULES += auto_init_usbus
 
 # Packages may also add modules to PSEUDOMODULES in their `Makefile.include`.

@@ -34,10 +34,17 @@
 #include "periph/gpio.h"
 #include "pm_layered.h"
 
-#if defined(CPU_FAM_STM32F0) || defined(CPU_FAM_STM32L0) || \
-    defined(CPU_FAM_STM32F3) || defined(CPU_FAM_STM32L4) || \
-    defined(CPU_FAM_STM32WB) || defined(CPU_FAM_STM32F7) || \
-    defined(CPU_FAM_STM32G4)
+#if defined(CPU_LINE_STM32L4R5xx) || defined(CPU_FAM_STM32G0)
+#define ISR_REG     ISR
+#define ISR_TXE     USART_ISR_TXE_TXFNF
+#define ISR_RXNE    USART_ISR_RXNE_RXFNE
+#define ISR_TC      USART_ISR_TC
+#define TDR_REG     TDR
+#define RDR_REG     RDR
+#elif defined(CPU_FAM_STM32F0) || defined(CPU_FAM_STM32L0) || \
+      defined(CPU_FAM_STM32F3) || defined(CPU_FAM_STM32L4) || \
+      defined(CPU_FAM_STM32WB) || defined(CPU_FAM_STM32F7) || \
+      defined(CPU_FAM_STM32G4)
 #define ISR_REG     ISR
 #define ISR_TXE     USART_ISR_TXE
 #define ISR_RXNE    USART_ISR_RXNE
@@ -53,7 +60,12 @@
 #define RDR_REG     DR
 #endif
 
+#if defined(CPU_LINE_STM32L4R5xx) || defined(CPU_FAM_STM32G0)
+#define RXENABLE            (USART_CR1_RE | USART_CR1_RXNEIE_RXFNEIE)
+#define USART_ISR_RXNE      (USART_ISR_RXNE_RXFNE)
+#else
 #define RXENABLE            (USART_CR1_RE | USART_CR1_RXNEIE)
+#endif
 
 #ifdef MODULE_PERIPH_UART_NONBLOCKING
 
@@ -117,9 +129,6 @@ static inline void uart_init_cts_pin(uart_t uart)
 static inline void uart_init_pins(uart_t uart, uart_rx_cb_t rx_cb)
 {
      /* configure TX pin */
-    gpio_init(uart_config[uart].tx_pin, GPIO_OUT);
-    /* set TX pin high to avoid garbage during further initialization */
-    gpio_set(uart_config[uart].tx_pin);
 #ifdef CPU_FAM_STM32F1
     gpio_init_af(uart_config[uart].tx_pin, GPIO_AF_OUT_PP);
 #else
@@ -172,8 +181,6 @@ int uart_init(uart_t uart, uint32_t baudrate, uart_rx_cb_t rx_cb, void *arg)
     tsrb_init(&uart_tx_rb[uart], uart_tx_rb_buf[uart], UART_TXBUF_SIZE);
 #endif
 
-    uart_init_pins(uart, rx_cb);
-
     uart_enable_clock(uart);
 
     /* reset UART configuration -> defaults to 8N1 mode */
@@ -198,6 +205,12 @@ int uart_init(uart_t uart, uint32_t baudrate, uart_rx_cb_t rx_cb, void *arg)
 #else
     uart_init_usart(uart, baudrate);
 #endif
+
+    /* Attach pins to enabled UART periph. Note: It is important that the UART
+     * interface is configured prior to attaching the pins, as otherwise the
+     * signal level flickers during initialization resulting in garbage being
+     * sent. */
+    uart_init_pins(uart, rx_cb);
 
     /* enable RX interrupt if applicable */
     if (rx_cb) {

@@ -32,6 +32,7 @@
 #include "board.h"
 #include "mpu.h"
 #include "panic.h"
+#include "sched.h"
 #include "vectors_cortexm.h"
 #ifdef MODULE_PUF_SRAM
 #include "puf_sram.h"
@@ -151,12 +152,6 @@ void reset_handler_default(void)
     // gpio_toggle(MODULES_GPIO_PIN);
 #endif /* CPU_HAS_BACKUP_RAM */
 
-#if defined(MODULE_MPU_STACK_GUARD) || defined(MODULE_MPU_NOEXEC_RAM)
-    // gpio_toggle(MODULES_GPIO_PIN);
-    mpu_enable();
-    // gpio_toggle(MODULES_GPIO_PIN);
-#endif
-
 #ifdef MODULE_MPU_NOEXEC_RAM
     // gpio_toggle(MODULES_GPIO_PIN);
     /* Mark the RAM non executable. This is a protection mechanism which
@@ -186,6 +181,10 @@ void reset_handler_default(void)
     // gpio_toggle(MODULES_GPIO_PIN);
 #endif
 
+#if defined(MODULE_MPU_STACK_GUARD) || defined(MODULE_MPU_NOEXEC_RAM)
+    mpu_enable();
+#endif
+
     post_startup();
 
     // gpio_toggle(MODULES_GPIO_PIN);
@@ -193,7 +192,7 @@ void reset_handler_default(void)
     board_init();
     // gpio_toggle(MODULES_GPIO_PIN);
 
-#if MODULE_NEWLIB
+#if MODULE_NEWLIB || MODULE_PICOLIBC
     /* initialize std-c library (this must be done after board_init) */
     extern void __libc_init_array(void);
     // MODULES_TOGGLE
@@ -395,6 +394,20 @@ __attribute__((used)) void hard_fault_handler(uint32_t* sp, uint32_t corrupted, 
     printf("EXC_RET: 0x%08" PRIx32 "\n", exc_return);
 
     if (!corrupted) {
+        /* Test if the EXC_RETURN returns to thread mode,
+         * to check if the hard fault happened in ISR context */
+        if (exc_return & 0x08) {
+            kernel_pid_t active_pid = thread_getpid();
+            printf("Active thread: %"PRIi16" \"%s\"\n",
+                   active_pid, thread_getname(active_pid));
+        }
+        else {
+            /* Print the interrupt number, NMI being -14, hardfault is -13,
+             * IRQ0 is 0 and so on */
+            uint32_t psr = sp[7];  /* Program status register. */
+            printf("Hard fault occured in ISR number %d\n",
+                   (int)(psr & 0xff) - 16);
+        }
         puts("Attempting to reconstruct state for debugging...");
         printf("In GDB:\n  set $pc=0x%" PRIx32 "\n  frame 0\n  bt\n", pc);
         int stack_left = _stack_size_left(HARDFAULT_HANDLER_REQUIRED_STACK_SPACE);

@@ -4,13 +4,12 @@ RIOTBASE ?= $(CURDIR)/../..
 
 export TAP ?= tap0
 
-CFLAGS += -DGNRC_NETIF_SINGLE           # Only one interface used and it makes
-                                        # shell commands easier
-
 USEMODULE += sock_dns
 USEMODULE += gnrc_sock_udp
 USEMODULE += gnrc_ipv6_default
 USEMODULE += gnrc_ipv6_nib_dns
+USEMODULE += gnrc_netif_single          # Only one interface used and it makes
+                                        # shell commands easier
 # use Ethernet as link-layer protocol
 ifeq (native,$(BOARD))
   TERMFLAGS ?= $(TAP)
@@ -47,6 +46,6 @@ TEST_ON_CI_BLACKLIST += all
 .PHONY: ethos
 
 ethos:
-	$(Q)env -u CC -u CFLAGS make -C $(RIOTTOOLS)/ethos
+	$(Q)env -u CC -u CFLAGS $(MAKE) -C $(RIOTTOOLS)/ethos
 
 include $(RIOTBASE)/Makefile.include

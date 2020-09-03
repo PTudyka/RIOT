@@ -39,27 +39,6 @@ extern "C" {
 #endif
 
 /**
- * @{
- * @ingroup net_gnrc_tcp_conf
- * @brief Size of the TCB mbox (as exponent of 2^n).
- *
- *        As the mbox buffer size ALWAYS needs to be power of two, this option
- *        represents the exponent of 2^n, which will be used as the size of the
- *        mbox.
- */
-#ifndef CONFIG_GNRC_TCP_TCB_MBOX_SIZE_EXP
-#define CONFIG_GNRC_TCP_TCB_MBOX_SIZE_EXP (3U)
-#endif
-/** @} */
-
-/**
- * @brief Size of the TCB mbox
- */
-#ifndef GNRC_TCP_TCB_MBOX_SIZE
-#define GNRC_TCP_TCB_MBOX_SIZE (1 << CONFIG_GNRC_TCP_TCB_MBOX_SIZE_EXP)
-#endif
-
-/**
  * @brief Transmission control block of GNRC TCP.
  */
 typedef struct _transmission_control_block {
@@ -88,11 +67,12 @@ typedef struct _transmission_control_block {
     int32_t srtt;          /**< Smoothed round trip time */
     int32_t rto;           /**< Retransmission timeout duration */
     uint8_t retries;       /**< Number of retransmissions */
-    xtimer_t tim_tout;     /**< Timer struct for timeouts */
-    msg_t msg_tout;        /**< Message, sent on timeouts */
+    xtimer_t timer_retransmit; /**< Retransmission timer */
+    xtimer_t timer_misc;       /**< General purpose timer */
+    msg_t msg_retransmit;      /**< Retransmission timer message */
+    msg_t msg_misc;            /**< General purpose timer message */
     gnrc_pktsnip_t *pkt_retransmit;   /**< Pointer to packet in "retransmit queue" */
-    msg_t mbox_raw[GNRC_TCP_TCB_MBOX_SIZE];   /**< Msg queue for mbox */
-    mbox_t mbox;             /**< TCB mbox for synchronization */
+    mbox_t *mbox;            /**< TCB mbox for synchronization */
     uint8_t *rcv_buf_raw;    /**< Pointer to the receive buffer */
     ringbuffer_t rcv_buf;    /**< Receive buffer data structure */
     mutex_t fsm_lock;        /**< Mutex for FSM access synchronization */

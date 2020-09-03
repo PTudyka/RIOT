@@ -1,6 +1,6 @@
 PKG_NAME    = nimble
 PKG_URL     = https://github.com/apache/mynewt-nimble.git
-PKG_VERSION = 37245d0c3f239c35c0c734a337c7b6301fcfd70b
+PKG_VERSION = cd7d7aa286ee1083818cbaac1e89bf69fe554f42
 PKG_LICENSE = Apache-2.0
 
 include $(RIOTBASE)/pkg/pkg.mk
@@ -88,3 +88,6 @@ nimble_scanlist:
 
 nimble_scanner:
 	"$(MAKE)" -C $(TDIR)/scanner
+
+nimble_statconn:
+	"$(MAKE)" -C $(TDIR)/statconn
