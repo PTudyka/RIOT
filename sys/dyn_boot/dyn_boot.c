@@ -19,7 +19,9 @@
  */
 
 #include "dyn_boot.h"
+#if __has_include("dyn_boot_params.h")
 #include "dyn_boot_params.h"
+#endif
 
 /* Implementation of the module */
 
@@ -27,7 +29,7 @@
 #define MODULE_FLAGS_SIZE ((DYN_BOOT_MODULES_COUNT & 7) == 0 ? (DYN_BOOT_MODULES_COUNT >> 3) : ((DYN_BOOT_MODULES_COUNT >> 3) +1))
 
 /* For each module group, a flag is saved as Bit, if this module group should be loaded */
-static module_flags_t MODULE_FLAGS[MODULE_FLAGS_SIZE];
+static module_flag_t MODULE_FLAGS[MODULE_FLAGS_SIZE];
 
 /* Current active run level for determining modules for dyn_boot */
 static run_level_t _run_level = RUN_LEVEL_7;
@@ -46,6 +48,9 @@ static const dyn_boot_gpio_t _gpio_config = DYN_BOOT_GPIO_CONF;
 static const dyn_boot_adc_t _adc_config = DYN_BOOT_ADC_CONF;
 #endif
 
+// static const module_timing_t MODULE_TIMINGS[DYN_BOOT_MODULES_COUNT];
+static timex_t MODULE_TIMINGS[DYN_BOOT_MODULES_COUNT];
+static timex_t current_module_timings[DYN_BOOT_MODULES_COUNT];
 
 run_level_t get_run_level(void)
 {
@@ -57,7 +62,7 @@ void set_run_level(run_level_t run_level)
     _run_level = run_level;
 }
 
-bool dyn_boot_get_flag(modules_t module)
+bool dyn_boot_get_flag(module_t module)
 {
     /*
      * module / 8 to get array index (module >> 3)
@@ -72,7 +77,7 @@ bool dyn_boot_get_flag(modules_t module)
  * @param[in] module Module to set flag for
  * @param[in] val Boolean to set flag (true/false)
  */
-static inline void _dyn_boot_set_flag(modules_t module, bool val)
+static inline void _dyn_boot_set_flag(module_t module, bool val)
 {
     if (val)
     {
@@ -203,6 +208,20 @@ int set_run_level_adc(void)
     return 0;
 }
 
+void start_module_timing(module_t module)
+{
+    // Save current time into var
+    xtimer_now_timex(&(current_module_timings[module]));
+}
+
+void stop_module_timing(module_t module)
+{
+    timex_t end_time;
+    xtimer_now_timex(&end_time);
+    timex_t diff = timex_sub(end_time, current_module_timings[module]);
+    MODULE_TIMINGS[module] = timex_add(MODULE_TIMINGS[module], diff);
+}
+
 void set_run_level_gpio(void)
 {
 
@@ -212,9 +231,9 @@ void set_run_level_gpio(void)
     gpio_init(_gpio_config.GPIO_PIN_4, GPIO_IN_PD);
 
     unsigned char gpio_bits = 0;
-    gpio_bits |= (gpio_read(_gpio_config.GPIO_PIN_0) ? 1 : 0) << 2;
+    gpio_bits |= (gpio_read(_gpio_config.GPIO_PIN_0) ? 1 : 0);
     gpio_bits |= (gpio_read(_gpio_config.GPIO_PIN_2) ? 1 : 0) << 1;
-    gpio_bits |= (gpio_read(_gpio_config.GPIO_PIN_4) ? 1 : 0);
+    gpio_bits |= (gpio_read(_gpio_config.GPIO_PIN_4) ? 1 : 0) << 2;
 
     set_run_level(gpio_bits);
 #endif
