@@ -28,13 +28,14 @@
 /* For GPIO and ADC configuration */
 #include "board.h"
 #include "periph/adc.h"
+#include "xtimer.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /* Datatype for saving module flag information as 1 Byte(s) */
-typedef unsigned char module_flags_t;
+typedef unsigned char module_flag_t;
 
 /* 
  * Enum with every used module
@@ -105,7 +106,7 @@ typedef enum {
 
     /* End type to get length of enum efficiently */
     DYN_BOOT_MODULES_COUNT
-} modules_t;
+} module_t;
 
 /*
  * Enum of possible run levels for dynamic boot
@@ -127,7 +128,7 @@ typedef enum {
  */
 typedef struct {
     run_level_t run_level;
-    modules_t module;
+    module_t module;
 } run_level_modules_t;
 
 /*
@@ -155,6 +156,11 @@ typedef struct {
     gpio_t GPIO_PIN_4;
 } dyn_boot_gpio_t;
 
+typedef struct {
+    module_t module;
+    timex_t time;
+} module_timing_t;
+
 /*
  * @brief Returns current active run level 
  * 
@@ -169,13 +175,16 @@ run_level_t get_run_level(void);
  */
 void set_run_level(run_level_t run_level);
 
+void start_module_timing(module_t module);
+void stop_module_timing(module_t module);
+
 /*
  * @brief Returns flag for given module. Determines, if module should be initialized or not.
  * 
  * @param[in] module Module to get flag for
  * @return 0, if module should not be loaded. 1 if module should be loaded.
  */
-bool dyn_boot_get_flag(modules_t module);
+bool dyn_boot_get_flag(module_t module);
 
 /*
  * Determines at current run_level, which modules should be initialized.
