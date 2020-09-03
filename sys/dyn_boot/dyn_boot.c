@@ -19,6 +19,7 @@
  */
 
 #include "dyn_boot.h"
+#include "dyn_boot_params.h"
 
 /* Implementation of the module */
 
@@ -28,22 +29,23 @@
 /* For each module group, a flag is saved as Bit, if this module group should be loaded */
 static module_flags_t MODULE_FLAGS[MODULE_FLAGS_SIZE];
 
-// #ifdef BOARD_INGA_RED
-// #define ADC_3_3_V   342
-// #define ADC_3_0_V   376
-// #define ADC_2_7_V   418
-// #define ADC_2_4_V   470
-// #define ADC_2_1_V   537
-// #else
-// #define ADC_3_3_V   0xFFFF
-// #define ADC_3_0_V   0xFFFF
-// #define ADC_2_7_V   0xFFFF
-// #define ADC_2_4_V   0xFFFF
-// #define ADC_2_1_V   0xFFFF
-// #endif
-
 /* Current active run level for determining modules for dyn_boot */
 static run_level_t _run_level = RUN_LEVEL_7;
+
+/* Array of modules with specific run_levels, at which these modules should be disabled (added by _params file) */
+#ifdef RUN_LEVEL_MODULES
+static const run_level_modules_t _RUN_LEVEL_MODULES[] = RUN_LEVEL_MODULES;
+static const uint16_t RUN_LEVEL_MODULES_SIZE = (sizeof(_RUN_LEVEL_MODULES) / sizeof(run_level_modules_t));
+#endif
+
+#ifdef DYN_BOOT_GPIO_CONF
+static const dyn_boot_gpio_t _gpio_config = DYN_BOOT_GPIO_CONF;
+#endif
+
+#ifdef DYN_BOOT_ADC_CONF
+static const dyn_boot_adc_t _adc_config = DYN_BOOT_ADC_CONF;
+#endif
+
 
 run_level_t get_run_level(void)
 {
@@ -55,7 +57,7 @@ void set_run_level(run_level_t run_level)
     _run_level = run_level;
 }
 
-bool dyn_boot_get_flag(dyn_boot_modules_t module)
+bool dyn_boot_get_flag(modules_t module)
 {
     /*
      * module / 8 to get array index (module >> 3)
@@ -64,7 +66,13 @@ bool dyn_boot_get_flag(dyn_boot_modules_t module)
     return (MODULE_FLAGS[module >> 3] & (1 << (module & 7)));
 }
 
-static inline void _dyn_boot_set_flag(dyn_boot_modules_t module, bool val)
+/*
+ * @brief Inline function to set Flag for a specific module
+ * 
+ * @param[in] module Module to set flag for
+ * @param[in] val Boolean to set flag (true/false)
+ */
+static inline void _dyn_boot_set_flag(modules_t module, bool val)
 {
     if (val)
     {
@@ -76,119 +84,141 @@ static inline void _dyn_boot_set_flag(dyn_boot_modules_t module, bool val)
     }
 }
 
-// static uint16_t _get_supply_voltage_adc(void)
-// {
-//     // Measure bandgap reference
-//     // ADMUX |= 0x01;
-//     if(adc_init(LINE))
-//     {
-//         // LOG_ERROR("Init ADC failed!\n");
-//         return 0xFFFF;
-//     }
-
-//     // Sample 5 times before "real" measurement
-//     uint8_t i;
-//     uint16_t adc_result = 0;
-
-//     // First values are not good, bandgap voltage reference needs to stabilize
-//     for (i=0; i < 3; ++i)
-//     {
-//         (void) adc_sample(LINE, RES);
-//     }
-//     adc_result = adc_sample(LINE, RES);
-
-//     if(adc_result > ADC_3_3_V)
-//     {
-//         set_run_level(RUN_LEVEL_3);
-//     }
-//     if(adc_result > ADC_3_0_V)
-//     {
-//         set_run_level(RUN_LEVEL_2);
-//     }
-//     if(adc_result > ADC_2_7_V)
-//     {
-//         set_run_level(RUN_LEVEL_1);
-//     }
-//     if(adc_result > ADC_2_4_V)
-//     {
-//         set_run_level(RUN_LEVEL_0);
-//     }
-
-//     return adc_result;
-// }
-
-int auto_select_modules(void)
+void auto_select_modules(void)
 {
-    // uint16_t supply_v_adc = _get_supply_voltage();
-
-    // printf("MODULE_FLAGS size: %d\n", DYN_BOOT_MODULES_COUNT >> 3);
-    // printf("Modules Count: %d\n", DYN_BOOT_MODULES_COUNT);
-    // printf("Calculated Count: %d\n", MODULE_FLAGS_SIZE);
-
+    // printf("Modules SIze: %d\n", MODULE_FLAGS_SIZE);
+    // printf("DYN_BOOT_MODULES_COUNT: %d\n", DYN_BOOT_MODULES_COUNT);
+    // printf("sizeof array: %d\n", sizeof(MODULE_FLAGS));
     // Fill with 1 at start
     unsigned i;
     for(i=0; i < MODULE_FLAGS_SIZE; ++i)
     {
         MODULE_FLAGS[i] = 0xFF;
-        // printf("MODULES_FLAGS: %d\n", MODULE_FLAGS[i]);
     }
-    // (void) puts(MODULES_LIST);
-    // const char *modules = MODULES_LIST;
-    // (void) puts(modules);
 
-    // Disable modules at different voltages
-    // printf("ADC Result: %d\n", supply_v_adc);
-    // if(supply_v_adc > ADC_3_3_V)
-    // {
-    //     _dyn_boot_set_flag(DYN_BOOT_MODULE_ADXL345, false);
-    // }
-    // if(supply_v_adc > ADC_3_0_V)
-    // {
-    //     _dyn_boot_set_flag(DYN_BOOT_MODULE_BMP180, false);
-    // }
-    // if(supply_v_adc > ADC_2_7_V)
-    // {
-    //     _dyn_boot_set_flag(DYN_BOOT_MODULE_L3G4200D, false);
-    // }
-    // if(supply_v_adc > ADC_2_4_V)
-    // {
-    //     _dyn_boot_set_flag(DYN_BOOT_GNRC, false);
-    // }
+#ifdef RUN_LEVEL_MODULES
+    // printf("Run_level_modules count: %d\n", RUN_LEVEL_MODULES_SIZE);
 
-    /* Set module flags according to run level */
-    // run_level_t run_level = get_run_level();
-    switch (_run_level)
+    // Deactivate modules depending on run_level
+    for (i=0; i < RUN_LEVEL_MODULES_SIZE; ++i)
     {
-        case RUN_LEVEL_0:
-            _dyn_boot_set_flag(DYN_BOOT_GNRC, false);
-            // fall through
-        case RUN_LEVEL_1:
-            _dyn_boot_set_flag(DYN_BOOT_MODULE_L3G4200D, false);
-            // fall through
-        case RUN_LEVEL_2:
-            _dyn_boot_set_flag(DYN_BOOT_MODULE_BMP180, false);
-            // fall through
-        case RUN_LEVEL_3:
-            _dyn_boot_set_flag(DYN_BOOT_MODULE_ADXL345, false);
-            // fall through
-        case RUN_LEVEL_4:
-            // fall through
-        case RUN_LEVEL_5:
-            // fall through
-        case RUN_LEVEL_6:
-            // fall through
-        case RUN_LEVEL_7:
-            // Deactivate nothing
+        // printf("Current run_level: %d, run_level of module: %d\n", _run_level, _RUN_LEVEL_MODULES[i].run_level);
+
+        /* If current run_level is higher than next item in list 
+         *  -> higher modules should not be disabled
+         *  -> break loop earlier to save time
+         */
+        if (_run_level > _RUN_LEVEL_MODULES[i].run_level)
+        {
+            // printf("Break loop\n");
             break;
+        }
+
+        // Check if module is valid
+        if (_RUN_LEVEL_MODULES[i].module >= DYN_BOOT_MODULES_COUNT)
+            continue;
+
+        // Deactive module, if run_level is appropriate and module is valid
+        _dyn_boot_set_flag(_RUN_LEVEL_MODULES[i].module, false);
+    }
+#endif
+
+    // Return count of disabled modules
+    // return 0;
+}
+
+int set_run_level_adc(void)
+{
+
+#ifdef DYN_BOOT_ADC_CONF
+    // Measure bandgap reference
+    // ADMUX |= 0x01;
+    if(adc_init(_adc_config.v_ref_line)/*adc_init(LINE)*/)
+    {
+        // LOG_ERROR("Init ADC failed!\n");
+        return -1;
     }
 
-    /*
-     * Deactivate SAUL, if not a single sensor is activated
-     */
-    // bool sensor_count = (MODULE_FLAGS[0] > 0x00);
-    // if (dyn_boot_get_flag)
+    // Sample 5 times before "real" measurement
+    uint8_t i;
+    int adc_result = 0;
 
-    // _dyn_boot_set_flag(DYN_BOOT_MODULE_SAUL, sensor_count);
+    // First values are not good, bandgap voltage reference needs to stabilize
+    for (i=0; i < 3; ++i)
+    {
+        (void) adc_sample(_adc_config.v_ref_line, _adc_config.resolution);
+    }
+    adc_result = adc_sample(_adc_config.v_ref_line, _adc_config.resolution);
+    // (void) adc_result;
 
-    return -1;
+    // Set run_level according to adc sample
+    if (adc_result > _adc_config.level_0)
+    {
+        set_run_level(RUN_LEVEL_0);
+    }
+    else if (adc_result > _adc_config.level_1)
+    {
+        set_run_level(RUN_LEVEL_1);
+    }
+    else if (adc_result > _adc_config.level_2)
+    {
+        set_run_level(RUN_LEVEL_2);
+    }
+    else if (adc_result > _adc_config.level_3)
+    {
+        set_run_level(RUN_LEVEL_3);
+    }
+    else if (adc_result > _adc_config.level_4)
+    {
+        set_run_level(RUN_LEVEL_4);
+    }
+    else if (adc_result > _adc_config.level_5)
+    {
+        set_run_level(RUN_LEVEL_5);
+    }
+    else if (adc_result > _adc_config.level_6)
+    {
+        set_run_level(RUN_LEVEL_6);
+    }
+    else if (adc_result > _adc_config.level_7)
+    {
+        set_run_level(RUN_LEVEL_7);
+    }
+
+    // if(adc_result > _adc_config.adc_aref_line)
+    // {
+    //     set_run_level(RUN_LEVEL_3);
+    // }
+    // if(adc_result > ADC_3_0_V)
+    // {
+    //     set_run_level(RUN_LEVEL_2);
+    // }
+    // if(adc_result > ADC_2_7_V)
+    // {
+    //     set_run_level(RUN_LEVEL_1);
+    // }
+    // if(adc_result > ADC_2_4_V)
+    // {
+    //     set_run_level(RUN_LEVEL_0);
+    // }
+#endif
+
+    return 0;
+}
+
+void set_run_level_gpio(void)
+{
+
+#ifdef DYN_BOOT_GPIO_CONF
+    gpio_init(_gpio_config.GPIO_PIN_0, GPIO_IN_PD);
+    gpio_init(_gpio_config.GPIO_PIN_2, GPIO_IN_PD);
+    gpio_init(_gpio_config.GPIO_PIN_4, GPIO_IN_PD);
+
+    unsigned char gpio_bits = 0;
+    gpio_bits |= (gpio_read(_gpio_config.GPIO_PIN_0) ? 1 : 0);
+    gpio_bits |= (gpio_read(_gpio_config.GPIO_PIN_2) ? 1 : 0) << 1;
+    gpio_bits |= (gpio_read(_gpio_config.GPIO_PIN_4) ? 1 : 0) << 2;
+
+    set_run_level(gpio_bits);
+#endif
 }
