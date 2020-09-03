@@ -40,6 +40,8 @@
 #include "board.h"
 // #include "adc.h"
 
+#include "dyn_boot.h"
+
 #define ENABLE_DEBUG (0)
 #include "debug.h"
 
@@ -181,6 +183,13 @@ void cpu_init(void)
     // gpio_init(GPIO_PIN(PORT_D, 7), GPIO_OUT);
     // gpio_toggle(GPIO_PIN(PORT_D, 6));
     // gpio_toggle(GPIO_PIN(PORT_D, 7));
+
+#ifdef MODULE_DYN_BOOT
+    // Set run_level manually
+    // set_run_level(RUN_LEVEL_4);
+    set_run_level_gpio();
+    auto_select_modules();
+#endif
 
 #ifdef MODULE_PERIPH_DMA
     /*  initialize DMA streams */

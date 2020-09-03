@@ -19,11 +19,18 @@
  */
 
 #include "ps.h"
+#include "dyn_boot.h"
 
 int _ps_handler(int argc, char **argv)
 {
     (void) argc;
     (void) argv;
+
+    if(!dyn_boot_get_flag(DYN_BOOT_MODULE_PS))
+    {
+        printf("Deactivated by dyn_boot\n");
+        return 0;
+    }
 
     ps();
 
