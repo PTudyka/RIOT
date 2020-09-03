@@ -158,10 +158,11 @@ static const spi_conf_t spi_config[] = {
     { GPIO_PIN(PORT_A, 4), 4 }, \
     { GPIO_PIN(PORT_B, 0), 8 }, \
     { GPIO_PIN(PORT_C, 1), 11 },\
-    { GPIO_PIN(PORT_C, 0), 10 } \
+    { GPIO_PIN(PORT_C, 0), 10 }, \
+    { -1, 17 } \
 }
 
-#define ADC_NUMOF           (6U)
+#define ADC_NUMOF           (7U)
 /** @} */
 
 /**
