@@ -119,6 +119,7 @@ void cpu_init(void)
     // Set run_level manually
     // set_run_level(RUN_LEVEL_7);
     set_run_level_adc();
+    // set_run_level_gpio();
     auto_select_modules();
 #endif
 

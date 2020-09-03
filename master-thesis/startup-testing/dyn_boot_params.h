@@ -87,6 +87,15 @@ extern "C" {
     ADC_3_1_V,  \
     ADC_3_3_V   \
 }
+
+/*
+#define DYN_BOOT_GPIO_CONF {    \
+    GPIO_PIN(PORT_C, 3),   \
+    GPIO_PIN(PORT_C, 4),    \
+    GPIO_PIN(PORT_C, 5)     \
+}
+*/
+
 #endif /* BOARD_INGA_RED */
 
 #ifdef __cplusplus
