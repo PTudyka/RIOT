@@ -64,17 +64,28 @@ extern "C" {
 // TODO: define array size as macro or will it be calculated at compile time?
 // #define RUN_LEVEL_MODULES_SIZE (1)
 
-#define ADC_3_3_V   342
-#define ADC_3_1_V   364
-#define ADC_2_9_V   389
-#define ADC_2_7_V   418
-#define ADC_2_5_V   451
-#define ADC_2_3_V   490
-#define ADC_2_1_V   537
-#define ADC_1_9_V   593
+// #define ADC_3_3_V   342
+// #define ADC_3_1_V   360
+// #define ADC_2_9_V   388
+// #define ADC_2_7_V   417
+// #define ADC_2_5_V   450
+// #define ADC_2_3_V   489
+// #define ADC_2_1_V   536
+// #define ADC_1_9_V   574
+// #define LEVEL_7_ADC 340 // 3,3V as Maximum
+#define LEVEL_0_ADC 549 // 1.9 V on HCS-3600
+#define LEVEL_1_ADC 522 // 2.0 V on HCS-3600
+#define LEVEL_2_ADC 478 // 2.2 V on HCS-3600
+#define LEVEL_3_ADC 439 // 2.4 V on HCS-3600
+#define LEVEL_4_ADC 406 // 2.6 V on HCS-3600
+#define LEVEL_5_ADC 377 // 2.8 V on HCS-3600
+#define LEVEL_6_ADC 359 // 3.0 V on HCS-3600
+#define LEVEL_7_ADC 345 // 3.2 V on HCS-3600
+// #define LEVEL_7_ADC 339 // 3.3 V on HCS-3600
 #define RES ADC_RES_10BIT
 #define LINE 0b11110
 
+/*
 #define DYN_BOOT_ADC_CONF {     \
     LINE,       \
     RES,        \
@@ -86,6 +97,19 @@ extern "C" {
     ADC_2_9_V,  \
     ADC_3_1_V,  \
     ADC_3_3_V   \
+}
+*/
+#define DYN_BOOT_ADC_CONF {     \
+    LINE,       \
+    RES,        \
+    LEVEL_0_ADC,  \
+    LEVEL_1_ADC,  \
+    LEVEL_2_ADC,  \
+    LEVEL_3_ADC,  \
+    LEVEL_4_ADC,  \
+    LEVEL_5_ADC,  \
+    LEVEL_6_ADC,  \
+    LEVEL_7_ADC   \
 }
 
 /*
