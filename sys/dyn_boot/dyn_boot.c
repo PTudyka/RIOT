@@ -48,10 +48,6 @@ static const dyn_boot_gpio_t _gpio_config = DYN_BOOT_GPIO_CONF;
 static const dyn_boot_adc_t _adc_config = DYN_BOOT_ADC_CONF;
 #endif
 
-// static const module_timing_t MODULE_TIMINGS[DYN_BOOT_MODULES_COUNT];
-static timex_t MODULE_TIMINGS[DYN_BOOT_MODULES_COUNT];
-static timex_t current_module_timings[DYN_BOOT_MODULES_COUNT];
-
 run_level_t get_run_level(void)
 {
     return _run_level;
@@ -192,20 +188,6 @@ int set_run_level_adc(void)
 #endif
 
     return 0;
-}
-
-void start_module_timing(module_t module)
-{
-    // Save current time into var
-    xtimer_now_timex(&(current_module_timings[module]));
-}
-
-void stop_module_timing(module_t module)
-{
-    timex_t end_time;
-    xtimer_now_timex(&end_time);
-    timex_t diff = timex_sub(end_time, current_module_timings[module]);
-    MODULE_TIMINGS[module] = timex_add(MODULE_TIMINGS[module], diff);
 }
 
 void set_run_level_gpio(void)
