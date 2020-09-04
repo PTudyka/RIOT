@@ -41,7 +41,7 @@ extern "C" {
  *  
  */
 #define RUN_LEVEL_MODULES {         \
-    { RUN_LEVEL_0, DYN_BOOT_GNRC }  \
+    { RUN_LEVEL_0, DYN_BOOT_MODULE_GNRC }  \
 }
 // TODO: define array size as macro or will it be calculated at compile time?
 // #define RUN_LEVEL_MODULES_SIZE (1)

@@ -103,8 +103,8 @@ void auto_init(void)
 
 #ifdef MODULE_PRNG
     void auto_init_random(void);
-    gpio_toggle(MODULES_GPIO_PIN);
     DEBUG("Auto init Random module\n");
+    gpio_toggle(MODULES_GPIO_PIN);
     #ifdef MODULE_DYN_BOOT
     if(dyn_boot_get_flag(DYN_BOOT_MODULE_PRNG))
     #endif

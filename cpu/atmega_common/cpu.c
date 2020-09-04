@@ -36,7 +36,9 @@
 #define ENABLE_DEBUG (0)
 #include "debug.h"
 
+#ifdef MODULE_DYN_BOOT
 #include "dyn_boot.h"
+#endif
 
 /*
 * Since atmega MCUs do not feature a software reset, the watchdog timer

@@ -53,7 +53,7 @@ typedef enum {
         MODULE_GNRC_UHCPC || MODULE_AUTO_INIT_GNRC_RPL || \
         MODULE_GNRC_RPL  
 */
-    DYN_BOOT_GNRC,
+    DYN_BOOT_MODULE_GNRC,
 #endif
 #ifdef MODULE_PS
     DYN_BOOT_MODULE_PS,

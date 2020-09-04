@@ -59,7 +59,7 @@ extern "C" {
     { RUN_LEVEL_3, DYN_BOOT_MODULE_ADXL345 }, \
     { RUN_LEVEL_3, DYN_BOOT_MODULE_BMP180 }, \
     { RUN_LEVEL_3, DYN_BOOT_MODULE_L3G4200D }, \
-    { RUN_LEVEL_2, DYN_BOOT_GNRC }  \
+    { RUN_LEVEL_2, DYN_BOOT_MODULE_GNRC }  \
 }
 // TODO: define array size as macro or will it be calculated at compile time?
 // #define RUN_LEVEL_MODULES_SIZE (1)
