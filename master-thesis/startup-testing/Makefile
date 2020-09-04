@@ -51,6 +51,11 @@ USEMODULE += dyn_boot
 CFLAGS += -I$(CURDIR)
 FEATURES_REQUIRED = periph_adc
 
+# Additional Flags for measurement
+CFLAGS += -DINTERN_TIMING_MEASUREMENT=1
+CFLAGS += -DEXTERN_GPIO_MEASUREMENT=1
+
+
 BOARD_PROVIDES_NETIF := acd52832 adafruit-clue airfy-beacon atmega256rfr2-xpro \
         arduino-nano-33-ble avr-rss2 b-l072z-lrwan1 cc2538dk fox \
         derfmega128 derfmega256 hamilton iotlab-m3 iotlab-a8-m3 lobaro-lorabox lsn50 mulle microbit msba2 \

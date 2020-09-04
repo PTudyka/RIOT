@@ -61,12 +61,17 @@ int get_supply_voltage(int argc, char **argv)
     (void) argc;
     (void) argv;
 
-    // Init adc line for bandgap measurement
-    adc_init(LINE);
-
     // Measure bandgap reference
     // ADMUX |= 0x01;
-    int adc_result = adc_sample(LINE, RES);
+    // int adc_result = adc_sample(LINE, RES);
+
+    int adc_result = 0;
+    // for (unsigned int i=0; i < 3; ++i)
+    // {
+    //     (void) adc_sample(LINE, RES);
+    // }
+    adc_result = adc_sample(LINE, RES);
+
     printf("ADC Result: %d\n", adc_result);
 
     return 0;
@@ -82,33 +87,41 @@ int get_current_run_level(int argc, char **argv)
     printf("Run Level: %d\n", run_level);
 #endif
 
-    return 0;
-}
+#ifdef INTERN_TIMING_MEASUREMENT
+    printf("INTERN_TIMING_MEASUREMENT defined\n");
+#endif
 
-int get_gpios(int argc, char **argv)
-{
-    (void) argc;
-    (void) argv;
-
-    // gpio_init(GPIO_PIN(PORT_C, 2), GPIO_IN);
-    gpio_init(GPIO_PIN(PORT_C, 3), GPIO_IN_PD);
-    gpio_init(GPIO_PIN(PORT_C, 4), GPIO_IN_PD);
-    gpio_init(GPIO_PIN(PORT_C, 5), GPIO_IN_PD);
-
-    // uint8_t pc2 = gpio_read(GPIO_PIN(PORT_C, 2));
-    uint8_t pc3 = gpio_read(GPIO_PIN(PORT_C, 3));
-    uint8_t pc4 = gpio_read(GPIO_PIN(PORT_C, 4));
-    uint8_t pc5 = gpio_read(GPIO_PIN(PORT_C, 5));
-
-    printf("PC3: %d, PC4: %d, PC5: %d\n", pc3, pc4, pc5);
+#ifdef EXTERN_GPIO_MEASUREMENT
+    printf("EXTERN_GPIO_MEASUREMENT defined\n");
+#endif
 
     return 0;
 }
+
+// int get_gpios(int argc, char **argv)
+// {
+//     (void) argc;
+//     (void) argv;
+
+//     // gpio_init(GPIO_PIN(PORT_C, 2), GPIO_IN);
+//     gpio_init(GPIO_PIN(PORT_C, 3), GPIO_IN_PD);
+//     gpio_init(GPIO_PIN(PORT_C, 4), GPIO_IN_PD);
+//     gpio_init(GPIO_PIN(PORT_C, 5), GPIO_IN_PD);
+
+//     // uint8_t pc2 = gpio_read(GPIO_PIN(PORT_C, 2));
+//     uint8_t pc3 = gpio_read(GPIO_PIN(PORT_C, 3));
+//     uint8_t pc4 = gpio_read(GPIO_PIN(PORT_C, 4));
+//     uint8_t pc5 = gpio_read(GPIO_PIN(PORT_C, 5));
+
+//     printf("PC3: %d, PC4: %d, PC5: %d\n", pc3, pc4, pc5);
+
+//     return 0;
+// }
 
 static const shell_command_t commands[] = {
     { "get_supply_v", "get supply voltage via ADC", get_supply_voltage },
     { "run_level", "get current run level", get_current_run_level },
-    { "get_gpios", "get current gpio states for PC2,3,4,5", get_gpios },
+    // { "get_gpios", "get current gpio states for PC2,3,4,5", get_gpios },
     { NULL, NULL, NULL }
 };
 
@@ -153,6 +166,9 @@ int main(void)
 //
 //        xtimer_sleep(2);
 //    }
+
+    // Init adc line for bandgap measurement
+    adc_init(LINE);
 
     // (void) puts("Welcome to RIOT!");
 
