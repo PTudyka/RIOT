@@ -26,7 +26,7 @@
 #include "net/gnrc.h"
 
 #define RB_BUF_SIZE 16
-#define INT_SIZE (sizeof(int))
+#define DATA_SIZE (sizeof(sensor_data))
 
 /* States of smart farming application */
 typedef enum {
@@ -49,7 +49,7 @@ static run_level_t current_run_level = RUN_LEVEL_7;
 
 /* Save read sensor data globally */
 static int sensor_data = 0;
-static char sensor_data_buf[INT_SIZE];
+static char sensor_data_buf[DATA_SIZE];
 
 int main(void)
 {
@@ -85,11 +85,11 @@ int main(void)
 
         case NODE_SAVE_DATA:
             // Save Data to ringbuffer
-            for (unsigned int i=0; i < INT_SIZE; ++i)
+            for (unsigned int i=0; i < DATA_SIZE; ++i)
             {
                 sensor_data_buf[i] = (char)(((i * 8) >> sensor_data) & 0xFF);
             }
-            ringbuffer_add(&rb, sensor_data_buf, INT_SIZE);
+            ringbuffer_add(&rb, sensor_data_buf, DATA_SIZE);
             break;
 
         case NODE_SLEEP:
