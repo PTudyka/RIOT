@@ -25,6 +25,9 @@
 #include "ringbuffer.h"
 #include "net/gnrc.h"
 
+#include "board.h"
+// #include "gpio_measurement.h"
+
 #define RB_BUF_SIZE 16
 #define DATA_SIZE (sizeof(sensor_data))
 
@@ -53,6 +56,9 @@ static char sensor_data_buf[DATA_SIZE];
 
 int main(void)
 {
+    gpio_toggle(STARTUP_GPIO_PIN);
+    // toggle_start_timing();
+
     puts("Generated RIOT application: 'smart-farm-eval'");
 
     while (1)
