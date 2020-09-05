@@ -36,7 +36,7 @@ inline void gpio_measurement_init(void)
     gpio_init(STARTUP_GPIO_PIN, GPIO_OUT);
     gpio_init(MODULES_GPIO_PIN, GPIO_OUT);
     // gpio_set(STARTUP_GPIO_PIN); // active low
-    gpio_toggle(STARTUP_GPIO_PIN);
+    // gpio_toggle(STARTUP_GPIO_PIN);
 }
 
 inline void toggle_start_timing(void)
