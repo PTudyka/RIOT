@@ -26,7 +26,7 @@ static uint32_t MODULE_TIMINGS[MODULE_TIMINGS_SIZE];
 /* Only one module timing measurement should be active at time */
 static uint32_t current_timing = 0;
 
-void start_module_timing()
+void start_module_timing(void)
 {
     // Save current time into var
     current_timing = xtimer_now_usec();

@@ -44,7 +44,7 @@ typedef enum MEASUREMENT_MODULES timing_modules_t;
 /*
  * @brief Saves current timestamp to indicate start of module measurement
  */
-void start_module_timing();
+void start_module_timing(void);
 
 /*
  * @brief Gets current timestamp (end of module) and saves difference
