@@ -48,10 +48,6 @@ static const dyn_boot_gpio_t _gpio_config = DYN_BOOT_GPIO_CONF;
 static const dyn_boot_adc_t _adc_config = DYN_BOOT_ADC_CONF;
 #endif
 
-// static const module_timing_t MODULE_TIMINGS[DYN_BOOT_MODULES_COUNT];
-static timex_t MODULE_TIMINGS[DYN_BOOT_MODULES_COUNT];
-static timex_t current_module_timings[DYN_BOOT_MODULES_COUNT];
-
 run_level_t get_run_level(void)
 {
     return _run_level;
@@ -91,9 +87,6 @@ static inline void _dyn_boot_set_flag(module_t module, bool val)
 
 void auto_select_modules(void)
 {
-    // printf("Modules SIze: %d\n", MODULE_FLAGS_SIZE);
-    // printf("DYN_BOOT_MODULES_COUNT: %d\n", DYN_BOOT_MODULES_COUNT);
-    // printf("sizeof array: %d\n", sizeof(MODULE_FLAGS));
     // Fill with 1 at start
     unsigned i;
     for(i=0; i < MODULE_FLAGS_SIZE; ++i)
@@ -156,72 +149,45 @@ int set_run_level_adc(void)
     adc_result = adc_sample(_adc_config.v_ref_line, _adc_config.resolution);
     // (void) adc_result;
 
+    // printf("adc_result: %d\n", adc_result);
+
     // Set run_level according to adc sample
-    if (adc_result > _adc_config.level_0)
+    if (adc_result > _adc_config.level_1)
     {
         set_run_level(RUN_LEVEL_0);
     }
-    else if (adc_result > _adc_config.level_1)
+    else if (adc_result > _adc_config.level_2)
     {
         set_run_level(RUN_LEVEL_1);
     }
-    else if (adc_result > _adc_config.level_2)
+    else if (adc_result > _adc_config.level_3)
     {
         set_run_level(RUN_LEVEL_2);
     }
-    else if (adc_result > _adc_config.level_3)
+    else if (adc_result > _adc_config.level_4)
     {
         set_run_level(RUN_LEVEL_3);
     }
-    else if (adc_result > _adc_config.level_4)
+    else if (adc_result > _adc_config.level_5)
     {
         set_run_level(RUN_LEVEL_4);
     }
-    else if (adc_result > _adc_config.level_5)
+    else if (adc_result > _adc_config.level_6)
     {
         set_run_level(RUN_LEVEL_5);
     }
-    else if (adc_result > _adc_config.level_6)
+    else if (adc_result > _adc_config.level_7)
     {
         set_run_level(RUN_LEVEL_6);
     }
-    else if (adc_result > _adc_config.level_7)
+    else /*if (adc_result > _adc_config.level_7)*/
     {
         set_run_level(RUN_LEVEL_7);
     }
 
-    // if(adc_result > _adc_config.adc_aref_line)
-    // {
-    //     set_run_level(RUN_LEVEL_3);
-    // }
-    // if(adc_result > ADC_3_0_V)
-    // {
-    //     set_run_level(RUN_LEVEL_2);
-    // }
-    // if(adc_result > ADC_2_7_V)
-    // {
-    //     set_run_level(RUN_LEVEL_1);
-    // }
-    // if(adc_result > ADC_2_4_V)
-    // {
-    //     set_run_level(RUN_LEVEL_0);
-    // }
 #endif
 
     return 0;
-}
-
-void start_module_timing(module_t module)
-{
-    // Save current time into var
-    xtimer_now_timex(&(current_module_timings[module]));
-}
-void stop_module_timing(module_t module)
-{
-    timex_t end_time;
-    xtimer_now_timex(&end_time);
-    timex_t diff = timex_sub(end_time, current_module_timings[module]);
-    MODULE_TIMINGS[module] = timex_add(MODULE_TIMINGS[module], diff);
 }
 
 void set_run_level_gpio(void)

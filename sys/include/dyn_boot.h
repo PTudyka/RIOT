@@ -26,8 +26,9 @@
 #include <stdbool.h>
 
 /* For GPIO and ADC configuration */
-#include "board.h"
+// #include "board.h"
 #include "periph/adc.h"
+#include "periph/gpio.h"
 #include "xtimer.h"
 
 #ifdef __cplusplus
@@ -52,7 +53,7 @@ typedef enum {
         MODULE_GNRC_UHCPC || MODULE_AUTO_INIT_GNRC_RPL || \
         MODULE_GNRC_RPL  
 */
-    DYN_BOOT_GNRC,
+    DYN_BOOT_MODULE_GNRC,
 #endif
 #ifdef MODULE_PS
     DYN_BOOT_MODULE_PS,
@@ -156,11 +157,6 @@ typedef struct {
     gpio_t GPIO_PIN_4;
 } dyn_boot_gpio_t;
 
-typedef struct {
-    module_t module;
-    timex_t time;
-} module_timing_t;
-
 /*
  * @brief Returns current active run level 
  * 
@@ -174,9 +170,6 @@ run_level_t get_run_level(void);
  * @param[in] run_level New active run level
  */
 void set_run_level(run_level_t run_level);
-
-void start_module_timing(module_t module);
-void stop_module_timing(module_t module);
 
 /*
  * @brief Returns flag for given module. Determines, if module should be initialized or not.
