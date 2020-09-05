@@ -7,7 +7,7 @@
  */
 
 /**
- * @defgroup    sys_dyn_boot_measurement Dynamic Boot Behaviour - Measurement
+ * @defgroup    sys_timing_measurement Timing Measurement for Modules
  * @ingroup     sys
  * @brief       Measures timings of Modules for Dynamic Boot Behaviour
  *
@@ -18,12 +18,11 @@
  * @author      ptudyka <p.tudyka@tu-bs.de>
  */
 
-#ifndef DYN_BOOT_MEASUREMENT_H
-#define DYN_BOOT_MEASUREMENT_H
+#ifndef TIMING_MEASUREMENT_H
+#define TIMING_MEASUREMENT_H
 
 /* Add header includes here */
-#include "dyn_boot.h"
-#include "periph/gpio.h"
+#include <stdbool.h>
 #include "xtimer.h"
 
 #ifdef __cplusplus
@@ -32,18 +31,20 @@ extern "C" {
 
 /* Declare the API of the module */
 
-typedef struct {
-    module_t module;
-    timex_t time;
-} module_timing_t;
+#define MEASUREMENT_MODULES {   \
+    MODULE_0 = 0,       \
+    MODULE_1,           \
+    MODULE_2,           \
+    MODULE_TIMINGS_SIZE \
+}
 
-void start_module_timing(module_t module);
+typedef enum MEASUREMENT_MODULES timing_modules_t;
 
-void stop_module_timing(module_t module);
+void start_module_timing(timing_modules_t module);
 
-timex_t get_time_for_module(module_t module);
+void stop_module_timing(timing_modules_t module);
 
-timex_t[] get_all_timings();
+uint32_t get_time_for_module(timing_modules_t module);
 
 #ifdef __cplusplus
 }

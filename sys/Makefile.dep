@@ -9,3 +9,7 @@ endif
 ifneq (,$(filter prng_fortuna,$(USEMODULE)))
   CFLAGS += -DCRYPTO_AES
 endif
+
+ifneq (,$(filter timing_measurement,$(USEMODULE)))  # if module in USEMODULE
+  USEMODULE += xtimer                                 # add dependencies to USEMODULE
+endif
