@@ -44,6 +44,9 @@ ifneq (,$(filter $(BOARD),inga_red))
 #  USEMODULE += mag3110
 endif
 
+
+# Test of timing measurement module
+USEMODULE += timing_measurement
 # Dynamic boot behaviour
 USEMODULE += dyn_boot
 # Include application directory to use params file 

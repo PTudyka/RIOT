@@ -48,6 +48,9 @@
 #endif
 
 
+#ifdef MODULE_TIMING_MEASUREMENT
+#include "timing_measurement.h"
+#endif
 #ifdef MODULE_DYN_BOOT
 #include "dyn_boot.h"
 #endif
@@ -118,9 +121,22 @@ int get_current_run_level(int argc, char **argv)
 //     return 0;
 // }
 
+int get_ts(int argc, char **argv)
+{
+    (void) argc;
+    (void) argv;
+
+#ifdef MODULE_TIMING_MEASUREMENT
+    printf("Module timing for at86rf2xx: %u us\n", get_time_for_module(MODULE_0));
+#endif
+
+    return 0;
+}
+
 static const shell_command_t commands[] = {
     { "get_supply_v", "get supply voltage via ADC", get_supply_voltage },
     { "run_level", "get current run level", get_current_run_level },
+    { "get_ts", "get module timing for radio init", get_ts },
     // { "get_gpios", "get current gpio states for PC2,3,4,5", get_gpios },
     { NULL, NULL, NULL }
 };

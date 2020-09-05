@@ -33,6 +33,10 @@
 #include "at86rf2xx.h"
 #include "at86rf2xx_params.h"
 
+#ifdef MODULE_TIMING_MEASUREMENT
+#include "timing_measurement.h"
+#endif
+
 /**
  * @brief   Define stack parameters for the MAC layer thread
  * @{
@@ -49,6 +53,9 @@ static char _at86rf2xx_stacks[AT86RF2XX_NUM][AT86RF2XX_MAC_STACKSIZE];
 
 void auto_init_at86rf2xx(void)
 {
+#ifdef MODULE_TIMING_MEASUREMENT
+    start_module_timing();
+#endif
     for (unsigned i = 0; i < AT86RF2XX_NUM; i++) {
         LOG_DEBUG("[auto_init_netif] initializing at86rf2xx #%u\n", i);
 
@@ -76,6 +83,10 @@ void auto_init_at86rf2xx(void)
         ((netdev_t *)&at86rf2xx_devs[i])->driver->set((netdev_t *)&at86rf2xx_devs[i], NETOPT_STATE, (void *)&target_state, sizeof(netopt_state_t));
 
     }
+
+#ifdef MODULE_TIMING_MEASUREMENT
+    stop_module_timing(MODULE_0);
+#endif
 }
 #else
 typedef int dont_be_pedantic;
