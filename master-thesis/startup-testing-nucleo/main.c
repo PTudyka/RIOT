@@ -44,6 +44,10 @@
 #include "periph/gpio.h"
 #include "periph/adc.h"
 
+#ifdef MODULE_TIMING_MEASUREMENT
+#include "timing_measurement.h"
+#endif
+
 #define VREFINT_CAL_ADDR 0x1FF80078
 
 int adc_read(int argc, char **argv)
@@ -117,10 +121,27 @@ int get_gpios(int argc, char **argv)
     return 0;
 }
 
+int get_ts(int argc, char **argv)
+{
+    (void) argc;
+    (void) argv;
+
+#ifdef MODULE_TIMING_MEASUREMENT
+    start_module_timing();
+    printf("This test message will be measured (timing)\n");
+    stop_module_timing(MODULE_0);
+
+    printf("Module timing for thread creations: %lu us\n", get_time_for_module(MODULE_0));
+#endif
+
+    return 0;
+}
+
 static const shell_command_t commands[] = {
     { "adc_read", "reads all adc lines", adc_read },
     { "run_level", "get current run level", get_current_run_level },
     { "get_gpios", "get current gpio states", get_gpios },
+    { "get_ts", "get module timing for radio init", get_ts },
     { NULL, NULL, NULL }
 };
 

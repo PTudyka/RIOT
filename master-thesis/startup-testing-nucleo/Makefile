@@ -45,6 +45,9 @@ USEMODULE += dyn_boot
 # for dyn_boot configuration
 CFLAGS += -I$(CURDIR)
 
+# Test of timing measurement module
+USEMODULE += timing_measurement
+
 #MODULE_NEWLIB
 # DISABLE_MODULE += newlib 
 
