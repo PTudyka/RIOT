@@ -541,7 +541,7 @@ __attribute__((constructor)) static void startup(int argc, char **argv, char **e
 #endif
 
     // Set run_level manually
-    set_run_level(RUN_LEVEL_0);
+    set_run_level(RUN_LEVEL_7);
     auto_select_modules();
 
     periph_init();
