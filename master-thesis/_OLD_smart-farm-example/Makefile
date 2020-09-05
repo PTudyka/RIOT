@@ -48,10 +48,10 @@ USEMODULE += gnrc_pktdump
 
 # Dynamic boot behaviour
 USEMODULE += dyn_boot
-USEMODULE += timing_measurement
+# USEMODULE += timing_measurement
 # USEMODULE += dyn_boot_measurement
-# USEMODULE += xtimer
-# USEMODULE += timex
+USEMODULE += xtimer
+USEMODULE += timex
 # Include application directory to use params file 
 # for dyn_boot configuration
 CFLAGS += -I$(CURDIR)

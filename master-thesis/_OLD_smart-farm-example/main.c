@@ -28,6 +28,8 @@
 
 #include "dyn_boot.h"
 #include "periph/pm.h"
+#include "xtimer.h"
+
 #ifdef MODULE_TIMING_MEASUREMENT
 #include "timing_measurement.h"
 #endif
@@ -46,25 +48,37 @@ int toggle(int argc, char **argv)
     return 0;
 }
 
-int get_modules(int argc, char **argv)
+// int get_modules(int argc, char **argv)
+// {
+//     (void) argc;
+//     (void) argv;
+
+//     unsigned int i=0;
+//     // char time_buffer[TIMEX_MAX_STR_LEN];
+//     for (i=0; i < MODULE_TIMINGS_SIZE; ++i)
+//     {
+//         // (void) timex_to_str(get_time_for_module(i), time_buffer);
+//         printf("Module: %d -> Time: %u\n", i, get_time_for_module(i));
+//     }
+
+//     return 0;
+// }
+
+int get_timestamp(int argc, char **argv)
 {
     (void) argc;
     (void) argv;
 
-    unsigned int i=0;
-    // char time_buffer[TIMEX_MAX_STR_LEN];
-    for (i=0; i < MODULE_TIMINGS_SIZE; ++i)
-    {
-        // (void) timex_to_str(get_time_for_module(i), time_buffer);
-        printf("Module: %d -> Time: %u\n", i, get_time_for_module(i));
-    }
+    uint32_t timestamp = xtimer_now_usec();
+    printf("Current timestamp: %u\n", timestamp);
 
     return 0;
 }
 
 static const shell_command_t commands[] = {
     { "toggle", "toggles modules flag", toggle },
-    { "get_modules", "get timings for all modules", get_modules },
+    // { "get_modules", "get timings for all modules", get_modules },
+    { "get_ts", "Prints current timestamp 64", get_timestamp },
     { NULL, NULL, NULL }
 };
 
