@@ -46,4 +46,8 @@ ifneq (,$(filter shell_commands,$(USEMODULE)))
   endif
 endif
 
+ifneq (,$(filter timing_measurement,$(USEMODULE)))  # if module in USEMODULE
+  USEMODULE += xtimer                                 # add dependencies to USEMODULE
+endif
+
 include $(RIOTBASE)/sys/test_utils/Makefile.dep
