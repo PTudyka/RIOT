@@ -20,59 +20,26 @@
 
 #include "timing_measurement.h"
 
-/* Implementation of the module */
-
-// static const module_timing_t MODULE_TIMINGS[DYN_BOOT_MODULES_COUNT];
+/* Save timestamp per module in array */
 static uint32_t MODULE_TIMINGS[MODULE_TIMINGS_SIZE];
-// static uint64_t MODULE_TIMINGS[DYN_BOOT_MODULES_COUNT];
-// static uint64_t current_module_timings[DYN_BOOT_MODULES_COUNT];
 
-// static bool is_init = false;
+/* Only one module timing measurement should be active at time */
 static uint32_t current_timing = 0;
 
-void start_module_timing(timing_modules_t module)
+void start_module_timing()
 {
-    (void) module;
-    // if (!is_init)
-    // {
-    //     xtimer_init();
-    //     is_init = true;
-    // }
-
     // Save current time into var
-    // xtimer_now_timex(&(current_module_timings[module]));
     current_timing = xtimer_now_usec();
-
-    // current_module_timings[module] = xtimer_now_usec64();
 }
 
 void stop_module_timing(timing_modules_t module)
 {
-    // if (!is_init)
-    // {
-    //     xtimer_init();
-    //     is_init = true;
-    // }
-
-    // timex_t end_time;
-    // xtimer_now_timex(&end_time);
-    // timex_t diff = timex_sub(end_time, current_module_timings[module]);
-    // MODULE_TIMINGS[module] = timex_add(MODULE_TIMINGS[module], diff);
-
+    // Get timestamp for end of module and save difference into array
     uint32_t end_time = xtimer_now_usec();
     MODULE_TIMINGS[module] += end_time - current_timing;
-
-    // uint64_t end_time = xtimer_now_usec64();
-    // MODULE_TIMINGS[module] = end_time - current_module_timings[module];
 }
 
 uint32_t get_time_for_module(timing_modules_t module)
 {
-    // return MODULE_TIMINGS[module];
     return MODULE_TIMINGS[module];
 }
-
-// timex_t[] get_all_timings();
-// {
-//     return MODULE_TIMINGS;
-// }

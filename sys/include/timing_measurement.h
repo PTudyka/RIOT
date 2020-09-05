@@ -21,16 +21,16 @@
 #ifndef TIMING_MEASUREMENT_H
 #define TIMING_MEASUREMENT_H
 
-/* Add header includes here */
 #include <stdbool.h>
+
+/* Relevant for saving timestamps */
 #include "xtimer.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/* Declare the API of the module */
-
+/* Extend this, if more Modules should be used */
 #define MEASUREMENT_MODULES {   \
     MODULE_0 = 0,       \
     MODULE_1,           \
@@ -38,17 +38,32 @@ extern "C" {
     MODULE_TIMINGS_SIZE \
 }
 
+/* Enum to differentiate between timestamp of different modules */
 typedef enum MEASUREMENT_MODULES timing_modules_t;
 
-void start_module_timing(timing_modules_t module);
+/*
+ * @brief Saves current timestamp to indicate start of module measurement
+ */
+void start_module_timing();
 
+/*
+ * @brief Gets current timestamp (end of module) and saves difference
+ * between start and end for the given module
+ * 
+ * @param[in] module Module to save timing for
+ */
 void stop_module_timing(timing_modules_t module);
 
+/*
+ * @brief Get timing of given module
+ * 
+ * @return Timing in usecs for given module
+ */
 uint32_t get_time_for_module(timing_modules_t module);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* DYN_BOOT_MEASUREMENT_H */
+#endif /* TIMING_MEASUREMENT_H */
 /** @} */
