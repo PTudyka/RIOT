@@ -99,8 +99,6 @@
 
 void auto_init(void)
 {
-    // auto_select_modules();
-
 #ifdef MODULE_PRNG
     void auto_init_random(void);
     DEBUG("Auto init Random module\n");
@@ -133,7 +131,7 @@ void auto_init(void)
     DEBUG("Auto init gnrc_pktbuf module\n");
     gpio_toggle(MODULES_GPIO_PIN);
     #ifdef MODULE_DYN_BOOT
-    if(dyn_boot_get_flag(DYN_BOOT_GNRC))
+    if(dyn_boot_get_flag(DYN_BOOT_MODULE_GNRC))
     #endif
     gnrc_pktbuf_init();
     gpio_toggle(MODULES_GPIO_PIN);
@@ -142,7 +140,7 @@ void auto_init(void)
     DEBUG("Auto init gnrc_pktdump module.\n");
     gpio_toggle(MODULES_GPIO_PIN);
     #ifdef MODULE_DYN_BOOT
-    if(dyn_boot_get_flag(DYN_BOOT_GNRC)) 
+    if(dyn_boot_get_flag(DYN_BOOT_MODULE_GNRC)) 
     #endif
     gnrc_pktdump_init();
     gpio_toggle(MODULES_GPIO_PIN);
@@ -237,7 +235,7 @@ void auto_init(void)
     extern void auto_init_at86rf2xx(void);
     gpio_toggle(MODULES_GPIO_PIN);
     #ifdef MODULE_DYN_BOOT
-    if(dyn_boot_get_flag(DYN_BOOT_GNRC)) 
+    if(dyn_boot_get_flag(DYN_BOOT_MODULE_GNRC)) 
     #endif
     auto_init_at86rf2xx();
     gpio_toggle(MODULES_GPIO_PIN);
@@ -330,10 +328,12 @@ void auto_init(void)
 #ifdef MODULE_NETDEV_TAP
     DEBUG("Auto init NETDEV TAP\n");
     extern void auto_init_netdev_tap(void);
+    gpio_toggle(MODULES_GPIO_PIN);
     #ifdef MODULE_DYN_BOOT
-    if(dyn_boot_get_flag(DYN_BOOT_GNRC)) 
+    if(dyn_boot_get_flag(DYN_BOOT_MODULE_GNRC))
     #endif
     auto_init_netdev_tap();
+    gpio_toggle(MODULES_GPIO_PIN);
 #endif
 
 #ifdef MODULE_SOCKET_ZEP
