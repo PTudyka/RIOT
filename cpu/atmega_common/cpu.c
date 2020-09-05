@@ -118,11 +118,13 @@ void cpu_init(void)
     gpio_toggle(STARTUP_GPIO_PIN);
 
 #ifdef MODULE_DYN_BOOT
+    gpio_toggle(MODULES_GPIO_PIN);
     // Set run_level manually
     // set_run_level(RUN_LEVEL_7);
     set_run_level_adc();
     // set_run_level_gpio();
     auto_select_modules();
+    gpio_toggle(MODULES_GPIO_PIN);
 #endif
 
     /* Initialize peripherals for which modules are included in the makefile.*/
