@@ -33,6 +33,8 @@
 #include "bmp180_params.h"
 #include "phydat.h"
 
+#include "saul_reg.h"
+
 /* Ringbuffer specific defines */
 #define RB_BUF_SIZE 16
 #define DATA_SIZE (sizeof(sensor_data))
@@ -73,25 +75,40 @@ static inline void pack_to_phydat(uint32_t pressure_val, phydat_t *res)
 void read_sensor_data(void)
 {
     // Init sensor for reading
-    bmp180_t dev;
-    if(bmp180_init(&dev, &bmp180_params[0]))
-    {
-        puts("Init bmp180 failed!");
-        next_status = NODE_ERROR;
+    // bmp180_t dev;
+    // if(bmp180_init(&dev, &bmp180_params[0]))
+    // {
+    //     puts("Init bmp180 failed!");
+    //     next_status = NODE_ERROR;
+    //     return;
+    // }
+    // sensor_data = bmp180_read_pressure(&dev);
+
+    // /* Print as phy_dat_t for debug purpose */
+    // // phydat_t data;
+    // pack_to_phydat(sensor_data, &sensor_data_phy);
+    // phydat_dump(&sensor_data_phy, 1);
+
+    /* Read sensor data via SAUL */
+    puts("SAUL test application");
+    saul_reg_t *dev = saul_reg_find_type(SAUL_SENSE_PRESS);
+    if (dev == NULL) {
+        puts("No SAUL Pressure Device present");
         return;
     }
-    sensor_data = bmp180_read_pressure(&dev);
+    int dim = saul_reg_read(dev, &sensor_data_phy);
+    // printf("\nDev: %s\tType: %s\n", dev->name,
+    //         saul_class_to_str(dev->driver->type));
+    phydat_dump(&sensor_data_phy, dim);
 
-    /* Print as phy_dat_t for debug purpose */
-    // phydat_t data;
-    pack_to_phydat(sensor_data, &sensor_data_phy);
-    phydat_dump(&sensor_data_phy, 1);
+    // while (dev) {
+    //     dev = dev->next;
+    // }
+    // puts("\n##########################");
 }
 
 void send_packet(void)
 {
-    printf("Sensor data: %u\n", sensor_data);
-
     // Init send_thread for radio transmitting
     gnrc_netif_t *netif = NULL;
     if(!(netif = gnrc_netif_iter(netif))) {

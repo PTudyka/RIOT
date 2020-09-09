@@ -18,7 +18,7 @@ USEMODULE += gnrc_netdev_default
 # USEMODULE += pm
 # USEMODULE += pm_layered
 # USEMODULE += ps
-# USEMODULE += saul_default
+USEMODULE += saul_default
 # USEMODULE += shell
 # USEMODULE += shell_commands
 
