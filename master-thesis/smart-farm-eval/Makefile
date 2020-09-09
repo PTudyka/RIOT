@@ -13,14 +13,17 @@ USEMODULE += auto_init_gnrc_netif
 USEMODULE += dyn_boot
 USEMODULE += gnrc
 USEMODULE += gnrc_netdev_default
-USEMODULE += gnrc_pktdump
-USEMODULE += gnrc_txtsnd
+# USEMODULE += gnrc_pktdump
+# USEMODULE += gnrc_txtsnd
 # USEMODULE += pm
 # USEMODULE += pm_layered
 # USEMODULE += ps
-USEMODULE += saul_default
-USEMODULE += shell
-USEMODULE += shell_commands
+# USEMODULE += saul_default
+# USEMODULE += shell
+# USEMODULE += shell_commands
+
+USEMODULE += bmp180
+USEMODULE += phydat
 
 # USEMODULE += gpio_measurement
 # Comment this out to disable code in RIOT that does safety checking
