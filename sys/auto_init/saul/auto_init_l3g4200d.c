@@ -27,6 +27,10 @@
 #include "l3g4200d.h"
 #include "l3g4200d_params.h"
 
+#ifdef MODULE_TIMING_MEASUREMENT
+#include "timing_measurement.h"
+#endif
+
 /**
  * @brief   Define the number of configured sensors
  */
@@ -55,6 +59,10 @@ extern saul_driver_t l3g4200d_saul_driver;
 
 void auto_init_l3g4200d(void)
 {
+#ifdef MODULE_TIMING_MEASUREMENT
+    start_module_timing();
+#endif
+
     assert(L3G4200D_NUM == L3G4200D_INFO_NUM);
 
     for (unsigned int i = 0; i < L3G4200D_NUM; i++) {
@@ -70,6 +78,10 @@ void auto_init_l3g4200d(void)
         saul_entries[i].driver = &l3g4200d_saul_driver;
         saul_reg_add(&(saul_entries[i]));
     }
+
+#ifdef MODULE_TIMING_MEASUREMENT
+    stop_module_timing(MODULE_3);
+#endif
 }
 
 #else

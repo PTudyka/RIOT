@@ -128,8 +128,10 @@ int get_ts(int argc, char **argv)
 
 #ifdef MODULE_TIMING_MEASUREMENT
     printf("Module timing for at86rf2xx: %u us\n", get_time_for_module(MODULE_0));
+    printf("Module timing for adxl345: %u us\n", get_time_for_module(MODULE_1));
+    printf("Module timing for bmp180: %u us\n", get_time_for_module(MODULE_2));
+    printf("Module timing for l3g4200d: %u us\n", get_time_for_module(MODULE_3));
 #endif
-
     return 0;
 }
 

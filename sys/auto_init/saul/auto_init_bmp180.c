@@ -26,6 +26,10 @@
 #include "bmp180.h"
 #include "bmp180_params.h"
 
+#ifdef MODULE_TIMING_MEASUREMENT
+#include "timing_measurement.h"
+#endif
+
 /**
  * @brief   Define the number of configured sensors
  */
@@ -56,6 +60,10 @@ extern const saul_driver_t bmp180_pressure_saul_driver;
 
 void auto_init_bmp180(void)
 {
+#ifdef MODULE_TIMING_MEASUREMENT
+    start_module_timing();
+#endif
+
     assert(BMP180_INFO_NUM == BMP180_NUM);
 
     for (unsigned i = 0; i < BMP180_NUM; i++) {
@@ -81,6 +89,10 @@ void auto_init_bmp180(void)
         saul_reg_add(&(saul_entries[(i * 2)]));
         saul_reg_add(&(saul_entries[(i * 2) + 1]));
     }
+
+#ifdef MODULE_TIMING_MEASUREMENT
+    stop_module_timing(MODULE_2);
+#endif
 }
 #else
 typedef int dont_be_pedantic;

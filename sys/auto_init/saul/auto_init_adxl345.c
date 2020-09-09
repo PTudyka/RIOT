@@ -27,6 +27,10 @@
 #include "adxl345.h"
 #include "adxl345_params.h"
 
+#ifdef MODULE_TIMING_MEASUREMENT
+#include "timing_measurement.h"
+#endif
+
 /**
  * @brief   Define the number of configured sensors
  */
@@ -54,6 +58,9 @@ extern saul_driver_t adxl345_saul_driver;
 
 void auto_init_adxl345(void)
 {
+#ifdef MODULE_TIMING_MEASUREMENT
+    start_module_timing();
+#endif
     assert(ADXL345_INFO_NUM == ADXL345_NUM);
 
     for (unsigned i = 0; i < ADXL345_NUM; i++) {
@@ -69,6 +76,10 @@ void auto_init_adxl345(void)
         saul_entries[i].driver = &adxl345_saul_driver;
         saul_reg_add(&(saul_entries[i]));
     }
+
+#ifdef MODULE_TIMING_MEASUREMENT
+    stop_module_timing(MODULE_1);
+#endif
 }
 
 #else

@@ -35,6 +35,11 @@ extern "C" {
     MODULE_0 = 0,       \
     MODULE_1,           \
     MODULE_2,           \
+    MODULE_3,           \
+    MODULE_4,           \
+    MODULE_5,           \
+    MODULE_6,           \
+    MODULE_7,           \
     MODULE_TIMINGS_SIZE \
 }
 
