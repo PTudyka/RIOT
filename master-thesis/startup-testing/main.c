@@ -135,13 +135,88 @@ int get_ts(int argc, char **argv)
     return 0;
 }
 
+int measure_timings(int argc, char **argv)
+{
+    (void) argc;
+    (void) argv;
+
+#ifdef MODULE_TIMING_MEASUREMENT
+
+    printf("Radio send message time: %u us\n", get_time_for_module(MODULE_4));
+    printf("adxl345 Read Time: %u us\n", get_time_for_module(MODULE_5));
+    printf("bmp180 Read Time: %u us\n", get_time_for_module(MODULE_6));
+    printf("l3g4200d Read Time: %u us\n", get_time_for_module(MODULE_7));
+
+    reset_time_for_module(MODULE_4);
+    reset_time_for_module(MODULE_5);
+    reset_time_for_module(MODULE_6);
+    reset_time_for_module(MODULE_7);
+#endif
+
+    return 0;
+}
+
 static const shell_command_t commands[] = {
     { "get_supply_v", "get supply voltage via ADC", get_supply_voltage },
     { "run_level", "get current run level", get_current_run_level },
     { "get_ts", "get module timing for radio init", get_ts },
+    { "timings", "measure timings for radio send", measure_timings },
     // { "get_gpios", "get current gpio states for PC2,3,4,5", get_gpios },
     { NULL, NULL, NULL }
 };
+
+// void *send_thread(void *arg)
+// {
+//     gnrc_netif_t *ieee802154_netif = arg;
+
+//     /// 0 Adress length means we want to use broadcast
+//     size_t addr_len = 0;
+//     uint8_t addr[GNRC_NETIF_L2ADDR_MAXLEN];
+//     gnrc_pktsnip_t *pkt, *hdr;
+//     gnrc_netif_hdr_t *nethdr;
+
+//     /// Send packet as broadcast
+//     uint8_t flags = 0 | GNRC_NETIF_HDR_FLAGS_BROADCAST;
+    
+//     /// payload
+//     char message[] = "RIOT says hello.\0";
+    
+//     while(1) {
+//         /// Sleep 1 second
+//         xtimer_sleep(SEND_INTERVAL);
+
+//         // Wait for a message to send
+//         // Reset FLAG if a messag should be sent
+//         if (!SEND_MESG_FLAG) { continue; }
+//         else { SEND_MESG_FLAG = 0; }
+
+//         // printf("MSG: %s\n", CURRENT_MSG);
+
+//         pkt = gnrc_pktbuf_add(NULL, message, sizeof(message), GNRC_NETTYPE_UNDEF);
+//         if (pkt == NULL) {
+//             puts("ERROR: packet buffer full");
+//             return NULL;
+//         }
+
+//         hdr = gnrc_netif_hdr_build(NULL, 0, addr, addr_len);
+//         if (hdr == NULL) {
+//             puts("ERROR: packet buffer full");
+//             gnrc_pktbuf_release(pkt);
+//             return NULL;
+//         }
+//         LL_PREPEND(pkt, hdr);
+//         nethdr = (gnrc_netif_hdr_t *)hdr->data;
+//         nethdr->flags = flags;
+//         int ret = gnrc_netapi_send(ieee802154_netif->pid, pkt);
+//         if (ret < 1) {
+//             printf("[send_thread] unable to send: %d\n", ret);
+//             gnrc_pktbuf_release(pkt);
+//         } else {
+//             puts("[send_thread] sent message");
+//         }
+//     }
+//     return NULL;
+// }
 
 int main(void)
 {
@@ -184,6 +259,15 @@ int main(void)
 //
 //        xtimer_sleep(2);
 //    }
+
+    // Init send_thread for radio transmitting
+    // gnrc_netif_t *netif = NULL;
+    // if((netif = gnrc_netif_iter(netif))) {
+    //     gnrc_netif_t *ieee802154_netif = netif;
+    //     send_thread_pid = thread_create(send_thread_stack, sizeof(send_thread_stack), THREAD_PRIORITY_MAIN + 2, THREAD_CREATE_STACKTEST, send_thread, ieee802154_netif, "send_thread");
+    // } else {
+    //     puts("Unable to find netif");
+    // }
 
     // Init adc line for bandgap measurement
     adc_init(LINE);
