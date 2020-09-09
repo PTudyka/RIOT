@@ -66,6 +66,13 @@ void stop_module_timing(timing_modules_t module);
  */
 uint32_t get_time_for_module(timing_modules_t module);
 
+/*
+ * @brief Resets timing of given module to 0
+ * 
+ * @param[in] module Module to reset timing
+ */
+void reset_time_for_module(timing_modules_t module);
+
 #ifdef __cplusplus
 }
 #endif

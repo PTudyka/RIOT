@@ -28,6 +28,10 @@
 #include "od.h"
 #endif
 
+#ifdef MODULE_TIMING_MEASUREMENT
+#include "timing_measurement.h"
+#endif
+
 static int _send(gnrc_netif_t *netif, gnrc_pktsnip_t *pkt);
 static gnrc_pktsnip_t *_recv(gnrc_netif_t *netif);
 
@@ -219,6 +223,10 @@ static gnrc_pktsnip_t *_recv(gnrc_netif_t *netif)
 
 static int _send(gnrc_netif_t *netif, gnrc_pktsnip_t *pkt)
 {
+#ifdef MODULE_TIMING_MEASUREMENT
+    start_module_timing();
+#endif
+
     netdev_t *dev = netif->dev;
     netdev_ieee802154_t *state = (netdev_ieee802154_t *)netif->dev;
     gnrc_netif_hdr_t *netif_hdr;
@@ -298,6 +306,10 @@ static int _send(gnrc_netif_t *netif, gnrc_pktsnip_t *pkt)
 
     /* release old data */
     gnrc_pktbuf_release(pkt);
+
+#ifdef MODULE_TIMING_MEASUREMENT
+    stop_module_timing(MODULE_4);
+#endif
     return res;
 }
 /** @} */

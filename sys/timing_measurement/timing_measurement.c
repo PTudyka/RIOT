@@ -43,3 +43,8 @@ uint32_t get_time_for_module(timing_modules_t module)
 {
     return MODULE_TIMINGS[module];
 }
+
+void reset_time_for_module(timing_modules_t module)
+{
+    MODULE_TIMINGS[module] = 0;
+}

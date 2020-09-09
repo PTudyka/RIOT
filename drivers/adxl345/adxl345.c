@@ -28,6 +28,10 @@
 #include "adxl345_regs.h"
 #include "adxl345_params.h"
 
+#ifdef MODULE_TIMING_MEASUREMENT
+#include "timing_measurement.h"
+#endif
+
 #define ENABLE_DEBUG        (0)
 #include "debug.h"
 
@@ -38,6 +42,9 @@
 
 int adxl345_init(adxl345_t *dev, const adxl345_params_t* params)
 {
+#ifdef MODULE_TIMING_MEASUREMENT
+    start_module_timing();
+#endif
     uint8_t reg;
 
     assert(dev && params);
@@ -73,11 +80,17 @@ int adxl345_init(adxl345_t *dev, const adxl345_params_t* params)
 
     DEBUG("[adxl345] init: successful\n");
 
+#ifdef MODULE_TIMING_MEASUREMENT
+    stop_module_timing(MODULE_1);
+#endif
     return ADXL345_OK;
 }
 
 void adxl345_read(const adxl345_t *dev, adxl345_data_t *data)
 {
+#ifdef MODULE_TIMING_MEASUREMENT
+    start_module_timing();
+#endif
     int16_t result[3];
 
     assert(dev && data);
@@ -97,6 +110,10 @@ void adxl345_read(const adxl345_t *dev, adxl345_data_t *data)
     data->x = result[0] * dev->scale_factor;
     data->y = result[1] * dev->scale_factor;
     data->z = result[2] * dev->scale_factor;
+
+#ifdef MODULE_TIMING_MEASUREMENT
+    stop_module_timing(MODULE_5);
+#endif
 }
 
 void adxl345_set_interrupt(const adxl345_t *dev)

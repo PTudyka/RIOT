@@ -26,6 +26,10 @@
 #include "periph/i2c.h"
 #include "periph/gpio.h"
 
+#ifdef MODULE_TIMING_MEASUREMENT
+#include "timing_measurement.h"
+#endif
+
 #define ENABLE_DEBUG    (0)
 #include "debug.h"
 
@@ -38,6 +42,9 @@
 
 int l3g4200d_init(l3g4200d_t *dev, const l3g4200d_params_t *params)
 {
+#ifdef MODULE_TIMING_MEASUREMENT
+    start_module_timing();
+#endif
     dev->params = *params;
 
     uint8_t tmp;
@@ -73,11 +80,18 @@ int l3g4200d_init(l3g4200d_t *dev, const l3g4200d_params_t *params)
         return -1;
     }
     i2c_release(DEV_I2C);
+
+#ifdef MODULE_TIMING_MEASUREMENT
+    stop_module_timing(MODULE_3);
+#endif
     return 0;
 }
 
 int l3g4200d_read(const l3g4200d_t *dev, l3g4200d_data_t *data)
 {
+#ifdef MODULE_TIMING_MEASUREMENT
+    start_module_timing();
+#endif
     uint8_t tmp[6];
     int16_t res;
 
@@ -93,6 +107,10 @@ int l3g4200d_read(const l3g4200d_t *dev, l3g4200d_data_t *data)
     data->acc_y = (int16_t)((dev->scale * res) / MAX_VAL);
     res = (tmp[5] << 8) | tmp[4];
     data->acc_z = (int16_t)((dev->scale * res) / MAX_VAL);
+
+#ifdef MODULE_TIMING_MEASUREMENT
+    stop_module_timing(MODULE_7);
+#endif
     return 0;
 }
 
