@@ -60,12 +60,12 @@ static run_level_t current_run_level = RUN_LEVEL_7;
 
 /* Save read sensor data globally */
 static uint32_t sensor_data = 0;
+static phydat_t sensor_data_phy;
 static char sensor_data_buf[DATA_SIZE];
 
-
-static inline void pack_to_phydat(uint32_t pressue_val, phydat_t *res)
+static inline void pack_to_phydat(uint32_t pressure_val, phydat_t *res)
 {
-    res->val[0] = pressue_val / 100;
+    res->val[0] = pressure_val / 100;
     res->unit = UNIT_PA;
     res->scale = 2;
 }
@@ -83,14 +83,64 @@ void read_sensor_data(void)
     sensor_data = bmp180_read_pressure(&dev);
 
     /* Print as phy_dat_t for debug purpose */
-    phydat_t data;
-    pack_to_phydat(sensor_data, &data);
-    phydat_dump(&data, 1);
+    // phydat_t data;
+    pack_to_phydat(sensor_data, &sensor_data_phy);
+    phydat_dump(&sensor_data_phy, 1);
 }
 
 void send_packet(void)
 {
     printf("Sensor data: %u\n", sensor_data);
+
+    // Init send_thread for radio transmitting
+    gnrc_netif_t *netif = NULL;
+    if(!(netif = gnrc_netif_iter(netif))) {
+        puts("Unable to find netif");
+        next_status = NODE_ERROR;
+        return;
+    }
+
+    /// 0 Adress length means we want to use broadcast
+    size_t addr_len = 0;
+    uint8_t addr[GNRC_NETIF_L2ADDR_MAXLEN];
+    gnrc_pktsnip_t *pkt, *hdr;
+    gnrc_netif_hdr_t *nethdr;
+
+    /// Send packet as broadcast
+    uint8_t flags = 0 | GNRC_NETIF_HDR_FLAGS_BROADCAST;
+    
+    /// payload
+    char message[sizeof(phydat_t) +1]; // Sensor_data + \0 termination char
+    message[sizeof(phydat_t)] = '\0';
+
+    printf("Size of phydat_t: %d\n", sizeof(phydat_t));
+    memcpy(message, &sensor_data_phy, sizeof(phydat_t));
+    printf("Message to send: %s\n", message);
+
+    /// Build packet buffer
+    pkt = gnrc_pktbuf_add(NULL, message, sizeof(message), GNRC_NETTYPE_UNDEF);
+    if (pkt == NULL) {
+        puts("ERROR: packet buffer full");
+        return;
+    }
+
+    /// Build meassage header
+    hdr = gnrc_netif_hdr_build(NULL, 0, addr, addr_len);
+    if (hdr == NULL) {
+        puts("ERROR: packet buffer full");
+        gnrc_pktbuf_release(pkt);
+        return;
+    }
+    LL_PREPEND(pkt, hdr);
+    nethdr = (gnrc_netif_hdr_t *)hdr->data;
+    nethdr->flags = flags;
+    int ret = gnrc_netapi_send(netif->pid, pkt);
+    if (ret < 1) {
+        printf("[send_thread] unable to send: %d\n", ret);
+        gnrc_pktbuf_release(pkt);
+    } else {
+        puts("[send_thread] sent message");
+    }
 }
 
 int main(void)
@@ -129,6 +179,7 @@ int main(void)
             // sensor_data = 0xFF;
             read_sensor_data();
 
+            /* Set next status */
             if (current_run_level > RUN_LEVEL_5)
                 next_status = NODE_SEND_PACKET;
             else
@@ -156,7 +207,8 @@ int main(void)
             /* Parse sensor data into byte array for ringbuffer packing */
             for (unsigned int i=0; i < DATA_SIZE; ++i)
             {
-                sensor_data_buf[i] = (char)(((i * 8) >> sensor_data) & 0xFF);
+                sensor_data_buf[i] = (char) ((sensor_data << (i)) & 0xFF);
+                // sensor_data_buf[i] = (char)(((i * 8) >> sensor_data) & 0xFF);
             }
             ringbuffer_add(&rb, sensor_data_buf, DATA_SIZE);
 
