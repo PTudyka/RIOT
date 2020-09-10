@@ -114,12 +114,12 @@ int adc_sample(adc_t line, adc_res_t res)
 
     /* set conversion channel */
 #if defined(CPU_ATMEGA328P) || defined(CPU_ATMEGA1281) || defined(CPU_ATMEGA1284P) || defined(CPU_ATMEGA32U4)
-
-#ifndef MODULE_DYN_BOOT
     ADMUX &= 0xf0;
-#elif
-    ADMUX &= 0xe0; // Reset Bit MUX4, if bandgap is previously used 
-#endif
+// #ifndef MODULE_DYN_BOOT
+//     ADMUX &= 0xf0;
+// #else
+//     ADMUX &= 0xe0; // Reset Bit MUX4, if bandgap is previously used 
+// #endif
     ADMUX |= line;
 #elif defined(CPU_ATMEGA2560) || defined(CPU_ATMEGA256RFR2)
     if (line < 8) {
