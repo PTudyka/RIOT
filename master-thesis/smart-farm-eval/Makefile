@@ -8,6 +8,8 @@ BOARD ?= inga_red
 # This has to be the absolute path to the RIOT base directory:
 RIOTBASE ?= $(CURDIR)/../..
 
+FEATURES_REQUIRED += periph_adc
+
 # required modules
 USEMODULE += auto_init_gnrc_netif
 USEMODULE += dyn_boot
@@ -24,6 +26,8 @@ USEMODULE += saul_default
 
 USEMODULE += bmp180
 USEMODULE += phydat
+
+CFLAGS += -I$(CURDIR)
 
 # USEMODULE += gpio_measurement
 # Comment this out to disable code in RIOT that does safety checking

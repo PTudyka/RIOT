@@ -34,6 +34,7 @@
 #include "phydat.h"
 
 #include "saul_reg.h"
+#include "periph/pm.h"
 
 /* Ringbuffer specific defines */
 #define RB_BUF_SIZE 16
@@ -107,7 +108,7 @@ void read_sensor_data(void)
     // puts("\n##########################");
 }
 
-void send_packet(void)
+void send_packet(phydat_t *data)
 {
     // Init send_thread for radio transmitting
     gnrc_netif_t *netif = NULL;
@@ -131,7 +132,7 @@ void send_packet(void)
     message[sizeof(phydat_t)] = '\0';
 
     printf("Size of phydat_t: %d\n", sizeof(phydat_t));
-    memcpy(message, &sensor_data_phy, sizeof(phydat_t));
+    memcpy(message, data, sizeof(phydat_t));
     printf("Message to send: %s\n", message);
 
     /// Build packet buffer
@@ -205,8 +206,27 @@ int main(void)
 
         case NODE_SEND_PACKET:
             puts("NODE_SEND_PACKET reached");
-            // Send packet
-            send_packet();
+            // Send only one packet and then move on
+            if (current_run_level == RUN_LEVEL_6)
+            {
+                send_packet(&sensor_data_phy);
+                break;
+            }
+            else
+            {
+                // At first send old packages
+                while (!ringbuffer_empty(&rb))
+                {
+                    // uint32_t data_buf = 0;
+                    // ringbuffer_get(&rb, (char*)&data_buf, 4);
+                    // printf("rb data: %u", data_buf);
+                    phydat_t data;
+                    ringbuffer_get(&rb, (char*)&data, sizeof(phydat_t));
+                    // pack_to_phydat(data_buf, &data);
+                    phydat_dump(&data, 1);
+                    send_packet(&data);
+                }
+            }
 
             // If current data != NULL, send this
             // Else check for SEND_MORE_DATA flag and check ringbuffer
@@ -222,16 +242,19 @@ int main(void)
             // Override oldest data, if bufer is full
 
             /* Parse sensor data into byte array for ringbuffer packing */
-            for (unsigned int i=0; i < DATA_SIZE; ++i)
-            {
-                sensor_data_buf[i] = (char) ((sensor_data << (i)) & 0xFF);
-                // sensor_data_buf[i] = (char)(((i * 8) >> sensor_data) & 0xFF);
-            }
-            ringbuffer_add(&rb, sensor_data_buf, DATA_SIZE);
+            // for (unsigned int i=0; i < DATA_SIZE; ++i)
+            // {
+            //     sensor_data_buf[i] = (char) ((sensor_data << (i)) & 0xFF);
+            //     // sensor_data_buf[i] = (char)(((i * 8) >> sensor_data) & 0xFF);
+            // }
+            // char buf[sizeof(phydat_t)];
+            (void) sensor_data_buf;
+            ringbuffer_add(&rb, (char*)&sensor_data_phy, sizeof(phydat_t));
 
             printf("Ringbuffer free space: %d\n", ringbuffer_get_free(&rb));
 
-            next_status = NODE_SLEEP;
+            // next_status = NODE_SLEEP;
+            next_status = NODE_SEND_PACKET;
             break;
 
         case NODE_SLEEP:
@@ -239,6 +262,8 @@ int main(void)
             // Set to sleep (lowest possibly power mode)
             // pm_set_lowest();
             xtimer_sleep(5);
+
+            pm_reboot();
 
             next_status = NODE_GET_RUN_LEVEL;
             break;
