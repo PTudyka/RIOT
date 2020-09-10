@@ -11,8 +11,8 @@ RIOTBASE ?= $(CURDIR)/../..
 # required features
 # FEATURES_REQUIRED += periph_spi
 
-# USEMODULE += stdio_cdc_acm
-USEMODULE += usbus_cdc_acm
+USEMODULE += stdio_cdc_acm
+# USEMODULE += usbus_cdc_acm
 
 GNRC_NETIF_NUMOF := 2
 
@@ -26,6 +26,8 @@ USEMODULE += ps
 USEMODULE += shell
 USEMODULE += shell_commands
 USEMODULE += auto_init
+
+USEMODULE += dyn_boot
 
 # allow to use a smaller packet buffer in low-PDU drivers
 # ifdef GNRC_PKTBUF_SIZE
