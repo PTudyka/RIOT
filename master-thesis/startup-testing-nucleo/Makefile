@@ -37,6 +37,8 @@ USEMODULE += shell_commands
 USEMODULE += ps
 # include and auto-initialize all available sensors
 USEMODULE += saul_default
+USEMODULE += ds18
+# USEMODULE += xtimer
 
 FEATURES_REQUIRED += periph_adc
 # Dynamic boot behaviour
