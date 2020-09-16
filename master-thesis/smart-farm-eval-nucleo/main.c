@@ -23,14 +23,14 @@
 #include "dyn_boot.h"
 // #include "periph/pm.h"
 #include "ringbuffer.h"
-#include "net/gnrc.h"
+// #include "net/gnrc.h"
 
 #include "board.h"
 // #include "gpio_measurement.h"
 
 /* Sensor specific includes */
-#include "bmp180.h"
-#include "bmp180_params.h"
+#include "ds18.h"
+#include "ds18_params.h"
 #include "phydat.h"
 
 #include "saul_reg.h"
@@ -66,6 +66,7 @@ static uint32_t sensor_data = 0;
 static phydat_t sensor_data_phy;
 static char sensor_data_buf[DATA_SIZE];
 
+/* TODO: adjust to ds18 temp sensor */
 static inline void pack_to_phydat(uint32_t pressure_val, phydat_t *res)
 {
     res->val[0] = pressure_val / 100;
@@ -92,11 +93,13 @@ void read_sensor_data(void)
 
     /* Read sensor data via SAUL */
     puts("SAUL test application");
-    saul_reg_t *dev = saul_reg_find_type(SAUL_SENSE_TEMP);
+    // saul_reg_t *dev = saul_reg_find_type(SAUL_SENSE_TEMP);
+    saul_reg_t *dev = saul_reg_find_name("ds18");
     if (dev == NULL) {
         puts("No SAUL Pressure Device present");
         return;
     }
+    printf("DS18 saul name: %s\n", dev->name);
     int dim = saul_reg_read(dev, &sensor_data_phy);
     // printf("\nDev: %s\tType: %s\n", dev->name,
     //         saul_class_to_str(dev->driver->type));
@@ -110,6 +113,8 @@ void read_sensor_data(void)
 
 void send_packet(phydat_t *data)
 {
+    phydat_dump(data, 1);
+    /*
     // Init send_thread for radio transmitting
     gnrc_netif_t *netif = NULL;
     if(!(netif = gnrc_netif_iter(netif))) {
@@ -159,6 +164,7 @@ void send_packet(phydat_t *data)
     } else {
         puts("[send_thread] sent message");
     }
+    */
 }
 
 int main(void)
