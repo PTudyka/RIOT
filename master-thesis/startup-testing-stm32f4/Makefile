@@ -37,6 +37,7 @@ USEMODULE += shell_commands
 USEMODULE += ps
 # include and auto-initialize all available sensors
 USEMODULE += saul_default
+USEMODULE += ds18
 
 # Don't use saul gpio, because we have used gpio pins!
 # DISABLE_MODULE += saul_gpio
@@ -48,6 +49,9 @@ USEMODULE += dyn_boot
 # Include application directory to use params file 
 # for dyn_boot configuration
 CFLAGS += -I$(CURDIR)
+
+# Test of timing measurement module
+USEMODULE += timing_measurement
 
 ifneq (,$(filter $(BOARD),stm32f4discovery))
   USEMODULE += stdio_cdc_acm

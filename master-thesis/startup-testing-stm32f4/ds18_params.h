@@ -45,7 +45,7 @@ extern "C" {
 #define DS18_PARAMS_BOARD           {   .pin        = (GPIO_PIN(PORT_C, 11)), \
                                         .out_mode   = DS18_PARAM_PULL }
                                         */
-#define DS18_PARAMS_BOARD           {   .pin        = (GPIO_PIN(PORT_C, 7)), \
+#define DS18_PARAMS_BOARD           {   .pin        = (GPIO_PIN(PORT_E, 10)), \
                                         .out_mode   = DS18_PARAM_PULL }
 
 /**
