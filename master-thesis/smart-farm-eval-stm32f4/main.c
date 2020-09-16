@@ -29,9 +29,11 @@
 // #include "gpio_measurement.h"
 
 /* Sensor specific includes */
-#include "bmp180.h"
-#include "bmp180_params.h"
+#include "ds18.h"
+#include "ds18_params.h"
 #include "phydat.h"
+
+#include "at86rf215.h"
 
 #include "saul_reg.h"
 #include "periph/pm.h"
@@ -92,7 +94,8 @@ void read_sensor_data(void)
 
     /* Read sensor data via SAUL */
     puts("SAUL test application");
-    saul_reg_t *dev = saul_reg_find_type(SAUL_SENSE_PRESS);
+    // saul_reg_t *dev = saul_reg_find_type(SAUL_SENSE_PRESS);
+    saul_reg_t *dev = saul_reg_find_name("ds18");
     if (dev == NULL) {
         puts("No SAUL Pressure Device present");
         return;
@@ -117,6 +120,31 @@ void send_packet(phydat_t *data)
         next_status = NODE_ERROR;
         return;
     }
+    // printf("netif pid: %d\n", netif->pid);
+
+    /*
+     * Check by channel_page, which netif is currently selected
+     * If channel_page == 0 -> 2.4Ghz netif is selected
+     * Else                 -> SubGhz netif is selected
+     */
+    uint16_t channel_page;
+    netif->dev->driver->get(netif->dev, NETOPT_CHANNEL_PAGE, (void *)&channel_page, sizeof(channel_page));
+    if (channel_page != 0)
+    {
+        netif = gnrc_netif_iter(netif);
+    }
+
+    /*
+     * Select next network interface, if pid is not 5
+     * Interface 5 is 2.4 GHz interface
+     * (sufficient for inga communication)
+     */
+    // if (netif != NULL && netif->pid != 4) {
+    //     netif = gnrc_netif_iter(netif);
+    //     printf("netif pid: %d\n", netif->pid);
+    // }
+
+    // printf("netif pid: %d\n", netif->pid);
 
     /// 0 Adress length means we want to use broadcast
     size_t addr_len = 0;
@@ -207,10 +235,9 @@ int main(void)
         case NODE_SEND_PACKET:
             puts("NODE_SEND_PACKET reached");
             // Send only one packet and then move on
-            if (current_run_level == RUN_LEVEL_6)
+            if (current_run_level == RUN_LEVEL_6 || 1)
             {
                 send_packet(&sensor_data_phy);
-                break;
             }
             else
             {

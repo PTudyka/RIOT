@@ -2,8 +2,8 @@
 APPLICATION = smart-farm-eval
 
 # If no BOARD is found in the environment, use this default:
-# BOARD ?= stm32f4discovery
-BOARD ?= inga_red
+BOARD ?= stm32f4discovery
+# BOARD ?= inga_red
 
 # This has to be the absolute path to the RIOT base directory:
 RIOTBASE ?= $(CURDIR)/../..
@@ -23,8 +23,12 @@ USEMODULE += gnrc_netdev_default
 USEMODULE += saul_default
 # USEMODULE += shell
 # USEMODULE += shell_commands
+USEMODULE += stdio_cdc_acm
+USEMODULE += at86rf215
 
-USEMODULE += bmp180
+GNRC_NETIF_NUMOF := 2
+
+USEMODULE += ds18
 USEMODULE += phydat
 
 CFLAGS += -I$(CURDIR)
