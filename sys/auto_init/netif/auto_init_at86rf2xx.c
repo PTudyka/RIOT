@@ -77,10 +77,10 @@ void auto_init_at86rf2xx(void)
                                      (netdev_t *)&at86rf2xx_devs[i]);
 #endif
         // Set radio to sleep
-        netopt_state_t target_state = NETOPT_STATE_SLEEP;
-    //    printf("target_state: %d\n", target_state);
-//        int ret = netif->dev->driver->set(netif->dev, NETOPT_STATE,y, sizeof(netopt_state_t));
-        ((netdev_t *)&at86rf2xx_devs[i])->driver->set((netdev_t *)&at86rf2xx_devs[i], NETOPT_STATE, (void *)&target_state, sizeof(netopt_state_t));
+//         netopt_state_t target_state = NETOPT_STATE_SLEEP;
+//     //    printf("target_state: %d\n", target_state);
+// //        int ret = netif->dev->driver->set(netif->dev, NETOPT_STATE,y, sizeof(netopt_state_t));
+//         ((netdev_t *)&at86rf2xx_devs[i])->driver->set((netdev_t *)&at86rf2xx_devs[i], NETOPT_STATE, (void *)&target_state, sizeof(netopt_state_t));
 
     }
 
